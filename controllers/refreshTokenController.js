@@ -1,31 +1,36 @@
 const User = require('../model/User');
+const Student = require('../model/StudentSchema');
 const jwt = require('jsonwebtoken');
 
 const handleRefreshToken = async (req, res) => {
     const cookies = req.cookies;
     if (!cookies?.jwt) return res.sendStatus(401);
-    const refreshToken = cookies.jwt;
+    const RefreshToken = cookies.jwt;
 
-    const foundUser = await User.findOne({ refreshToken }).exec();
+    console.log(RefreshToken)
+
+    const foundUser = await Student.findOne({ RefreshToken }).exec();
     if (!foundUser) return res.sendStatus(403); //Forbidden 
+
+    
     // evaluate jwt 
     jwt.verify(
-        refreshToken,
+        RefreshToken,
         process.env.REFRESH_TOKEN_SECRET,
         (err, decoded) => {
-            if (err || foundUser.username !== decoded.username) return res.sendStatus(403);
-            const roles = Object.values(foundUser.roles);
+            if (err || foundUser.RegNo !== decoded.RegNo) return res.sendStatus(403);
+            const role  = foundUser.Role;
             const accessToken = jwt.sign(
                 {
                     "UserInfo": {
-                        "username": decoded.username,
-                        "roles": roles
+                        "RegNo": decoded.RegNo,
+                        "Role": role
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
                 { expiresIn: '10s' }
             );
-            res.json({ roles, accessToken })
+            res.json({ role, accessToken })
         }
     );
 }

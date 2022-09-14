@@ -1,50 +1,72 @@
-const User = require('../model/User');
+const Student = require('../model/StudentSchema');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const handleLogin = async (req, res) => {
-    const { user, pwd } = req.body;
-    if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required.' });
+//make search function
 
-    // phelay students mae check karo, ager mil gaya to roles manually studdent likh kr token banao aur bejh do
 
-    const foundUser = await User.findOne({ username: user }).exec();
-    if (!foundUser) return res.sendStatus(401); //Unauthorized 
-    // evaluate password 
-    const match = await bcrypt.compare(pwd, foundUser.password);
-    if (match) {
-        const roles = Object.values(foundUser.roles).filter(Boolean);
+
+const StudentLogin = async (req, res) => {
+
+    
+   
+    const { RegNo, Password } = req.body;
+    
+    if (!RegNo || !Password ) return res.status(400).json({ 'message': 'Username and password are required.' });
+
+     const foundStudent = await Student.findOne({ RegNo: RegNo }).exec();
+
+   
+    if (!foundStudent) return res.sendStatus(401); //Unauthorized 
+    const match = await bcrypt.compare(Password, foundStudent.Password);
+
+       if (match) {
+       const role = foundStudent.Role;
         // create JWTs
+        // regno, pass, role
+        // regno+pass+role = Access $dfadfsdfkhsdbfhsebfwjfbiwjefwibejfwbejfwbefjweb
+        // regno+pass+role = Refresh $sefsdfssdgdsfgdfgdfgdfgdfgdfgdfg
+
         const accessToken = jwt.sign(
             {
                 "UserInfo": {
-                    "username": foundUser.username,
-                    "roles": roles
+                    "RegNo": foundStudent.RegNo,
+                    "Role": foundStudent.Role
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: '59s' }
         );
         const refreshToken = jwt.sign(
-            { "username": foundUser.username },
+            { "RegNo": foundStudent.RegNo },
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '1d' }
         );
-        // Saving refreshToken with current user
-        foundUser.refreshToken = refreshToken;
-        const result = await foundUser.save();
-        console.log(result);
-        console.log(roles);
+        // Saving refreshToken with current user in db
+        foundStudent.RefreshToken = refreshToken;
+
+        const result = await foundStudent.save();
 
         // Creates Secure Cookie with refresh token
         res.cookie('jwt', refreshToken, { httpOnly: true,  sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
         // Send authorization roles and access token to user
-        res.json({ roles, accessToken });
+        res.json({ role, accessToken });
 
     } else {
         res.sendStatus(401);
     }
+
+ 
 }
 
-module.exports = { handleLogin };
+
+
+
+
+const TeacherLogin = async (req, res) => {
+
+
+ }
+
+module.exports = { StudentLogin , TeacherLogin};
