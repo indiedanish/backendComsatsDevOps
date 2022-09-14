@@ -30,7 +30,9 @@ var TeacherSchema = new mongoose.Schema({
   },
   Desgination: {
     type: String,
-    required: true,
   },
+  RefreshToken: {
+    type: String,
+  }
 });
 module.exports = mongoose.model("Teacher", TeacherSchema);

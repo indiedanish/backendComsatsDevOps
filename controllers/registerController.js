@@ -31,7 +31,33 @@ const addNewStudent = async (req, res) => {
 
 const addNewTeacher = async (req, res) => {
     
+    var { Name, Email, Password, PhoneNumber, Gender, Role, Designation } = req.body;
+    // Name = "Ali"
+    // Email = "ali@yahoo.com"
+    // Password = "1234",
+    // PhoneNumber = "03001234567",
+    // Gender = true,
+    // Role = "Supervisor",
+    // Designation = "Teacher";
+    
+    if (!Name || !Email || !Password) return res.status(400).json({ 'message': 'Username, Email and password are required.' });
+  
+    // Check if user already exists
+    const duplicate = await Teacher.findOne({ Email: Email }).exec();
+    if (duplicate) return res.sendStatus(409); //Conflict 
+    try {
+        //encrypt the password
+        Password = await bcrypt.hash(Password, 10);
+        
+        const newTeacher = await Teacher.create({ Name, Email, Password, PhoneNumber, Gender, Role, Designation });
+        console.log(newTeacher);
 
+        
+        res.status(201).json({ 'success': `New user ${newTeacher} created!` });
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
 
 
     
