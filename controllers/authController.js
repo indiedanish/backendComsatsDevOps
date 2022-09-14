@@ -6,6 +6,8 @@ const handleLogin = async (req, res) => {
     const { user, pwd } = req.body;
     if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required.' });
 
+    // phelay students mae check karo, ager mil gaya to roles manually studdent likh kr token banao aur bejh do
+
     const foundUser = await User.findOne({ username: user }).exec();
     if (!foundUser) return res.sendStatus(401); //Unauthorized 
     // evaluate password 

@@ -1,30 +1,59 @@
 const User = require('../model/User');
+const Student = require('../model/Student');
 const bcrypt = require('bcrypt');
 
-const handleNewUser = async (req, res) => {
-    const { user, pwd } = req.body;
-    if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required.' });
+const addNewStudent = async (req, res) => {
 
-    // check for duplicate usernames in the db
-    const duplicate = await User.findOne({ username: user }).exec();
+    var { Name, RegNo, Position, Gender, Email, Password, PhoneNumber, Role, FypStatus, CommitteeRemarks, SupervisorRemarks, OnlineStatus } = req.body;
+    if (!Name || !RegNo || !Password) return res.status(400).json({ 'message': 'Username, Reg No and password are required.' });
+
+    // Check if user already exists
+    const duplicate = await Student.findOne({ RegNo: RegNo }).exec();
     if (duplicate) return res.sendStatus(409); //Conflict 
-
     try {
         //encrypt the password
-        const hashedPwd = await bcrypt.hash(pwd, 10);
+        Password = await bcrypt.hash(Password, 10);
+        
+        const newStudent = await Student.create({ Name, RegNo, Position, Gender, Email, Password, PhoneNumber, Role, FypStatus, CommitteeRemarks, SupervisorRemarks, OnlineStatus });
+        console.log(newStudent);
 
-        //create and store the new user
-        const result = await User.create({
-            "username": user,
-            "password": hashedPwd
-        });
-
-        console.log(result);
-
-        res.status(201).json({ 'success': `New user ${user} created!` });
-    } catch (err) {
+        
+        res.status(201).json({ 'success': `New user ${newStudent} created!` });
+    }
+    catch (err) {
         res.status(500).json({ 'message': err.message });
     }
+
+    
+
+
 }
 
-module.exports = { handleNewUser };
+const addNewTeacher = async (req, res) => {
+
+    var { Name, RegNo, Position, Gender, Email, Password, PhoneNumber, Role, FypStatus, CommitteeRemarks, SupervisorRemarks, OnlineStatus } = req.body;
+    if (!Name || !RegNo || !Password) return res.status(400).json({ 'message': 'Username, Reg No and password are required.' });
+
+    // Check if user already exists
+    const duplicate = await Student.findOne({ RegNo: RegNo }).exec();
+    if (duplicate) return res.sendStatus(409); //Conflict 
+    try {
+        //encrypt the password
+        Password = await bcrypt.hash(Password, 10);
+        
+        const newStudent = await Student.create({ Name, RegNo, Position, Gender, Email, Password, PhoneNumber, Role, FypStatus, CommitteeRemarks, SupervisorRemarks, OnlineStatus });
+        console.log(newStudent);
+
+        
+        res.status(201).json({ 'success': `New user ${newStudent} created!` });
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+
+    
+}
+
+
+
+module.exports = { addNewStudent, addNewTeacher };
