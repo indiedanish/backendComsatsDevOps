@@ -1,4 +1,4 @@
-const User = require('../model/User');
+const User = require('../model/AdminSchema');
 const Student = require('../model/StudentSchema');
 const jwt = require('jsonwebtoken');
 

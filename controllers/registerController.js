@@ -1,4 +1,4 @@
-const User = require('../model/User');
+const Admin = require('../model/AdminSchema');
 const Student = require('../model/StudentSchema');
 const Teacher = require('../model/TeacherSchema');
 const bcrypt = require('bcrypt');

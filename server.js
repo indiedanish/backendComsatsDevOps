@@ -12,6 +12,7 @@ const credentials = require('./middleware/credentials');
 const mongoose = require('mongoose');
 const connectDB = require('./config/dbConn');
 const PORT = process.env.PORT || 3500;
+const verifyAdmin = require('./middleware/verifyAdmin');
 
 // Connect to MongoDB
 connectDB();
@@ -47,8 +48,11 @@ app.use('/auth', require('./routes/auth'));
 app.use('/refresh', require('./routes/refresh'));
 app.use('/logout', require('./routes/logout'));
 
+app.use('/register',verifyAdmin, require('./routes/register'));
+
+
 app.use(verifyJWT);
-app.use('/register', require('./routes/register'));
+
 app.use('/student', require('./routes/api/student'));
 
 app.use('/employees', require('./routes/api/employees'));

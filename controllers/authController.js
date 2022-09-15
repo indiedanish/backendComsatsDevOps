@@ -1,5 +1,6 @@
 const Student = require('../model/StudentSchema');
 const Teacher = require('../model/TeacherSchema');
+const Admin = require('../model/AdminSchema');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -13,7 +14,7 @@ const StudentLogin = async (req, res) => {
     
     const { RegNo, Password } = req.body;
     
-    if (!RegNo || !Password ) return res.status(400).json({ 'message': 'Username and password are required.' });
+    if (!RegNo || !Password ) return res.status(400).json({ 'message': 'RegNo and password are required.' });
 
      const foundStudent = await Student.findOne({ RegNo: RegNo }).exec();
 
@@ -115,4 +116,41 @@ const TeacherLogin = async (req, res) => {
 
  }
 
-module.exports = { StudentLogin , TeacherLogin};
+ 
+const AdminLogin = async (req, res) => {
+      
+    const { Email, Password } = req.body;
+    
+    if (!Email || !Password ) return res.status(400).json({ 'message': 'Email and password are required.' });
+
+
+     const foundAdmin = await Admin.findOne({ Email: Email }).exec();
+
+
+    if ( Email != foundAdmin.Email && Password != foundAdmin.Passoword) return res.sendStatus(401); //Unauthorized 
+  
+      
+
+        const refreshToken = jwt.sign(
+            { "Email": foundAdmin.Email },
+           "" + process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: '1d' }
+        );
+        // Saving refreshToken with current user in db
+        foundAdmin.RefreshToken = refreshToken;
+
+        const result = await foundAdmin.save();
+
+        // Creates Secure Cookie with refresh token
+        res.cookie('jwt', refreshToken, { httpOnly: true,  sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
+
+        // Send authorization roles and access token to user
+        res.json({refreshToken });
+
+  
+
+
+
+ }
+
+module.exports = { StudentLogin , TeacherLogin, AdminLogin};
