@@ -48,7 +48,7 @@ app.use('/auth', require('./routes/auth'));
 app.use('/refresh', require('./routes/refresh'));
 app.use('/logout', require('./routes/logout'));
 
-app.use('/register',verifyAdmin, require('./routes/register'));
+app.use('/adminRoutes',verifyAdmin, require('./routes/adminRoutes'));
 
 
 app.use(verifyJWT);
