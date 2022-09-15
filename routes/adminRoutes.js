@@ -6,7 +6,7 @@ router.post('/student', adminController.addNewStudent);
 router.post('/teacher', adminController.addNewTeacher);
 
 router.put('/student', adminController.updateStudent);
-router.put('/teacher', adminController.updateTeacher);
+// router.put('/teacher', adminController.updateTeacher);
 
 router.delete('/student', adminController.deleteStudent);
 router.delete('/teacher', adminController.deleteTeacher);
