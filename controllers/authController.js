@@ -72,7 +72,7 @@ const TeacherLogin = async (req, res) => {
 
     if (!foundTeacher) return res.sendStatus(401); //Unauthorized 
     const match = await bcrypt.compare(Password, foundTeacher.Password);
-
+    console.log(process.env.ACCESS_TOKEN_SECRET)
        if (match) {
        const role = foundTeacher.Role;
         // create JWTs
