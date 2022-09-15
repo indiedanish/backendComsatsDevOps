@@ -63,6 +63,29 @@ const addNewTeacher = async (req, res) => {
     
 }
 
+const updateStudent = async (req, res) => {
+
+}
+
+const updateTeacher = async (req, res) => {
+
+}
+
+const deleteStudent = async (req, res) => {
+
+}
+
+const deleteTeacher = async (req, res) => {
+
+}
+
+const getAllStudent = async (req, res) => {
+
+}
+
+const getAllTeacher = async (req, res) => {
+
+}
 
 
 module.exports = { addNewStudent, addNewTeacher };
