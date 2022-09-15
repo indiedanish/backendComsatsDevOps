@@ -21,7 +21,7 @@ var StudentSchema = new mongoose.Schema({
   Gender: {
     type: Boolean,
     required: true,
-    unique: true,
+  
   },
 
   Role: {
