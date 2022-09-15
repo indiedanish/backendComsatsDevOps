@@ -59,8 +59,7 @@ const addNewTeacher = async (req, res) => {
         res.status(500).json({ 'message': err.message });
     }
 
-
-    
+   
 }
 
 const updateStudent = async (req, res) => {
@@ -95,9 +94,26 @@ const updateStudent = async (req, res) => {
 
  }
 
-// const updateTeacher = async (req, res) => {
+const updateTeacher = async (req, res) => {
+    if (!req?.body?.id) {
+        return res.status(400).json({ 'message': 'Email parameter is required.' });
+    }
+    const teacher = await Teacher.findOne({ _id: req.body.id }).exec();
+    if (!teacher) {
+        return res.status(204).json({ "message": `No teacher matches  ${req.body.id}.` });
+    }
+    if (req.body?.Name) teacher.Name = req.body.Name;
+    if (req.body?.Email) teacher.Email = req.body.Email;
+    if (req.body?.PhoneNumber) teacher.PhoneNumber = req.body.PhoneNumber;
+    if (req.body?.Gender) teacher.Gender = req.body.Gender;
+    if (req.body?.Role) teacher.Role = req.body.Role;
+    if (req.body?.Designation) teacher.Designation = req.body.Designation;
 
-// }
+    if (req.body?.Password){
+        teacher.Password = await bcrypt.hash(req.body.Password, 10);
+    }
+}
+
 
 const deleteStudent = async (req, res) => {
     if (!req?.body?.id) return res.status(400).json({ 'message': 'Student required.' });
@@ -121,7 +137,8 @@ const deleteStudent = async (req, res) => {
     res.json(result);
  }
 
- 
+ //--------------------------------------------------------------
+
 
 const getAllStudent = async (req, res) => {
     const students = await Student.find();
@@ -144,7 +161,30 @@ const getAllTeacher = async (req, res) => {
 
 }
 
+const getStudent = async (req, res) => {
+    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student regno required.' });
+
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
+    if (!student) {
+        return res.status(204).json({ "message": `No student matches regno ${req.body.RegNo}.` });
+    }
+    res.json(student);
+}
+
+const getTeacher = async (req, res) => {
+    if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teacher email required.' });
+
+    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
+    if (!teacher) {
+        return res.status(204).json({ "message": `No teacher matches Email ${req.body.Email}.` });
+    }
+    res.json(teacher);
+}
+
+
+//--------------------------------------------------------------
 
 
 
-module.exports = { addNewStudent, addNewTeacher, getAllStudent, getAllTeacher, deleteStudent, deleteTeacher, updateStudent};
+
+module.exports = { addNewStudent, addNewTeacher, getAllStudent, getAllTeacher, getStudent, getTeacher, deleteStudent, deleteTeacher, updateStudent, updateTeacher};
