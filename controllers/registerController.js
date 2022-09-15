@@ -40,7 +40,7 @@ const addNewTeacher = async (req, res) => {
     // Role = "Supervisor",
     // Designation = "Teacher";
 
-    if (!Name || !Email || !Password) return res.status(400).json({ 'message': 'Username, Email and password are required.' });
+    if (!Name || !Email || !Password) return res.status(400).json({ 'message': 'Name, Email and password are required.' });
   
     // Check if user already exists
     const duplicate = await Teacher.findOne({ Email: Email }).exec();
