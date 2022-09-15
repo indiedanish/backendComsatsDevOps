@@ -32,14 +32,14 @@ const addNewStudent = async (req, res) => {
 const addNewTeacher = async (req, res) => {
     
     var { Name, Email, Password, PhoneNumber, Gender, Role, Designation } = req.body;
-    // Name = "Ali"
-    // Email = "ali@yahoo.com"
-    // Password = "1234",
-    // PhoneNumber = "03001234567",
-    // Gender = true,
-    // Role = "Supervisor",
-    // Designation = "Teacher";
-    
+    Name = "Ali"
+    Email = "ali@yahoo.com"
+    Password = "1234",
+    PhoneNumber = "03001234567",
+    Gender = true,
+    Role = "Supervisor",
+    Designation = "Teacher";
+
     if (!Name || !Email || !Password) return res.status(400).json({ 'message': 'Username, Email and password are required.' });
   
     // Check if user already exists
