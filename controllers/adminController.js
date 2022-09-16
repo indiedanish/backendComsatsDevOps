@@ -60,11 +60,11 @@ const addNewTeacher = async (req, res) => {
 //------------------------------------------------------------------------
 
 const deleteStudent = async (req, res) => {
-    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Students ID required.' });
+    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
 
     const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
     if (!student) {
-        return res.status(204).json({ "message": `No student matches ID ${req.body.RegNo}.` });
+        return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
     }
     const result = await student.deleteOne(); //{ _id: req.body.id }
     res.json(result);
@@ -84,11 +84,11 @@ const deleteTeacher = async (req, res) => {
 //------------------------------------------------------------------
 
 const getStudent = async (req, res) => {
-    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student regno required.' });
+    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
 
     const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
     if (!student) {
-        return res.status(204).json({ "message": `No student matches regno ${req.body.RegNo}.` });
+        return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
     }
     res.json(student);
 }
@@ -152,7 +152,9 @@ const updateTeacher = async (req, res) => {
     if (!req?.body?.Email) {
         return res.status(400).json({ 'message': 'Email parameter is required.' });
     }
+    
     const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
+
     if (!teacher) {
         return res.status(204).json({ "message": `No teacher matches  ${req.body.Email}.` });
     }
@@ -166,7 +168,7 @@ const updateTeacher = async (req, res) => {
     if (req.body?.Password){
         teacher.Password = await bcrypt.hash(req.body.Password, 10);
     }
-    const result = await Teacher.save();
+    const result = await teacher.save();
     res.json(result);
 }
 

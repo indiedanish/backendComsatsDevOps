@@ -50,7 +50,7 @@ app.use('/logout', require('./routes/logout'));
 
 
 app.use('/admin',
-//verifyAdmin, 
+verifyAdmin, 
 require('./routes/adminRoutes'));
 
 
