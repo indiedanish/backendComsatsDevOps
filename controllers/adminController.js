@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const addNewStudent = async (req, res) => {
 
     var { Name, RegNo, Position, Gender, Email, Password, PhoneNumber, Role, FypStatus, CommitteeRemarks, SupervisorRemarks, OnlineStatus } = req.body;
-    if (!Name || !RegNo || !Password || !Email) return res.status(400).json({ 'message': 'Username, Reg No, Email and Password are required.' });
+    if (!Name || !RegNo || !Password) return res.status(400).json({ 'message': 'Username, Reg No and password are required.' });
 
     // Check if user already exists
     const duplicate = await Student.findOne({ RegNo: RegNo }).exec();
@@ -107,22 +107,13 @@ const getTeacher = async (req, res) => {
 //--------------------------------------------------------------
 
 const updateStudent = async (req, res) => {
-    console.log("Hi")
     if (!req?.body?.RegNo) {
-        return res.status(400).json({ 'message': 'RegNo is required.' });
-        console.log("Hi22")
-
+        return res.status(400).json({ 'message': 'ID parameter is required.' });
     }
-    console.log("33")
-
     const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
-    console.log("44")
-
     if (!student) {
         return res.status(204).json({ "message": `No Student matches RegNo ${req.body.RegNo}.` });
     }
-    console.log("55")
-
     if (req.body?.Name) student.Name = req.body.Name;
     if (req.body?.RegNo) student.RegNo = req.body.RegNo;
     if (req.body?.Position) student.Position = req.body.Position;
@@ -135,16 +126,9 @@ const updateStudent = async (req, res) => {
     if (req.body?.SupervisorRemarks) student.SupervisorRemarks = req.body.SupervisorRemarks;
     if (req.body?.OnlineStatus) student.OnlineStatus = req.body.OnlineStatus;
 
-    console.log("66")
-
-
-
     if (req.body?.Password){
         student.Password = await bcrypt.hash(req.body.Password, 10);
     }
-
-    const result = await student.save();
-    res.json(result);
 }
 
 
@@ -168,8 +152,11 @@ const updateTeacher = async (req, res) => {
     if (req.body?.Password){
         teacher.Password = await bcrypt.hash(req.body.Password, 10);
     }
+<<<<<<< HEAD
     const result = await teacher.save();
     res.json(result);
+=======
+>>>>>>> parent of 05e8c5d (AdminControllerUpdated)
 }
 
 
