@@ -129,6 +129,9 @@ const updateStudent = async (req, res) => {
     if (req.body?.Password){
         student.Password = await bcrypt.hash(req.body.Password, 10);
     }
+
+    const result = await student.save();
+    res.json(result);
 }
 
 
