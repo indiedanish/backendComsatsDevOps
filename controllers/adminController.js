@@ -1,6 +1,12 @@
 const Admin = require('../model/AdminSchema');
 const Student = require('../model/StudentSchema');
 const Teacher = require('../model/TeacherSchema');
+const Template = require('../model/TemplateSchema');
+
+const fs = require('fs');
+
+
+
 const bcrypt = require('bcrypt');
 
 
@@ -15,10 +21,10 @@ const addNewStudent = async (req, res) => {
     try {
         //encrypt the password
         Password = await bcrypt.hash(Password, 10);
-        
+
         const newStudent = await Student.create({ Name, RegNo, Position, Gender, Email, Password, PhoneNumber, Role, FypStatus, CommitteeRemarks, SupervisorRemarks, OnlineStatus });
         console.log(newStudent);
-        
+
         res.status(201).json({ 'success': `New user ${newStudent} created!` });
     }
     catch (err) {
@@ -27,7 +33,7 @@ const addNewStudent = async (req, res) => {
 }
 
 const addNewTeacher = async (req, res) => {
-    
+
     var { Name, Email, Password, PhoneNumber, Gender, Role, Designation } = req.body;
     // Name = "Ali"
     // Email = "ali@yahoo.com"
@@ -38,14 +44,14 @@ const addNewTeacher = async (req, res) => {
     // Designation = "Teacher";
 
     if (!Name || !Email || !Password) return res.status(400).json({ 'message': 'Name, Email and password are required.' });
-  
+
     // Check if user already exists
     const duplicate = await Teacher.findOne({ Email: Email }).exec();
     if (duplicate) return res.sendStatus(409); //Conflict 
     try {
         //encrypt the password
         Password = await bcrypt.hash(Password, 10);
-        
+
         const newTeacher = await Teacher.create({ Name, Email, Password, PhoneNumber, Gender, Role, Designation });
         console.log(newTeacher);
 
@@ -56,7 +62,7 @@ const addNewTeacher = async (req, res) => {
     }
 }
 
-   
+
 //------------------------------------------------------------------------
 
 const deleteStudent = async (req, res) => {
@@ -126,7 +132,7 @@ const updateStudent = async (req, res) => {
     if (req.body?.SupervisorRemarks) student.SupervisorRemarks = req.body.SupervisorRemarks;
     if (req.body?.OnlineStatus) student.OnlineStatus = req.body.OnlineStatus;
 
-    if (req.body?.Password){
+    if (req.body?.Password) {
         student.Password = await bcrypt.hash(req.body.Password, 10);
     }
 
@@ -139,7 +145,7 @@ const updateTeacher = async (req, res) => {
     if (!req?.body?.Email) {
         return res.status(400).json({ 'message': 'Email parameter is required.' });
     }
-    
+
     const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
 
     if (!teacher) {
@@ -152,7 +158,7 @@ const updateTeacher = async (req, res) => {
     if (req.body?.Role) teacher.Role = req.body.Role;
     if (req.body?.Designation) teacher.Designation = req.body.Designation;
 
-    if (req.body?.Password){
+    if (req.body?.Password) {
         teacher.Password = await bcrypt.hash(req.body.Password, 10);
     }
 
@@ -165,18 +171,18 @@ const updateTeacher = async (req, res) => {
 
 
 
- //--------------------------------------------------------------
+//--------------------------------------------------------------
 
 
 const getAllStudent = async (req, res) => {
     const students = await Student.find();
     if (!students) return res.status(204).json({ 'message': 'No Students found.' });
     try {
-    res.json(students);
+        res.json(students);
     }
     catch (err) {
-    res.status(500).json({ 'message': err.message });
-}
+        res.status(500).json({ 'message': err.message });
+    }
 
 }
 
@@ -190,10 +196,95 @@ const getAllTeacher = async (req, res) => {
 }
 
 
+//--------------------------------------------------------------
 
 
 
+const addTemplate = async (req, res) => {
+
+    var { Title, DateModified, Deadline } = req.body;
+    if (!Title || !Deadline) return res.status(400).json({ 'message': 'Title and Deadline are required.' });
+
+    const duplicate = await Template.findOne({ Title: Title }).exec();
+    if (duplicate) return res.sendStatus(409); //Conflict 
+    try {
+
+        let buff = fs.readFileSync(req.body.File);
+        let File = buff.toString('base64');
+
+        const newTemplate = await Template.create({ Title, DateModified, Deadline, File });
+        console.log(newTemplate);
+
+        res.status(201).json({ 'success': `New ${newTemplate} created!` });
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+}
+
+
+const deleteTemplate = async (req, res) => {
+    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
+
+    const template = await Template.findOne({ Title: req.body.Title }).exec();
+    if (!template) {
+        return res.status(204).json({ "message": `No such template exists` });
+    }
+    const result = await template.deleteOne();
+    res.json(result);
+}
+
+
+const updateTemplate = async (req, res) => {
+    if (!req?.body?.Title) {
+        return res.status(400).json({ 'message': 'Title is required.' });
+    }
+    const template = await Template.findOne({ Title: req.body.Title }).exec();
+    if (!template) {
+        return res.status(204).json({ "message": `No Template matches Title` });
+    }
+    if (req.body?.Title) template.Title = req.body.Title;
+    if (req.body?.DateModified) template.DateModified = req.body.DateModified;
+    if (req.body?.Deadline) template.Deadline = req.body.Deadline;
+  
+    let buff = fs.readFileSync(req.body.File);
+    let File = buff.toString('base64');
+
+
+    if (req.body?.File) template.File = File;
+
+
+    const result = await template.save();
+    res.json(result);
+}
+
+
+const getAllTemplate = async (req, res) => {
+    const templates = await Template.find();
+    if (!templates) return res.status(204).json({ 'message': 'No Templates found.' });
+    try {
+        res.json(templates);
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+
+}
+
+const getTemplate = async (req, res) => {
+    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
+
+    const template = await Template.findOne({ Title: req.body.Title }).exec();
+    if (!template) {
+        return res.status(204).json({ "message": `No template matches Title` });
+    }
+    res.json(template);
+}
 
 
 
-module.exports = { addNewStudent, addNewTeacher, getAllStudent, getAllTeacher, getStudent, getTeacher, deleteStudent, deleteTeacher, updateStudent, updateTeacher}
+module.exports = {
+    addNewStudent, addNewTeacher, getAllStudent, getAllTeacher,
+    getStudent, getTeacher, deleteStudent, deleteTeacher, updateStudent, updateTeacher,
+    addTemplate, getTemplate, getAllTemplate, updateTemplate, deleteTemplate
+}
