@@ -28,6 +28,7 @@ var TeacherSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
   Desgination: {
     type: String,
   },
