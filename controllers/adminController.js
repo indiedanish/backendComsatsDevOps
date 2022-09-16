@@ -152,11 +152,10 @@ const updateTeacher = async (req, res) => {
     if (req.body?.Password){
         teacher.Password = await bcrypt.hash(req.body.Password, 10);
     }
-<<<<<<< HEAD
+
     const result = await teacher.save();
     res.json(result);
-=======
->>>>>>> parent of 05e8c5d (AdminControllerUpdated)
+
 }
 
 
