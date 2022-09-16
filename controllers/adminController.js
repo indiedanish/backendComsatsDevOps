@@ -58,6 +58,7 @@ const addNewTeacher = async (req, res) => {
     catch (err) {
         res.status(500).json({ 'message': err.message });
     }
+<<<<<<< HEAD
 
    
 }
@@ -117,25 +118,109 @@ const updateTeacher = async (req, res) => {
 
 const deleteStudent = async (req, res) => {
     if (!req?.body?.id) return res.status(400).json({ 'message': 'Student required.' });
+=======
+}
 
-    const student = await Student.findOne({ _id: req.body.id }).exec();
+   
+//------------------------------------------------------------------------
+
+const deleteStudent = async (req, res) => {
+    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Students ID required.' });
+
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
     if (!student) {
-        return res.status(204).json({ "message": `No student matches ID ${req.body.id}.` });
+        return res.status(204).json({ "message": `No student matches ID ${req.body.RegNo}.` });
     }
     const result = await student.deleteOne(); //{ _id: req.body.id }
     res.json(result);
- }
+}
 
- const deleteTeacher = async (req, res) => {
-    if (!req?.body?.id) return res.status(400).json({ 'message': 'Teacher required.' });
+const deleteTeacher = async (req, res) => {
+    if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teachers Email required.' });
 
-    const teacher = await Teacher.findOne({ _id: req.body.id }).exec();
+    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
     if (!teacher) {
-        return res.status(204).json({ "message": `No teacher matches ID ${req.body.id}.` });
+        return res.status(204).json({ "message": `No teacher matches email ${req.body.Email}.` });
     }
     const result = await teacher.deleteOne(); //{ _id: req.body.id }
     res.json(result);
- }
+}
+
+//------------------------------------------------------------------
+
+const getStudent = async (req, res) => {
+    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student regno required.' });
+
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
+    if (!student) {
+        return res.status(204).json({ "message": `No student matches regno ${req.body.RegNo}.` });
+    }
+    res.json(student);
+}
+
+const getTeacher = async (req, res) => {
+    if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teacher email required.' });
+
+    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
+    if (!teacher) {
+        return res.status(204).json({ "message": `No teacher matches Email ${req.body.Email}.` });
+    }
+    res.json(teacher);
+}
+
+
+//--------------------------------------------------------------
+
+const updateStudent = async (req, res) => {
+    if (!req?.body?.RegNo) {
+        return res.status(400).json({ 'message': 'ID parameter is required.' });
+    }
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
+    if (!student) {
+        return res.status(204).json({ "message": `No Student matches RegNo ${req.body.RegNo}.` });
+    }
+    if (req.body?.Name) student.Name = req.body.Name;
+    if (req.body?.RegNo) student.RegNo = req.body.RegNo;
+    if (req.body?.Position) student.Position = req.body.Position;
+    if (req.body?.Gender) student.Gender = req.body.Gender;
+    if (req.body?.Email) student.Email = req.body.Email;
+    if (req.body?.PhoneNumber) student.PhoneNumber = req.body.PhoneNumber;
+    if (req.body?.Role) student.Role = req.body.Role;
+    if (req.body?.FypStatus) student.FypStatus = req.body.FypStatus;
+    if (req.body?.CommitteeRemarks) student.CommitteeRemarks = req.body.CommitteeRemarks;
+    if (req.body?.SupervisorRemarks) student.SupervisorRemarks = req.body.SupervisorRemarks;
+    if (req.body?.OnlineStatus) student.OnlineStatus = req.body.OnlineStatus;
+
+    if (req.body?.Password){
+        student.Password = await bcrypt.hash(req.body.Password, 10);
+    }
+}
+
+
+const updateTeacher = async (req, res) => {
+    if (!req?.body?.Email) {
+        return res.status(400).json({ 'message': 'Email parameter is required.' });
+    }
+    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
+    if (!teacher) {
+        return res.status(204).json({ "message": `No teacher matches  ${req.body.Email}.` });
+    }
+    if (req.body?.Name) teacher.Name = req.body.Name;
+    if (req.body?.Email) teacher.Email = req.body.Email;
+    if (req.body?.PhoneNumber) teacher.PhoneNumber = req.body.PhoneNumber;
+    if (req.body?.Gender) teacher.Gender = req.body.Gender;
+    if (req.body?.Role) teacher.Role = req.body.Role;
+    if (req.body?.Designation) teacher.Designation = req.body.Designation;
+
+    if (req.body?.Password){
+        teacher.Password = await bcrypt.hash(req.body.Password, 10);
+    }
+}
+
+>>>>>>> 9830d1a (Manually Resolved Some Conflicts)
+
+
+
 
  //--------------------------------------------------------------
 
@@ -161,30 +246,16 @@ const getAllTeacher = async (req, res) => {
 
 }
 
-const getStudent = async (req, res) => {
-    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student regno required.' });
-
-    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
-    if (!student) {
-        return res.status(204).json({ "message": `No student matches regno ${req.body.RegNo}.` });
-    }
-    res.json(student);
-}
-
-const getTeacher = async (req, res) => {
-    if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teacher email required.' });
-
-    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
-    if (!teacher) {
-        return res.status(204).json({ "message": `No teacher matches Email ${req.body.Email}.` });
-    }
-    res.json(teacher);
-}
-
 
 //--------------------------------------------------------------
 
 
 
 
+<<<<<<< HEAD
 module.exports = { addNewStudent, addNewTeacher, getAllStudent, getAllTeacher, getStudent, getTeacher, deleteStudent, deleteTeacher, updateStudent, updateTeacher};
+=======
+
+
+module.exports = { addNewStudent, addNewTeacher, getAllStudent, getAllTeacher, getStudent, getTeacher, deleteStudent, deleteTeacher, updateStudent, updateTeacher}
+>>>>>>> 9830d1a (Manually Resolved Some Conflicts)
