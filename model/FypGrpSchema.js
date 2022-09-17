@@ -7,7 +7,6 @@ var FypGrpSchema = new mongoose.Schema({
         unique: true,
     },
 
-
     Project: {
         type: Schema.Types.ObjectId,
         ref: 'Project'
@@ -31,7 +30,6 @@ var FypGrpSchema = new mongoose.Schema({
         
     },
 
-
     GroupSupervisor: {
              type: Schema.Types.ObjectId,
              ref: 'Teacher'
@@ -51,26 +49,3 @@ var FypGrpSchema = new mongoose.Schema({
 });
 module.exports = mongoose.model("FypGrp", FypGrpSchema);
 
-
-
-
-
-// Committee:[ {
-
-//     Name: {
-
-//      type: String,
-//      required: true,
-//      unique: true,
-//      },
-
-//      Teacher: [
-//          {
-//              type: Schema.Types.ObjectId,
-//              ref: 'Teacher'
-//          }
-//      ],
-     
-
- 
-// }]

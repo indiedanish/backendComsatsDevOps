@@ -16,6 +16,13 @@ var CommitteeSchema = new mongoose.Schema({
             }
         ],
 
+        // Groups: [
+        //     {
+        //         type: Schema.Types.ObjectId,
+        //         ref: 'FypGrp'
+        //     }
+        // ],
+
 
 });
 module.exports = mongoose.model("Committee", CommitteeSchema);
