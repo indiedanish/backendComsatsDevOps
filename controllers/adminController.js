@@ -202,7 +202,7 @@ const getAllTeacher = async (req, res) => {
 
 const addTemplate = async (req, res) => {
 
-    var { Title, DateModified, Deadline } = req.body;
+    var { Title, DateModified, Deadline, File } = req.body;
     if (!Title || !Deadline) return res.status(400).json({ 'message': 'Title and Deadline are required.' });
 
     const duplicate = await Template.findOne({ Title: Title }).exec();

@@ -17,11 +17,13 @@ router.get('/getTeacher', adminController.getTeacher);
 router.get('/getAllStudents', adminController.getAllStudent);
 router.get('/getAllTeachers', adminController.getAllTeacher); 
 
-router.get('/getAllTemplate', adminController.getAllTemplates); 
-router.get('/getTemplate', adminController.getTemplate); 
 router.post('/template', adminController.addTemplate); 
 router.put('/template', adminController.updateTemplate); 
 router.delete('/template', adminController.deleteTemplate); 
+router.get('/getAllTemplate', adminController.getAllTemplate); 
+router.get('/getTemplate', adminController.getTemplate); 
+
+
 
 
 
