@@ -209,9 +209,6 @@ const addTemplate = async (req, res) => {
     if (duplicate) return res.sendStatus(409); //Conflict 
     try {
 
-        let buff = fs.readFileSync(req.body.File);
-        let File = buff.toString('base64');
-
         const newTemplate = await Template.create({ Title, DateModified, Deadline, File });
         console.log(newTemplate);
 
@@ -246,12 +243,7 @@ const updateTemplate = async (req, res) => {
     if (req.body?.Title) template.Title = req.body.Title;
     if (req.body?.DateModified) template.DateModified = req.body.DateModified;
     if (req.body?.Deadline) template.Deadline = req.body.Deadline;
-  
-    let buff = fs.readFileSync(req.body.File);
-    let File = buff.toString('base64');
-
-
-    if (req.body?.File) template.File = File;
+    if (req.body?.File) template.File = req.body.File;
 
 
     const result = await template.save();
@@ -280,7 +272,6 @@ const getTemplate = async (req, res) => {
     }
     res.json(template);
 }
-
 
 
 module.exports = {
