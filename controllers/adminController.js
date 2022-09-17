@@ -2,9 +2,7 @@ const Admin = require('../model/AdminSchema');
 const Student = require('../model/StudentSchema');
 const Teacher = require('../model/TeacherSchema');
 const Template = require('../model/TemplateSchema');
-
-const fs = require('fs');
-
+const Announcement = require('../model/AnnouncementSchema');
 
 
 const bcrypt = require('bcrypt');
@@ -274,8 +272,88 @@ const getTemplate = async (req, res) => {
 }
 
 
+
+
+//--------------------------------------------------------------
+
+
+
+const addAnnouncement = async (req, res) => {
+
+    var { Title, Description} = req.body;
+    if (!Title) return res.status(400).json({ 'message': 'Title is required.' });
+
+    const duplicate = await Announcement.findOne({ Title: Title }).exec();
+    if (duplicate) return res.sendStatus(409); //Conflict 
+    try {
+
+        const newAnnouncement = await Announcement.create({ Title, Description });
+        console.log(newAnnouncement);
+
+        res.status(201).json({ 'success': `New ${newAnnouncement} created!` });
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+}
+
+
+const deleteAnnouncement = async (req, res) => {
+    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
+
+    const template = await Announcement.findOne({ Title: req.body.Title }).exec();
+    if (!template) {
+        return res.status(204).json({ "message": `No such announcements exists` });
+    }
+    const result = await template.deleteOne();
+    res.json(result);
+}
+
+
+const updateAnnouncement = async (req, res) => {
+    if (!req?.body?.Title) {
+        return res.status(400).json({ 'message': 'Title is required.' });
+    }
+    const announcement = await Announcement.findOne({ Title: req.body.Title }).exec();
+    if (!announcement) {
+        return res.status(204).json({ "message": `No Announcement matches Title` });
+    }
+    if (req.body?.Title) announcement.Title = req.body.Title;
+    if (req.body?.Description) announcement.Description = req.body.Description;
+
+
+    const result = await announcement.save();
+    res.json(result);
+}
+
+
+const getAllAnnouncement = async (req, res) => {
+    const announcements = await Announcement.find();
+    if (!announcements) return res.status(204).json({ 'message': 'No Announcements found.' });
+    try {
+        res.json(announcements);
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+
+}
+
+const getAnnouncement = async (req, res) => {
+    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
+
+    const announcement = await Announcement.findOne({ Title: req.body.Title }).exec();
+    if (!announcement) {
+        return res.status(204).json({ "message": `No announcement matches Title` });
+    }
+    res.json(announcement);
+}
+
+
+
 module.exports = {
     addNewStudent, addNewTeacher, getAllStudent, getAllTeacher,
     getStudent, getTeacher, deleteStudent, deleteTeacher, updateStudent, updateTeacher,
-    addTemplate, getTemplate, getAllTemplate, updateTemplate, deleteTemplate
+    addTemplate, getTemplate, getAllTemplate, updateTemplate, deleteTemplate,
+    addAnnouncement, getAnnouncement, getAllAnnouncement, updateAnnouncement, deleteAnnouncement
 }

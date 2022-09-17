@@ -24,6 +24,11 @@ router.get('/getAllTemplate', adminController.getAllTemplate);
 router.get('/getTemplate', adminController.getTemplate); 
 
 
+router.post('/announcement', adminController.addAnnouncement); 
+router.put('/announcement', adminController.updateAnnouncement); 
+router.delete('/announcement', adminController.deleteAnnouncement); 
+router.get('/getAllAnnouncement', adminController.getAllAnnouncement); 
+router.get('/getAnnouncement', adminController.getAnnouncement); 
 
 
 
