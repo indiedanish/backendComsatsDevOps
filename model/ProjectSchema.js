@@ -15,6 +15,12 @@ var ProjectSchema = new mongoose.Schema({
         type: String,
     },
 
+    Deliverable:   [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Deliverable'
+    }],
+    
+    
     TeamLeader:   {
         type: mongoose.Schema.ObjectId,
         ref: 'Student'

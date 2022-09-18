@@ -57,6 +57,13 @@ var StudentSchema = new mongoose.Schema({
     ref: 'RubricsSupervisor'
 
   },
+
+  Notifications: [{
+    type: mongoose.Schema.ObjectId,
+    ref: 'Notification'
+
+  }],
+
   OnlineStatus: {
     type: Boolean,
   },

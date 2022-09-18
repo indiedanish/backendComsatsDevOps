@@ -1,7 +1,5 @@
 var mongoose = require("mongoose");
-var TemplateSchema = new mongoose.Schema({
-
-  
+var DeliverableSchema = new mongoose.Schema({
 
   Title: {
     type: String,
@@ -14,12 +12,6 @@ var TemplateSchema = new mongoose.Schema({
     default: Date.now,
   },
 
-  Deadline: {
-    type: Date,
-    required: true,
-
-  },
-
   File: {
     type: String,
     required: true,
@@ -28,4 +20,4 @@ var TemplateSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model("Template", TemplateSchema);
+module.exports = mongoose.model("Deliverable", DeliverableSchema);
