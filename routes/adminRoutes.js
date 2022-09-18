@@ -41,11 +41,11 @@ router.get('/getAnnouncement', announcementController.getAnnouncement);
 // router.get('/getRubrics', rubricsController.getAnnouncement); 
 
 
-// router.post('/committee', committeeController.addAnnouncement); 
-// router.put('/committee', committeeController.updateAnnouncement); 
-// router.delete('/committee', committeeController.deleteAnnouncement); 
-// router.get('/getCommittee', committeeController.getAnnouncement); 
-// router.get('/getAllCommittee', committeeController.getAllAnnouncement); 
+router.post('/committee', committeeController.addCommittee); 
+router.put('/committee', committeeController.updateCommittee); 
+router.delete('/committee', committeeController.deleteCommittee); 
+router.get('/getCommittee', committeeController.getCommittee); 
+router.get('/getAllCommittee', committeeController.getAllCommittee); 
 
 
 
