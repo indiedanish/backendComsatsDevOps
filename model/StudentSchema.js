@@ -2,7 +2,13 @@ var mongoose = require("mongoose");
 var StudentSchema = new mongoose.Schema({
   Name: {
     type: String,
+    
+  },
+
+  RegNo: {
+    type: String,
     required: true,
+    unique: true,
   },
   Email: {
     type: String,
@@ -16,44 +22,40 @@ var StudentSchema = new mongoose.Schema({
 
   PhoneNumber: {
     type: Number,
-    required: true,
+
   },
   Gender: {
     type: Boolean,
-    required: true,
   
   },
 
   Role: {
     type: String,
-    required: true,
+
   },
-  RegNo: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+
 
   Position: {
     type: String,
-    required: true,
+
   },
 
   FypStatus: {
     type: String,
-    required: true,
+ 
   },
-  CommitteeRemarks: {
-    Presentation: { Remarks: { type: String }, Marks: { type: Number } },
-    TechnicalKnowledge: { Remarks: { type: String }, Marks: { type: Number } },
-    Communication: { Remarks: { type: String }, Marks: { type: Number } },
-    Documentation: { Remarks: { type: String }, Marks: { type: Number } },
+
+  CommitteeEvaluation: {
+  
+    type: mongoose.Schema.ObjectId,
+      ref: 'RubricsCommittee'
+ 
   },
-  SupervisorRemarks: {
-    Presentation: { Remarks: { type: String }, Marks: { type: Number } },
-    TechnicalKnowledge: { Remarks: { type: String }, Marks: { type: Number } },
-    Communication: { Remarks: { type: String }, Marks: { type: Number } },
-    Documentation: { Remarks: { type: String }, Marks: { type: Number } },
+
+  SupervisorEvaluation: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'RubricsSupervisor'
+
   },
   OnlineStatus: {
     type: Boolean,

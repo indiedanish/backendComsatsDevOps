@@ -1,18 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const employeesController = require('../../controllers/employeesController');
+const ProjectController = require('../../controllers/TeacherControllers/ProjectController');
 const ROLES_LIST = require('../../config/roles_list');
 const verifyRoles = require('../../middleware/verifyRoles');
 
-router.route('/')
-    .get(employeesController.getAllEmployees)
 
-    
-    .post(verifyRoles(ROLES_LIST.TeamLead), employeesController.createNewEmployee)
-    .put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), employeesController.updateEmployee)
-    .delete(verifyRoles(ROLES_LIST.Admin), employeesController.deleteEmployee);
 
-router.route('/:id')
-    .get(employeesController.getEmployee);
+// router.get('/project',verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead ), ProjectController.getProject)
+// router.get('/allProject',verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead ), ProjectController.getProject)
+
+
+   
 
 module.exports = router;

@@ -58,10 +58,11 @@ require('./routes/adminRoutes'));
 app.use(verifyJWT);
 
 app.use('/student', require('./routes/api/student'));
+app.use('/teacher', require('./routes/api/teacher'));
 
 
-app.use('/employees', require('./routes/api/employees'));
-app.use('/users', require('./routes/api/users'));
+app.use('/employees', require('./routes/api/teacher'));
+
 
 app.all('*', (req, res) => {
     res.status(404);

@@ -16,16 +16,16 @@ var TeacherSchema = new mongoose.Schema({
 
   PhoneNumber: {
     type: Number,
-    required: true,
-  },
+    required: true,  },
   Gender: {
     type: Boolean,
-    required: true,
-
   },
-
-  Role: {
-    type: String,
+  isSupervisor: {
+    type: Boolean,
+    required: true,
+  },
+  isCommittee: {
+    type: Boolean,
     required: true,
   },
 

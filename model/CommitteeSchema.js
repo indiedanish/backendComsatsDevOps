@@ -11,18 +11,12 @@ var CommitteeSchema = new mongoose.Schema({
 
         Teacher: [
             {
-                type: Schema.Types.ObjectId,
+                type: mongoose.Schema.ObjectId,
                 ref: 'Teacher'
             }
         ],
 
-        // Groups: [
-        //     {
-        //         type: Schema.Types.ObjectId,
-        //         ref: 'FypGrp'
-        //     }
-        // ],
-
+       
 
 });
 module.exports = mongoose.model("Committee", CommitteeSchema);

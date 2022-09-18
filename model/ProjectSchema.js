@@ -7,10 +7,6 @@ var ProjectSchema = new mongoose.Schema({
         unique: true,
     },
 
-    Technologies: {
-        type: String,    
-    },
-
     Description: {  
         type: String,
     },
@@ -19,13 +15,39 @@ var ProjectSchema = new mongoose.Schema({
         type: String,
     },
 
-    Group: {
-        type: Schema.Types.ObjectId,
-        ref: 'FypGrp'
+    TeamLeader:   {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Student'
     },
 
-  
+    GroupMembers: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Student'
+        }
+    ],
+    GroupStatus: {  // 0 = Pending, 1 = Approved, 2 = Rejected
+        type: String,
+        
+    },
 
+    GroupSupervisor: {
+        type: mongoose.Schema.ObjectId,
+             ref: 'Teacher'
+    },
+    GroupCoSupervisor: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Teacher'
+
+    },
+    GroupCommittee: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Committee'
+    },
+
+    Average: {
+        type: Number,
+    },
 
 
 });

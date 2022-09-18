@@ -1,34 +1,52 @@
 const express = require('express');
 const router = express.Router();
-const adminController = require('../controllers/adminController');
-
-router.post('/student', adminController.addNewStudent);
-router.post('/teacher', adminController.addNewTeacher);
-
-router.put('/student', adminController.updateStudent);
-router.put('/teacher', adminController.updateTeacher);
-
-router.delete('/student', adminController.deleteStudent);
-router.delete('/teacher', adminController.deleteTeacher);
-
-router.get('/getStudent', adminController.getStudent);
-router.get('/getTeacher', adminController.getTeacher);
-
-router.get('/getAllStudents', adminController.getAllStudent);
-router.get('/getAllTeachers', adminController.getAllTeacher); 
-
-router.post('/template', adminController.addTemplate); 
-router.put('/template', adminController.updateTemplate); 
-router.delete('/template', adminController.deleteTemplate); 
-router.get('/getAllTemplate', adminController.getAllTemplate); 
-router.get('/getTemplate', adminController.getTemplate); 
+const stdTechCrudController = require('../controllers/AdminControllers/stdTechCrudController');
+const tempplateController = require('../controllers/AdminControllers/templateController');
+const announcementController = require('../controllers/AdminControllers/announcementController');
+const rubricsController = require('../controllers/AdminControllers/rubricsController');
+const committeeController = require('../controllers/AdminControllers/committeeController');
 
 
-router.post('/announcement', adminController.addAnnouncement); 
-router.put('/announcement', adminController.updateAnnouncement); 
-router.delete('/announcement', adminController.deleteAnnouncement); 
-router.get('/getAllAnnouncement', adminController.getAllAnnouncement); 
-router.get('/getAnnouncement', adminController.getAnnouncement); 
+router.post('/student', stdTechCrudController.addNewStudent);
+router.post('/teacher', stdTechCrudController.addNewTeacher);
+
+router.put('/student', stdTechCrudController.updateStudent);
+router.put('/teacher', stdTechCrudController.updateTeacher);
+
+router.delete('/student', stdTechCrudController.deleteStudent);
+router.delete('/teacher', stdTechCrudController.deleteTeacher);
+
+router.get('/getStudent', stdTechCrudController.getStudent);
+router.get('/getTeacher', stdTechCrudController.getTeacher);
+
+router.get('/getAllStudents', stdTechCrudController.getAllStudent);
+router.get('/getAllTeachers', stdTechCrudController.getAllTeacher); 
+
+router.post('/template', tempplateController.addTemplate); 
+router.put('/template', tempplateController.updateTemplate); 
+router.delete('/template', tempplateController.deleteTemplate); 
+router.get('/getAllTemplate', tempplateController.getAllTemplate); 
+router.get('/getTemplate', tempplateController.getTemplate); 
+
+router.post('/announcement', announcementController.addAnnouncement); 
+router.put('/announcement', announcementController.updateAnnouncement); 
+router.delete('/announcement', announcementController.deleteAnnouncement); 
+router.get('/getAllAnnouncement', announcementController.getAllAnnouncement); 
+router.get('/getAnnouncement', announcementController.getAnnouncement); 
+
+
+// router.post('/rubrics', rubricsController.addAnnouncement); 
+// router.put('/rubrics', rubricsController.updateAnnouncement); 
+// router.delete('/rubrics', rubricsController.deleteAnnouncement); 
+// router.get('/getRubrics', rubricsController.getAnnouncement); 
+
+
+// router.post('/committee', committeeController.addAnnouncement); 
+// router.put('/committee', committeeController.updateAnnouncement); 
+// router.delete('/committee', committeeController.deleteAnnouncement); 
+// router.get('/getCommittee', committeeController.getAnnouncement); 
+// router.get('/getAllCommittee', committeeController.getAllAnnouncement); 
+
 
 
 

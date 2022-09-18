@@ -1,14 +1,13 @@
-const Admin = require('../model/AdminSchema');
-const Student = require('../model/StudentSchema');
-const Teacher = require('../model/TeacherSchema');
-const Template = require('../model/TemplateSchema');
-const Announcement = require('../model/AnnouncementSchema');
+
+const Student = require('../../model/StudentSchema');
+const Teacher = require('../../model/TeacherSchema');
+
 
 
 const bcrypt = require('bcrypt');
 
 
-const addNewStudent = async (req, res) => {
+module.exports.addNewStudent = async (req, res) => {
 
     var { Name, RegNo, Position, Gender, Email, Password, PhoneNumber, Role, FypStatus, CommitteeRemarks, SupervisorRemarks, OnlineStatus } = req.body;
     if (!Name || !RegNo || !Password) return res.status(400).json({ 'message': 'Username, Reg No and password are required.' });
@@ -30,7 +29,7 @@ const addNewStudent = async (req, res) => {
     }
 }
 
-const addNewTeacher = async (req, res) => {
+module.exports.addNewTeacher = async (req, res) => {
 
     var { Name, Email, Password, PhoneNumber, Gender, Role, Designation } = req.body;
     // Name = "Ali"
@@ -63,7 +62,7 @@ const addNewTeacher = async (req, res) => {
 
 //------------------------------------------------------------------------
 
-const deleteStudent = async (req, res) => {
+module.exports.deleteStudent = async (req, res) => {
     if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
 
     const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
@@ -73,8 +72,7 @@ const deleteStudent = async (req, res) => {
     const result = await student.deleteOne(); //{ _id: req.body.id }
     res.json(result);
 }
-
-const deleteTeacher = async (req, res) => {
+module.exports.deleteTeacher = async (req, res) => {
     if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teachers Email required.' });
 
     const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
@@ -87,7 +85,7 @@ const deleteTeacher = async (req, res) => {
 
 //------------------------------------------------------------------
 
-const getStudent = async (req, res) => {
+module.exports.getStudent = async (req, res) => {
     if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
 
     const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
@@ -97,7 +95,7 @@ const getStudent = async (req, res) => {
     res.json(student);
 }
 
-const getTeacher = async (req, res) => {
+module.exports.getTeacher = async (req, res) => {
     if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teacher email required.' });
 
     const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
@@ -110,7 +108,7 @@ const getTeacher = async (req, res) => {
 
 //--------------------------------------------------------------
 
-const updateStudent = async (req, res) => {
+module.exports.updateStudent = async (req, res) => {
     if (!req?.body?.RegNo) {
         return res.status(400).json({ 'message': 'ID parameter is required.' });
     }
@@ -139,7 +137,7 @@ const updateStudent = async (req, res) => {
 }
 
 
-const updateTeacher = async (req, res) => {
+module.exports.updateTeacher = async (req, res) => {
     if (!req?.body?.Email) {
         return res.status(400).json({ 'message': 'Email parameter is required.' });
     }
@@ -172,7 +170,7 @@ const updateTeacher = async (req, res) => {
 //--------------------------------------------------------------
 
 
-const getAllStudent = async (req, res) => {
+module.exports.getAllStudent = async (req, res) => {
     const students = await Student.find();
     if (!students) return res.status(204).json({ 'message': 'No Students found.' });
     try {
@@ -184,7 +182,7 @@ const getAllStudent = async (req, res) => {
 
 }
 
-const getAllTeacher = async (req, res) => {
+module.exports.getAllTeacher = async (req, res) => {
 
     const teachers = await Teacher.find();
     if (!teachers) return res.status(204).json({ 'message': 'No Teachers found.' });
@@ -198,162 +196,3 @@ const getAllTeacher = async (req, res) => {
 
 
 
-const addTemplate = async (req, res) => {
-
-    var { Title, DateModified, Deadline, File } = req.body;
-    if (!Title || !Deadline) return res.status(400).json({ 'message': 'Title and Deadline are required.' });
-
-    const duplicate = await Template.findOne({ Title: Title }).exec();
-    if (duplicate) return res.sendStatus(409); //Conflict 
-    try {
-
-        const newTemplate = await Template.create({ Title, DateModified, Deadline, File });
-        console.log(newTemplate);
-
-        res.status(201).json({ 'success': `New ${newTemplate} created!` });
-    }
-    catch (err) {
-        res.status(500).json({ 'message': err.message });
-    }
-}
-
-
-const deleteTemplate = async (req, res) => {
-    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
-
-    const template = await Template.findOne({ Title: req.body.Title }).exec();
-    if (!template) {
-        return res.status(204).json({ "message": `No such template exists` });
-    }
-    const result = await template.deleteOne();
-    res.json(result);
-}
-
-
-const updateTemplate = async (req, res) => {
-    if (!req?.body?.Title) {
-        return res.status(400).json({ 'message': 'Title is required.' });
-    }
-    const template = await Template.findOne({ Title: req.body.Title }).exec();
-    if (!template) {
-        return res.status(204).json({ "message": `No Template matches Title` });
-    }
-    if (req.body?.Title) template.Title = req.body.Title;
-    if (req.body?.DateModified) template.DateModified = req.body.DateModified;
-    if (req.body?.Deadline) template.Deadline = req.body.Deadline;
-    if (req.body?.File) template.File = req.body.File;
-
-
-    const result = await template.save();
-    res.json(result);
-}
-
-
-const getAllTemplate = async (req, res) => {
-    const templates = await Template.find();
-    if (!templates) return res.status(204).json({ 'message': 'No Templates found.' });
-    try {
-        res.json(templates);
-    }
-    catch (err) {
-        res.status(500).json({ 'message': err.message });
-    }
-
-}
-
-const getTemplate = async (req, res) => {
-    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
-
-    const template = await Template.findOne({ Title: req.body.Title }).exec();
-    if (!template) {
-        return res.status(204).json({ "message": `No template matches Title` });
-    }
-    res.json(template);
-}
-
-
-
-
-//--------------------------------------------------------------
-
-
-
-const addAnnouncement = async (req, res) => {
-
-    var { Title, Description} = req.body;
-    if (!Title) return res.status(400).json({ 'message': 'Title is required.' });
-
-    const duplicate = await Announcement.findOne({ Title: Title }).exec();
-    if (duplicate) return res.sendStatus(409); //Conflict 
-    try {
-
-        const newAnnouncement = await Announcement.create({ Title, Description });
-        console.log(newAnnouncement);
-
-        res.status(201).json({ 'success': `New ${newAnnouncement} created!` });
-    }
-    catch (err) {
-        res.status(500).json({ 'message': err.message });
-    }
-}
-
-
-const deleteAnnouncement = async (req, res) => {
-    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
-
-    const template = await Announcement.findOne({ Title: req.body.Title }).exec();
-    if (!template) {
-        return res.status(204).json({ "message": `No such announcements exists` });
-    }
-    const result = await template.deleteOne();
-    res.json(result);
-}
-
-
-const updateAnnouncement = async (req, res) => {
-    if (!req?.body?.Title) {
-        return res.status(400).json({ 'message': 'Title is required.' });
-    }
-    const announcement = await Announcement.findOne({ Title: req.body.Title }).exec();
-    if (!announcement) {
-        return res.status(204).json({ "message": `No Announcement matches Title` });
-    }
-    if (req.body?.Title) announcement.Title = req.body.Title;
-    if (req.body?.Description) announcement.Description = req.body.Description;
-
-
-    const result = await announcement.save();
-    res.json(result);
-}
-
-
-const getAllAnnouncement = async (req, res) => {
-    const announcements = await Announcement.find();
-    if (!announcements) return res.status(204).json({ 'message': 'No Announcements found.' });
-    try {
-        res.json(announcements);
-    }
-    catch (err) {
-        res.status(500).json({ 'message': err.message });
-    }
-
-}
-
-const getAnnouncement = async (req, res) => {
-    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
-
-    const announcement = await Announcement.findOne({ Title: req.body.Title }).exec();
-    if (!announcement) {
-        return res.status(204).json({ "message": `No announcement matches Title` });
-    }
-    res.json(announcement);
-}
-
-
-
-module.exports = {
-    addNewStudent, addNewTeacher, getAllStudent, getAllTeacher,
-    getStudent, getTeacher, deleteStudent, deleteTeacher, updateStudent, updateTeacher,
-    addTemplate, getTemplate, getAllTemplate, updateTemplate, deleteTemplate,
-    addAnnouncement, getAnnouncement, getAllAnnouncement, updateAnnouncement, deleteAnnouncement
-}
