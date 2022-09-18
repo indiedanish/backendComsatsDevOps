@@ -1,8 +1,4 @@
-
 const Template = require('../../model/TemplateSchema');
-
-
-
 
 module.exports.addTemplate = async (req, res) => {
 
