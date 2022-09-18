@@ -4,7 +4,7 @@ const router = express.Router();
 const ROLES_LIST = require('../../config/roles_list');
 const verifyRoles = require('../../middleware/verifyRoles');
 
-const ProjectController = require('../../controllers/TeacherControllers/ProjectController');
+const ProjectController = require('../../controllers/TeacherControllers/TeacherProjectController');
 
 router.post('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee), ProjectController.addProject)
 router.put('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee), ProjectController.updateProject)

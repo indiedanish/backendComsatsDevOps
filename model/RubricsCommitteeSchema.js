@@ -2,9 +2,6 @@
 var mongoose = require("mongoose");
 var RubricsCommitteeSchema = new mongoose.Schema({
 
-
-
-
     Scope_SRS: {
         Remarks: {
             type: String,
@@ -34,9 +31,7 @@ var RubricsCommitteeSchema = new mongoose.Schema({
 
 
 
-    }
-
-    ,
+    },
 
     SDS: {
         Remarks: {
