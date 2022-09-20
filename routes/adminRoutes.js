@@ -35,10 +35,17 @@ router.get('/getAllAnnouncement', announcementController.getAllAnnouncement);
 router.get('/getAnnouncement', announcementController.getAnnouncement); 
 
 
-// router.post('/rubrics', rubricsController.addAnnouncement); 
-// router.put('/rubrics', rubricsController.updateAnnouncement); 
-// router.delete('/rubrics', rubricsController.deleteAnnouncement); 
-// router.get('/getRubrics', rubricsController.getAnnouncement); 
+//router.post('/supervisorRubrics', rubricsController.addCommitteeRubrics); 
+// router.put('/supervisorRubrics', rubricsController.updateAnnouncement); 
+// router.delete('/supervisorRubrics', rubricsController.deleteAnnouncement); 
+// router.get('/getSupervisorRubrics', rubricsController.getAnnouncement); 
+// router.get('/getAllsupervisorRubrics', rubricsController.getAnnouncement); 
+
+ router.post('/committeeRubrics', rubricsController.addCommitteeRubrics); 
+// router.put('/committeeRubrics', rubricsController.updateAnnouncement); 
+// router.delete('/committeeRubrics', rubricsController.deleteAnnouncement); 
+// router.get('/getCommitteeRubrics', rubricsController.getAnnouncement); 
+// router.get('/getAllCommitteeRubrics', rubricsController.getAnnouncement); 
 
 
 router.post('/committee', committeeController.addCommittee); 
