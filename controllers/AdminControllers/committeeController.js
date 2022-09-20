@@ -1,13 +1,26 @@
 const Committee = require('../../model/CommitteeSchema');
+const TeacherDB = require('../../model/TeacherSchema');
 
 module.exports.addCommittee = async (req, res) => {
 
-    var { Name, Teacher } = req.body;
+    var { Name, Teacher = new Array() } = req.body;     // Committe Name and array of teacher emails
     if (!Name) return res.status(400).json({ 'message': 'Name is required.' });
 
     const duplicate = await Committee.findOne({ Name: Name }).exec();
     if (duplicate) return res.sendStatus(409); //Conflict 
+
     try {
+        check = new Array();
+        for (var i = 0; i < Teacher.length; i++) {
+            temp = await TeacherDB.findOne({ Email: Teacher[i] });
+            if (!temp) {
+                return res.status(204).json({ "message": `No such Teacher exists` });
+            }
+            check = [...check, temp]
+        }
+
+        Teacher = check
+
 
         const newCommittee = await Committee.create({ Name, Teacher });
         console.log(newCommittee);
@@ -41,8 +54,23 @@ module.exports.updateCommittee = async (req, res) => {
         return res.status(204).json({ "message": `No Committee matches Name` });
     }
     if (req.body?.Name) committee.Name = req.body.Name;
-    if (req.body?.Teacher) committee.Teacher = req.body.Teaacher;
-   
+
+
+    check = new Array();
+    for (var i = 0; i < req.body.Teacher.length; i++) {
+        temp = await TeacherDB.findOne({ Email: req.body.Teacher[i] });
+        if (!temp) {
+            return res.status(204).json({ "message": `No such Teacher exists` });
+        }
+        check = [...check, temp]
+    }
+
+    Teacher = check
+
+
+
+    if (req.body?.Teacher) committee.Teacher = Teacher;
+
     const result = await committee.save();
     res.json(result);
 }

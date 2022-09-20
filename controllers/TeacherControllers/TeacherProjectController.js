@@ -8,13 +8,10 @@ const Committee = require('../../model/CommitteeSchema');
 
 module.exports.addProject = async (req, res) => {
 
-    console.log("Ali");
-
 
     var { Name, Description, Status, Deliverable, TeamLeader, GroupMembers,
         GroupStatus, GroupSupervisor, GroupCoSupervisor, GroupCommittee, Average } = req.body;
     if (!Name) return res.status(400).json({ 'message': 'Name is required.' });
-    console.log("Name");
 
     const duplicate = await Project.findOne({ Name: Name }).exec();
     if (duplicate) return res.sendStatus(409); //Conflict 
@@ -41,7 +38,6 @@ module.exports.addProject = async (req, res) => {
 
         }
 
-
         if (req.body.GroupCoSupervisor) {
             GroupCoSupervisor = await Teacher.findOne({ Email: GroupCoSupervisor });
             if (!GroupCoSupervisor) {
@@ -50,7 +46,7 @@ module.exports.addProject = async (req, res) => {
 
         }
 
-        if (req.body.GroupCoSupervisor) {
+        if (req.body.GroupCommittee) {
             GroupCommittee = await Committee.findOne({ Name: GroupCommittee });
             if (!GroupCoSupervisor) {
                 return res.status(204).json({ "message": `No such GroupCommittee exists` });
