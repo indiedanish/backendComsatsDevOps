@@ -9,7 +9,8 @@ const bcrypt = require('bcrypt');
 
 module.exports.addNewStudent = async (req, res) => {
 
-    var { Name, RegNo, Position, Gender, Email, Password, PhoneNumber, Role, FypStatus, CommitteeRemarks, SupervisorRemarks, OnlineStatus } = req.body;
+    var { Name, RegNo, Email, Password, PhoneNumber, Gender, Role, Position, FypStatus, 
+        CommitteeEvaluation, SupervisorEvaluation, Notifications, OnlineStatus } = req.body;
     if (!Name || !RegNo || !Password) return res.status(400).json({ 'message': 'Username, Reg No and password are required.' });
 
     // Check if user already exists
@@ -19,7 +20,10 @@ module.exports.addNewStudent = async (req, res) => {
         //encrypt the password
         Password = await bcrypt.hash(Password, 10);
 
-        const newStudent = await Student.create({ Name, RegNo, Position, Gender, Email, Password, PhoneNumber, Role, FypStatus, CommitteeRemarks, SupervisorRemarks, OnlineStatus });
+        const newStudent = await Student.create({  Name, RegNo, Email, Password, PhoneNumber, Gender, 
+             Role, Position, FypStatus, CommitteeEvaluation, SupervisorEvaluation, 
+             Notifications, OnlineStatus });
+
         console.log(newStudent);
 
         res.status(201).json({ 'success': `New user ${newStudent} created!` });
@@ -29,9 +33,88 @@ module.exports.addNewStudent = async (req, res) => {
     }
 }
 
+
+
+module.exports.updateStudent = async (req, res) => {
+    if (!req?.body?.RegNo) {
+        return res.status(400).json({ 'message': 'ID parameter is required.' });
+    }
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
+    if (!student) {
+        return res.status(204).json({ "message": `No Student matches RegNo ${req.body.RegNo}.` });
+    }
+    if (req.body?.Name) student.Name = req.body.Name;
+    if (req.body?.RegNo) student.RegNo = req.body.RegNo;
+    if (req.body?.Email) student.Email = req.body.Email;
+    if (req.body?.PhoneNumber) student.PhoneNumber = req.body.PhoneNumber;
+    if (req.body?.Gender) student.Gender = req.body.Gender;
+    if (req.body?.Role) student.Role = req.body.Role;
+    if (req.body?.Position) student.Position = req.body.Position;
+    if (req.body?.FypStatus) student.FypStatus = req.body.FypStatus;
+    if (req.body?.CommitteeEvaluation) student.CommitteeEvaluation = req.body.CommitteeEvaluation;
+    if (req.body?.SupervisorEvaluation) student.SupervisorEvaluation = req.body.SupervisorEvaluation;
+    if (req.body?.Notifications) student.SupervisorNotifications = req.body.SupervisorNotifications;
+    if (req.body?.OnlineStatus) student.OnlineStatus = req.body.OnlineStatus;
+
+    if (req.body?.Password) {
+        student.Password = await bcrypt.hash(req.body.Password, 10);
+    }
+
+    const result = await student.save();
+    res.json(result);
+}
+
+
+module.exports.deleteStudent = async (req, res) => {
+    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
+
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
+    if (!student) {
+        return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
+    }
+    const result = await student.deleteOne(); //{ _id: req.body.id }
+    res.json(result);
+}
+
+
+
+
+module.exports.getStudent = async (req, res) => {
+    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
+
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
+    if (!student) {
+        return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
+    }
+    res.json(student);
+}
+
+module.exports.getAllStudent = async (req, res) => {
+    const students = await Student.find();
+    if (!students) return res.status(204).json({ 'message': 'No Students found.' });
+    try {
+        res.json(students);
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+
+}
+
+
+
+
+
+//--------------------------------------------------------------
+
+
+
+
+
+
 module.exports.addNewTeacher = async (req, res) => {
 
-    var { Name, Email, Password, PhoneNumber, Gender, Role, Designation } = req.body;
+    var { Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation } = req.body;
     // Name = "Ali"
     // Email = "ali@yahoo.com"
     // Password = "1234",
@@ -49,7 +132,7 @@ module.exports.addNewTeacher = async (req, res) => {
         //encrypt the password
         Password = await bcrypt.hash(Password, 10);
 
-        const newTeacher = await Teacher.create({ Name, Email, Password, PhoneNumber, Gender, Role, Designation });
+        const newTeacher = await Teacher.create({ Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation });
         console.log(newTeacher);
 
         res.status(201).json({ 'success': `New user ${newTeacher} created!` });
@@ -57,83 +140,6 @@ module.exports.addNewTeacher = async (req, res) => {
     catch (err) {
         res.status(500).json({ 'message': err.message });
     }
-}
-
-
-//------------------------------------------------------------------------
-
-module.exports.deleteStudent = async (req, res) => {
-    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
-
-    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
-    if (!student) {
-        return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
-    }
-    const result = await student.deleteOne(); //{ _id: req.body.id }
-    res.json(result);
-}
-module.exports.deleteTeacher = async (req, res) => {
-    if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teachers Email required.' });
-
-    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
-    if (!teacher) {
-        return res.status(204).json({ "message": `No teacher matches email ${req.body.Email}.` });
-    }
-    const result = await teacher.deleteOne(); //{ _id: req.body.id }
-    res.json(result);
-}
-
-//------------------------------------------------------------------
-
-module.exports.getStudent = async (req, res) => {
-    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
-
-    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
-    if (!student) {
-        return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
-    }
-    res.json(student);
-}
-
-module.exports.getTeacher = async (req, res) => {
-    if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teacher email required.' });
-
-    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
-    if (!teacher) {
-        return res.status(204).json({ "message": `No teacher matches Email ${req.body.Email}.` });
-    }
-    res.json(teacher);
-}
-
-
-//--------------------------------------------------------------
-
-module.exports.updateStudent = async (req, res) => {
-    if (!req?.body?.RegNo) {
-        return res.status(400).json({ 'message': 'ID parameter is required.' });
-    }
-    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
-    if (!student) {
-        return res.status(204).json({ "message": `No Student matches RegNo ${req.body.RegNo}.` });
-    }
-    if (req.body?.Name) student.Name = req.body.Name;
-    if (req.body?.RegNo) student.RegNo = req.body.RegNo;
-    if (req.body?.Position) student.Position = req.body.Position;
-    if (req.body?.Gender) student.Gender = req.body.Gender;
-    if (req.body?.Email) student.Email = req.body.Email;
-    if (req.body?.PhoneNumber) student.PhoneNumber = req.body.PhoneNumber;
-    if (req.body?.Role) student.Role = req.body.Role;
-    if (req.body?.FypStatus) student.FypStatus = req.body.FypStatus;
-    if (req.body?.CommitteeRemarks) student.CommitteeRemarks = req.body.CommitteeRemarks;
-    if (req.body?.SupervisorRemarks) student.SupervisorRemarks = req.body.SupervisorRemarks;
-    if (req.body?.OnlineStatus) student.OnlineStatus = req.body.OnlineStatus;
-
-    if (req.body?.Password) {
-        student.Password = await bcrypt.hash(req.body.Password, 10);
-    }
-
-    const result = await student.save();
-    res.json(result);
 }
 
 
@@ -151,8 +157,11 @@ module.exports.updateTeacher = async (req, res) => {
     if (req.body?.Email) teacher.Email = req.body.Email;
     if (req.body?.PhoneNumber) teacher.PhoneNumber = req.body.PhoneNumber;
     if (req.body?.Gender) teacher.Gender = req.body.Gender;
-    if (req.body?.Role) teacher.Role = req.body.Role;
+    if (req.body?.isSupervisor) teacher.isSupervisor = req.body.isSupervisor;
+    if (req.body?.isCommittee) teacher.isCommittee = req.body.isCommittee;
     if (req.body?.Designation) teacher.Designation = req.body.Designation;
+
+    
 
     if (req.body?.Password) {
         teacher.Password = await bcrypt.hash(req.body.Password, 10);
@@ -166,21 +175,30 @@ module.exports.updateTeacher = async (req, res) => {
 
 
 
+module.exports.deleteTeacher = async (req, res) => {
+    if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teachers Email required.' });
 
-//--------------------------------------------------------------
-
-
-module.exports.getAllStudent = async (req, res) => {
-    const students = await Student.find();
-    if (!students) return res.status(204).json({ 'message': 'No Students found.' });
-    try {
-        res.json(students);
+    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
+    if (!teacher) {
+        return res.status(204).json({ "message": `No teacher matches email ${req.body.Email}.` });
     }
-    catch (err) {
-        res.status(500).json({ 'message': err.message });
-    }
-
+    const result = await teacher.deleteOne(); //{ _id: req.body.id }
+    res.json(result);
 }
+
+
+
+module.exports.getTeacher = async (req, res) => {
+    if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teacher email required.' });
+
+    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
+    if (!teacher) {
+        return res.status(204).json({ "message": `No teacher matches Email ${req.body.Email}.` });
+    }
+    res.json(teacher);
+}
+
+
 
 module.exports.getAllTeacher = async (req, res) => {
 

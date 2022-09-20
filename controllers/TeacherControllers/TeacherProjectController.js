@@ -2,6 +2,7 @@ const Project = require('../../model/ProjectSchema');
 
 module.exports.addProject = async (req, res) => {
 
+
     var { Name, Description, Status,  Deliverable, TeamLeader,  GroupMembers,
         GroupStatus, GroupSupervisor, GroupCoSupervisor,  GroupCommittee, Average } = req.body;
     if (!Name) return res.status(400).json({ 'message': 'Name is required.' });

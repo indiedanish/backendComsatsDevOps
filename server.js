@@ -52,13 +52,17 @@ app.use('/logout', require('./routes/logout'));
 app.use('/admin',
 verifyAdmin, 
 require('./routes/adminRoutes'));
-
+//{"Email": "dan@dan.com" , "Password": "12345"}
 
 
 app.use(verifyJWT);
 
+
+
 app.use('/student', require('./routes/api/student'));
 app.use('/teacher', require('./routes/api/teacher'));
+
+
 
 
 app.use('/employees', require('./routes/api/teacher'));

@@ -15,6 +15,8 @@ module.exports.addTeamMember = async (req, res) => {
 
     try {
         const newTeamMember = await Project.GroupMembers.create({ Student });
+       // if (req.body?.Student) project.GroupMembers.Student = req.body.Student.Role;
+
         console.log(newTeamMember);
 
         res.status(201).json({ 'success': `New ${newTeamMember} created!` });
@@ -50,7 +52,6 @@ module.exports.updateRole = async (req, res) => {
     }
 
 }
-
 
 module.exports.deleteTeamMember = async (req, res) => {
     if (!req?.body?.Name || !req.body?.Student) return res.status(400).json({
