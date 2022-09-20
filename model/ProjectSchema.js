@@ -39,7 +39,7 @@ var ProjectSchema = new mongoose.Schema({
 
     GroupSupervisor: {
         type: mongoose.Schema.ObjectId,
-             ref: 'Teacher'
+        ref: 'Teacher'
     },
     GroupCoSupervisor: {
         type: mongoose.Schema.ObjectId,

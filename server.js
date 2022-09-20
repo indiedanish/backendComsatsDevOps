@@ -50,12 +50,12 @@ app.use('/logout', require('./routes/logout'));
 
 
 app.use('/admin',
-verifyAdmin, 
+//verifyAdmin, 
 require('./routes/adminRoutes'));
 //{"Email": "dan@dan.com" , "Password": "12345"}
 
 
-app.use(verifyJWT);
+//app.use(verifyJWT);
 
 
 

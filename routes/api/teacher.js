@@ -8,7 +8,7 @@ const TeacherProjectController = require('../../controllers/TeacherControllers/T
 
 console.log("AliRouteNeww")
 
-router.post('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee), TeacherProjectController.addProject)
+router.post('/project', TeacherProjectController.addProject)
 router.put('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee), TeacherProjectController.updateProject)
 router.delete('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee), TeacherProjectController.deleteProject)
 router.get('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee ), TeacherProjectController.getProject)

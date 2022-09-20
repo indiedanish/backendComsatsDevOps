@@ -8,7 +8,7 @@ const verifyRoles = require('../../middleware/verifyRoles');
 
 
 
-router.get('/project', TeacherProjectController.getProject)
+router.get('/project',verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead ), TeacherProjectController.getProject)
 router.get('/allProject',verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead ), TeacherProjectController.getAllProject)
 
 
