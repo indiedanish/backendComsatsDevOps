@@ -16,13 +16,31 @@ router.post('/teamMember',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectCont
 router.put('/updateRole',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.updateRole) 
 router.delete('/teamMember',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.deleteTeamMember)
 
+// Requirements
+router.post('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.addTeamMember)
+router.put('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.updateRole) 
+router.delete('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.deleteTeamMember)
+
+//Add Requirements L
+//PUT reassign requirement to team member L
+//Accept assigned requriment for team member M
+//Change description of requirement L
+//Add Comments L/M
+//Add Files L/M
+//View Requirements L/M
+//View Comments L/M
+//Delete Comments L/M
+//View Files L/M
+//Testing routes jitnay bhi hoon gaay
+
+
+//
 
 
 // Backlogs
 // Notification Post, Join Email/Request
 // According to evalution or requirements 
 // View report will be considered as evalution
-
 
 
 module.exports = router;

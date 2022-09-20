@@ -10,16 +10,16 @@ module.exports.addCommittee = async (req, res) => {
     if (duplicate) return res.sendStatus(409); //Conflict 
 
     try {
-        check = new Array();
+        validTeachers = new Array();
         for (var i = 0; i < Teacher.length; i++) {
             temp = await TeacherDB.findOne({ Email: Teacher[i] });
             if (!temp) {
                 return res.status(204).json({ "message": `No such Teacher exists` });
             }
-            check = [...check, temp]
+            validTeachers = [...validTeachers, temp]
         }
 
-        Teacher = check
+        Teacher = validTeachers
 
 
         const newCommittee = await Committee.create({ Name, Teacher });
@@ -56,16 +56,16 @@ module.exports.updateCommittee = async (req, res) => {
     if (req.body?.Name) committee.Name = req.body.Name;
 
 
-    check = new Array();
+    validTeachers = new Array();
     for (var i = 0; i < req.body.Teacher.length; i++) {
         temp = await TeacherDB.findOne({ Email: req.body.Teacher[i] });
         if (!temp) {
             return res.status(204).json({ "message": `No such Teacher exists` });
         }
-        check = [...check, temp]
+        validTeachers = [...validTeachers, temp]
     }
 
-    Teacher = check
+    Teacher = validTeachers
 
 
 
@@ -85,7 +85,6 @@ module.exports.getAllCommittee = async (req, res) => {
     catch (err) {
         res.status(500).json({ 'message': err.message });
     }
-
 }
 
 module.exports.getCommittee = async (req, res) => {

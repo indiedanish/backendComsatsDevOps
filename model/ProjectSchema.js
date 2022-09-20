@@ -15,6 +15,12 @@ var ProjectSchema = new mongoose.Schema({
         type: String,
     },
 
+    Requirements: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Requirement'
+
+    },
+
     Deliverable:   [{
         type: mongoose.Schema.ObjectId,
         ref: 'Deliverable'
