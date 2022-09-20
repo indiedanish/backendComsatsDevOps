@@ -2,21 +2,25 @@ const jwt = require('jsonwebtoken');
 
 
 const verifyJWT = (req, res, next) => {
-    const authHeader = req.headers.authorization || req.headers.Authorization;
-    console.log("ali")
-    if (!authHeader?.startsWith('Bearer')) return res.sendStatus(401);
-    const token = authHeader.split(' ')[1];
-    console.log("ali2")
+    const cookies = req.cookies;
+    if (!cookies?.jwt) return res.sendStatus(401);
 
-    console.log(token)
+    const RefreshToken = cookies.jwt;
+
+
+    
+ 
     
     jwt.verify(
-        token,
-        process.env.ACCESS_TOKEN_SECRET,
+        RefreshToken,
+        process.env.REFRESH_TOKEN_SECRET,
         (err, decoded) => {
-            if (err) return res.sendStatus(403); //invalid token
+           
+            if (err) return res.json(err); //invalid token
+        
+            req.Email = decoded.Email;
+            req.Role = decoded.Role;
          
-            req.roles = decoded.UserInfo.roles;
             next();
         }
     );

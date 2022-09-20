@@ -7,7 +7,7 @@ const verifyRoles = require('../../middleware/verifyRoles');
 const TeacherProjectController = require('../../controllers/TeacherControllers/TeacherProjectController');
 
 
-router.post('/project', verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee), TeacherProjectController.addProject)
+router.post('/project', verifyRoles(ROLES_LIST.Supervisor), TeacherProjectController.addProject)
 router.put('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee), TeacherProjectController.updateProject)
 router.delete('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee), TeacherProjectController.deleteProject)
 router.get('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee ), TeacherProjectController.getProject)

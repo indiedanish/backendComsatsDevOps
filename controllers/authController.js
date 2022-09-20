@@ -75,25 +75,17 @@ const TeacherLogin = async (req, res) => {
     const match = await bcrypt.compare(Password, foundTeacher.Password);
     console.log(process.env.ACCESS_TOKEN_SECRET)
        if (match) {
-       const role = foundTeacher.Role;
-        // create JWTs
-        // regno, pass, role
-        // regno+pass+role = Access $dfadfsdfkhsdbfhsebfwjfbiwjefwibejfwbejfwbefjweb
-        // regno+pass+role = Refresh $sefsdfssdgdsfgdfgdfgdfgdfgdfgdfg
+  
 
-        const accessToken = jwt.sign(
-            
-            {
-                "UserInfo": {
-                    "Email": foundTeacher.Email,
-                    "Role": foundTeacher.Role
-                }
-            },
-            "" + process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '59s' }
-        );
+        const role = foundTeacher.isCommittee ? "2004" : "2003";
+
+
+        console.log(foundTeacher.Email)
         const refreshToken = jwt.sign(
-            { "Email": foundTeacher.Email },
+            { "Email": foundTeacher.Email,
+            "Role": role
+
+        },
            "" + process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '1d' }
         );
@@ -106,7 +98,7 @@ const TeacherLogin = async (req, res) => {
         res.cookie('jwt', refreshToken, { httpOnly: true,  sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
         // Send authorization roles and access token to user
-        res.json({ role, accessToken });
+        res.json({ role, refreshToken });
 
     } else {
         res.sendStatus(401);

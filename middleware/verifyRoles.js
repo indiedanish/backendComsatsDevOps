@@ -2,15 +2,19 @@ const verifyRoles = (...allowedRoles) => {
     //req.role = TeamLead
     //allowedRoles = [team Lead]
     return (req, res, next) => {
-        if (!req?.roles) return res.sendStatus(401);
+
+        
+        if (!req?.Role) return res.sendStatus(401);
         
         const rolesArray = [...allowedRoles];
 
+        if (rolesArray.includes(req.Role)) {
+            
+            next();
+        }
 
-       
-        const result = req.roles.map(role => rolesArray.includes(role)).find(val => val === true); //searching in allowed parameters
-        if (!result) return res.sendStatus(401);
-        next();
+        else  return res.sendStatus(401);
+        
     }
 }
 
