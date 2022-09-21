@@ -22,7 +22,6 @@ router.put('/deleteTeamMember', verifyRoles( ROLES_LIST.TeamLead ), StudentProje
 // router.put('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.updateRole) 
 // router.delete('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.deleteTeamMember)
 
-//Add Requirements L
 //PUT reassign requirement to team member L
 //Accept assigned requriment for team member M
 //Change description of requirement L

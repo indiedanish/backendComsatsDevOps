@@ -27,16 +27,16 @@ module.exports.addRequirement = async (req, res) => {
 }
 
 
-// module.exports.deleteCommittee = async (req, res) => {
-//     if (!req?.body?.Name) return res.status(400).json({ 'message': 'Name required.' });
+module.exports.deleteRequirement = async (req, res) => {
+    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
 
-//     const committee = await Committee.findOne({ Name: req.body.Name }).exec();
-//     if (!committee) {
-//         return res.status(204).json({ "message": `No such Committee exists` });
-//     }
-//     const result = await committee.deleteOne();
-//     res.json(result);
-// }
+    const reqt = await Requirement.findOne({ Title: req.body.Title }).exec();
+    if (!reqt) {
+        return res.status(204).json({ "message": `No such Requirement exists` });
+    }
+    const result = await reqt.deleteOne();
+    res.json(result);
+}
 
 
 // module.exports.updateCommittee = async (req, res) => {
@@ -70,16 +70,16 @@ module.exports.addRequirement = async (req, res) => {
 // }
 
 
-// module.exports.getAllCommittee = async (req, res) => {
-//     const committees = await Committee.find();
-//     if (!committees) return res.status(204).json({ 'message': 'No Committees found.' });
-//     try {
-//         res.json(committees);
-//     }
-//     catch (err) {
-//         res.status(500).json({ 'message': err.message });
-//     }
-// }
+module.exports.getAllRequirement = async (req, res) => {
+    const requirements = await Requirement.find();
+    if (!requirements) return res.status(204).json({ 'message': 'No Requirements found.' });
+    try {
+        res.json(requirements);
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+}
 
 // module.exports.getCommittee = async (req, res) => {
 //     if (!req?.body?.Name) return res.status(400).json({ 'message': 'Name required.' });
