@@ -12,14 +12,14 @@ router.get('/project',verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead ), 
 router.get('/allProject',verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead ), TeacherProjectController.getAllProject)
 
 
-router.post('/teamMember',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.addTeamMember)
-router.put('/updateRole',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.updateRole) 
-router.delete('/teamMember',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.deleteTeamMember)
+router.put('/teamMember', StudentProjectController.addTeamMember)
+router.put('/updateRole', StudentProjectController.updateRole) 
+router.put('/deleteTeamMember', StudentProjectController.deleteTeamMember)
 
 // Requirements
-router.post('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.addTeamMember)
-router.put('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.updateRole) 
-router.delete('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.deleteTeamMember)
+// router.post('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.addTeamMember)
+// router.put('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.updateRole) 
+// router.delete('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.deleteTeamMember)
 
 //Add Requirements L
 //PUT reassign requirement to team member L
