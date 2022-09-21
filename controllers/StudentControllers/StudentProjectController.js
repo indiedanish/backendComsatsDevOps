@@ -74,19 +74,17 @@ module.exports.deleteTeamMember = async (req, res) => {
         const student = await StudentDB.findOne({ RegNo: req.body.Student }).exec();
         var StudentID = student._id;
         console.log(StudentID)
-       // const result = await template.deleteOne();
-            var astudent = await ProjectDB.updateOne({'_id': project._id},{$pull:{"GroupMembers":{_id:StudentID}}}, {multi:true})
-           // console.log(astudent)
 
+        console.log(project.GroupMembers)
 
-        //    var astudent = ProjectDB.updateOne(
-        //         { '_id': project._id }, 
-        //         { $pull: { GroupMembers: { _id: StudentID } } },
-        //         false, // Upsert
-        //         true, // Multi
-        //     );
+           var astudent =  await ProjectDB.updateOne(
+                { '_id': project._id }, 
+                { $pull: { GroupMembers: StudentID  } },
+                // false, // Upsert
+                // true, // Multi
+            );
 
-            res.json(astudent);
+             res.send(astudent);
 
     }
 }
