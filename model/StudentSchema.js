@@ -47,13 +47,13 @@ var StudentSchema = new mongoose.Schema({
   CommitteeEvaluation: {
   
     type: mongoose.Schema.ObjectId,
-      ref: 'EvaluationCommittee'
+      ref: 'RubricsCommittee'
  
   },
 
   SupervisorEvaluation: {
     type: mongoose.Schema.ObjectId,
-    ref: 'EvaluationSupervisor'
+    ref: 'RubricsSupervisor'
 
   },
 
