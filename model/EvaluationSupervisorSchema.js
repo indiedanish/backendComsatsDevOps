@@ -5,7 +5,6 @@ var EvaluationSupervisorSchema = new mongoose.Schema({
     Name: {
         type: String,
         required: true,
-        unique: true,
     },
 
     Remarks: {

@@ -5,7 +5,7 @@ const ROLES_LIST = require('../../config/roles_list');
 const verifyRoles = require('../../middleware/verifyRoles');
 
 const TeacherProjectController = require('../../controllers/TeacherControllers/TeacherProjectController');
-const EvaluationController = require('../../controllers/TeacherControllers/EvaluationController');
+const EvaluationController = require('../../controllers/TeacherControllers/TeacherEvaluationController');
 
 // Project Management
 router.post('/project', verifyRoles(ROLES_LIST.Supervisor), TeacherProjectController.addProject)

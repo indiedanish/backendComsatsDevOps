@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const TeacherProjectController = require('../../controllers/TeacherControllers/TeacherProjectController');
 const StudentProjectController = require('../../controllers/StudentControllers/StudentProjectController');
-const RequirementController = require('../../controllers/StudentControllers/requirementController');
+const RequirementController = require('../../controllers/StudentControllers/requirementController');4
+const StudentEvaluationController = require('../../controllers/StudentControllers/StudentEvaluationController');
+
 
 const ROLES_LIST = require('../../config/roles_list');
 const verifyRoles = require('../../middleware/verifyRoles');
@@ -35,7 +37,9 @@ router.get('/getRequirementComments', verifyRoles( ROLES_LIST.TeamLead, ROLES_LI
 //Testing routes jitnay bhi hoon gaay
 
 
-//
+// Evaluation
+router.get('/getEvaluation', StudentEvaluationController.getEvaluation)
+
 
 
 // Backlogs

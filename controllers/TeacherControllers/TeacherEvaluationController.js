@@ -1,9 +1,5 @@
-const Project = require('../../model/ProjectSchema');
-const { StudentLogin } = require('../authController');
-
 const StudentDB = require('../../model/StudentSchema');
 const TeacherDB = require('../../model/TeacherSchema');
-const CommitteeDB = require('../../model/CommitteeSchema');
 
 const RubricsCommittee = require("../../model/RubricsCommitteeSchema");
 const RubricsSupervisor = require('../../model/RubricsSupervisorSchema');
@@ -47,23 +43,47 @@ module.exports.AddSupervisorEvaluation = async (req, res) => {
     //Name of Evaluation i.e SRS, SDS, Teacher Email, Student RegNo,
     // Remarks and Questions Object
 
-    if (!Name || !Student || !Questions || !Teacher) return res.status(400).json({ 
+    if (!Name || !Student || !Questions || !Teacher) return res.status(400).json({
         'message': 'Name of Evaluation, Student RegNo and Questions Object required.'
     });
 
     const EvaluationType = await RubricsSupervisor.findOne({ Name: req.body.Name }).exec();
-  
     if (!EvaluationType) {
         return res.status(204).json({ "message": `No such Evaluation exists` });
     }
-    Student = await StudentDB.findOne({ RegNo: req.body.Student }).exec();
+    var Student = await StudentDB.findOne({ RegNo: req.body.Student }).exec();
     if (!Student) {
         return res.status(204).json({ "message": `No Student matches RegNo` });
     }
-    Teacher = await TeacherDB.findOne({ Email: req.body.Teacher }).exec();
+    var Teacher = await TeacherDB.findOne({ Email: req.body.Teacher }).exec();
     if (!Teacher) {
         return res.status(204).json({ "message": `No Teacher matches Email` });
     }
+
+    // console.log(Student)
+    // console.log(Teacher)
+
+    var std = Student._id;
+    var teach = Teacher._id;
+    console.log(std)
+    console.log(teach)
+
+//    var duplicate =  EvaluationSupervisor.findOne(
+//         {"$match" : 
+//          {
+//        "$and" : 
+//          {"Name" : req.body.Name,
+//          "Student" : std, 
+//         "Teacher" : teach}       
+       
+//          }
+//         })
+    const duplicate = await EvaluationSupervisor.findOne({ Name: req.body.Name } || { Student: std } || { Teacher: teach }).exec();
+    console.log(duplicate)
+    if (duplicate) {
+        return res.status(209).json({ "message": `Record already exists` });
+    }
+    console.log("Hi")
 
     try {
         const newEvaluation = await EvaluationSupervisor.create({ Name, Teacher, Student, Remarks, Questions });
@@ -86,12 +106,12 @@ module.exports.AddCommitteeEvaluation = async (req, res) => {
     //Name of Evaluation i.e SRS, SDS, Teacher Email, Student RegNo,
     // Remarks and Questions Object
 
-    if (!Name || !Student || !Questions || !Teacher) return res.status(400).json({ 
+    if (!Name || !Student || !Questions || !Teacher) return res.status(400).json({
         'message': 'Name of Evaluation, Student RegNo and Questions Object required.'
     });
 
     const EvaluationType = await RubricsCommittee.findOne({ Name: req.body.Name }).exec();
-  
+
     if (!EvaluationType) {
         return res.status(204).json({ "message": `No such Evaluation exists` });
     }
