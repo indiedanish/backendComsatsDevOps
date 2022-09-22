@@ -39,57 +39,82 @@ module.exports.deleteRequirement = async (req, res) => {
 }
 
 
-// module.exports.updateCommittee = async (req, res) => {
-//     if (!req?.body?.Name) {
-//         return res.status(400).json({ 'message': 'Name required.' });
-//     }
-//     const committee = await Committee.findOne({ Name: req.body.Name }).exec();
-//     if (!committee) {
-//         return res.status(204).json({ "message": `No Committee matches Name` });
-//     }
-//     if (req.body?.Name) committee.Name = req.body.Name;
+module.exports.updateRequirementLead = async (req, res) => {
+    if (!req?.body?.Title) { //Name of Requirement
+        return res.status(400).json({ 'message': 'Name required.' });
+    }
+    const requirement = await Requirement.findOne({ Title: req.body.Title }).exec();
+    if (!requirement) {
+        return res.status(204).json({ "message": `No Committee matches Name` });
+    }
+    if (req.body?.Description) requirement.Description = req.body.Description;
+
+    if (req.body?.AssignedTo) { // AssignedTo = Student RegNo
+        var StudentObj = await StudentDB.findOne({RegNo : req.body.AssignedTo})
+        requirement.AssignedTo = StudentObj;
+    }
+    if (req.body?.Type) requirement.Type = req.body.Type;
+    if (req.body?.Priority) requirement.Priority = req.body.Priority;
+    if (req.body?.Accepted) requirement.Accepted = req.body.Accepted;
+
+    if (req.body?.File) requirement.File = req.body.File;
+    if (req.body?.SubmittedFile) requirement.SubmittedFile = req.body.SubmittedFile;
+    if (req.body?.DateModified) requirement.DateModified = req.body.DateModified;
+    if (req.body?.Deadline) requirement.Deadline = req.body.Deadline;
+    if (req.body?.Rename) requirement.Title = req.body.Rename;
 
 
-//     validTeachers = new Array();
-//     for (var i = 0; i < req.body.Teacher.length; i++) {
-//         temp = await TeacherDB.findOne({ Email: req.body.Teacher[i] });
-//         if (!temp) {
-//             return res.status(204).json({ "message": `No such Teacher exists` });
-//         }
-//         validTeachers = [...validTeachers, temp]
-//     }
 
-//     Teacher = validTeachers
+
+    const result = await requirement.save();
+    res.json(result);
+}
 
 
 
-//     if (req.body?.Teacher) committee.Teacher = Teacher;
 
-//     const result = await committee.save();
-//     res.json(result);
-// }
+
+module.exports.updateRequirementMember = async (req, res) => {
+    if (!req?.body?.Title) { //Name of Requirement
+        return res.status(400).json({ 'message': 'Name required.' });
+    }
+    const requirement = await Requirement.findOne({ Title: req.body.Title }).exec();
+    if (!requirement) {
+        return res.status(204).json({ "message": `No Committee matches Name` });
+    }
+
+    if (req.body?.Priority) requirement.Priority = req.body.Priority;
+    if (req.body?.Accepted) requirement.Accepted = req.body.Accepted;
+
+    if (req.body?.SubmittedFile) requirement.SubmittedFile = req.body.SubmittedFile;
+    if (req.body?.DateModified) requirement.DateModified = req.body.DateModified;
+
+    const result = await requirement.save();
+    res.json(result);
+}
+
 
 
 module.exports.getAllRequirement = async (req, res) => {
-    const requirements = await Requirement.find();
-    if (!requirements) return res.status(204).json({ 'message': 'No Requirements found.' });
+    const requirement = await Requirement.find();
+    if (!requirement) return res.status(204).json({ 'message': 'No Requirements found.' });
     try {
-        res.json(requirements);
+        res.json(requirement);
     }
     catch (err) {
         res.status(500).json({ 'message': err.message });
     }
 }
 
-// module.exports.getCommittee = async (req, res) => {
-//     if (!req?.body?.Name) return res.status(400).json({ 'message': 'Name required.' });
+module.exports.getRequirement = async (req, res) => {
+    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
 
-//     const committee = await Committee.findOne({ Name: req.body.Name }).exec();
-//     if (!committee) {
-//         return res.status(204).json({ "message": `No committee matches Name` });
-//     }
-//     res.json(committee);
-// }
+    const requirement = await Requirement.findOne({ Title: req.body.Title }).exec();
+    if (!requirement) {
+        return res.status(204).json({ "message": `No requirement matches Title` });
+    }
+    res.json(requirement);
+}
 
 
 

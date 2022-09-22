@@ -9,28 +9,29 @@ const verifyRoles = require('../../middleware/verifyRoles');
 
 
 
-router.get('/project',verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead ), TeacherProjectController.getProject)
-router.get('/allProject',verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead ), TeacherProjectController.getAllProject)
+router.get('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), TeacherProjectController.getProject)
+router.get('/allProject', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), TeacherProjectController.getAllProject)
 
 
-router.put('/teamMember', verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.addTeamMember)
-router.put('/updateRole', verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.updateRole) 
-router.put('/deleteTeamMember', verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.deleteTeamMember)
+router.put('/teamMember', verifyRoles(ROLES_LIST.TeamLead), StudentProjectController.addTeamMember)
+router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), StudentProjectController.updateRole)
+router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), StudentProjectController.deleteTeamMember)
 
 // Requirements
- router.post('/requirement', RequirementController.addRequirement)
-// router.put('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.updateRole) 
-// router.delete('/requirement',verifyRoles( ROLES_LIST.TeamLead ), StudentProjectController.deleteTeamMember)
+router.post('/requirement', verifyRoles( ROLES_LIST.TeamLead ), RequirementController.addRequirement)
 
-//PUT reassign requirement to team member L
-//Accept assigned requriment for team member M
-//Change description of requirement L
+router.put('/requirementLead', verifyRoles( ROLES_LIST.TeamLead ), RequirementController.updateRequirementLead)
+router.put('/requirementMember', verifyRoles( ROLES_LIST.TeamMember ), RequirementController.updateRequirementMember)
+
+router.delete('/requirement', verifyRoles( ROLES_LIST.TeamLead ), RequirementController.deleteRequirement)
+router.get('/getRequirement', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.getRequirement)
+router.get('/getAllRequirement', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.getAllRequirement)
+
+
+
 //Add Comments L/M
-//Add Files L/M
-//View Requirements L/M
 //View Comments L/M
 //Delete Comments L/M
-//View Files L/M
 //Testing routes jitnay bhi hoon gaay
 
 
