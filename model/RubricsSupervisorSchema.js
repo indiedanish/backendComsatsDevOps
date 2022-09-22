@@ -2,125 +2,29 @@
 var mongoose = require("mongoose");
 var RubricsSupervisorSchema = new mongoose.Schema({
 
-    Scope_SRS: {
-        Remarks: {
-            type: String,
-        },
-
-        CLOs: [
-
-            {
-                Question: [{
-                    Criteria: {
-                        type: String,
-                    },
-                    ObtainedMarks: {
-                        type: Number
-                    },
-                    TotalMark: {
-                        type: Number
-                    }
-
-                }
-                ]
-
-            }
-
-
-        ],
-
-
-
-    }
-
-    ,
-
-    SDS: {
-        Remarks: {
-            type: String,
-        },
-
-        CLOs: [
-
-            {
-                Question: [{
-                    Criteria: {
-                        type: String,
-                    },
-                    ObtainedMarks: {
-                        type: Number
-                    },
-                    TotalMark: {
-                        type: Number
-                    }
-                }
-                ]
-
-            }
-
-
-        ],
-
+    Name: {
+        type: String,
+        required: true,
+        unique: true,
     },
 
-
-    Testing: {
-        Remarks: {
-            type: String,
-        },
-
-        CLOs: [
-
-            {
-                Question: [{
-                    Criteria: {
-                        type: String,
-                    },
-                    ObtainedMarks: {
-                        type: Number
-                    },
-                    TotalMark: {
-                        type: Number
-                    }
-                }
-                ]
-
-            }
-
-
-        ],
-
+    Remarks: {
+        type: String,
     },
 
-
-    Final: {
-        Remarks: {
-            type: String,
-        },
-
-        CLOs: [
-
-            {
-                Question: [{
-                    Criteria: {
-                        type: String,
-                    },
-                    ObtainedMarks: {
-                        type: Number
-                    },
-                    TotalMark: {
-                        type: Number
-                    }
-                }
-                ]
-
+    Questions: [
+        {
+            Criteria: {
+                type: String,
+            },
+            ObtainedMarks: {
+                type: Number
+            },
+            TotalMark: {
+                type: Number
             }
-
-
-        ],
-
-    },
-
+        }
+    ],
 
 });
 
