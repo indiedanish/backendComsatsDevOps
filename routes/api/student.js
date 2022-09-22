@@ -27,16 +27,11 @@ router.delete('/requirement', verifyRoles( ROLES_LIST.TeamLead ), RequirementCon
 router.get('/getRequirement', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.getRequirement)
 router.get('/getAllRequirement', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.getAllRequirement)
 
-//Post Comments in Requirement
-router.put('/addRequirementComments', RequirementController.addRequirementComments)
-router.put('/deleteRequirementComments', RequirementController.deleteRequirementComments)
-//router.get('/getRequirementComments', RequirementController.getRequirementComments)
+//Post, Delete and View Comments in Requirement
+router.put('/addRequirementComments', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.addRequirementComments)
+router.put('/deleteRequirementComments', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.deleteRequirementComments)
+router.get('/getRequirementComments', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.getRequirementComments)
 
-
-
-
-
-//View Comments L/M
 //Testing routes jitnay bhi hoon gaay
 
 

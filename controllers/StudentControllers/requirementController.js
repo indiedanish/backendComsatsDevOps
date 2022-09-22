@@ -170,6 +170,16 @@ module.exports.deleteRequirementComments = async (req, res) => {
     }
 }
 
+//getRequirementComments
 
+module.exports.getRequirementComments = async (req, res) => {
+    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
 
+    const RequirementObj = await Requirement.findOne({ Title: req.body.Title }).exec();
+    if (!RequirementObj) {
+        return res.status(204).json({ "message": `No requirement matches Title` });
+    }
+    DisplayComment = RequirementObj.Comments;
+    res.json(DisplayComment);
+}
 
