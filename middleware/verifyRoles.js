@@ -8,6 +8,11 @@ const verifyRoles = (...allowedRoles) => {
         
         const rolesArray = [...allowedRoles];
 
+
+       
+
+        console.log(req.Role, " : " ,rolesArray )
+
         if (rolesArray.includes(req.Role)) {
             
             next();

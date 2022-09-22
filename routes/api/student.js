@@ -26,7 +26,7 @@ router.put('/requirementLead', verifyRoles( ROLES_LIST.TeamLead ), RequirementCo
 router.put('/requirementMember', verifyRoles( ROLES_LIST.TeamMember ), RequirementController.updateRequirementMember)
 
 router.delete('/requirement', verifyRoles( ROLES_LIST.TeamLead ), RequirementController.deleteRequirement)
-router.get('/getRequirement', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.getRequirement)
+router.get('/getRequirement', verifyRoles(  ROLES_LIST.TeamMember ), RequirementController.getRequirement)
 router.get('/getAllRequirement', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.getAllRequirement)
 
 //Post, Delete and View Comments in Requirement

@@ -21,7 +21,7 @@ const StudentLogin = async (req, res) => {
    
     if (!foundStudent) return res.sendStatus(401); //Unauthorized 
     const match = await bcrypt.compare(Password, foundStudent.Password);
-
+        
        if (match) {
        const role = foundStudent.Role;
         // create JWTs
@@ -29,18 +29,11 @@ const StudentLogin = async (req, res) => {
         // regno+pass+role = Access $dfadfsdfkhsdbfhsebfwjfbiwjefwibejfwbejfwbefjweb
         // regno+pass+role = Refresh $sefsdfssdgdsfgdfgdfgdfgdfgdfgdfg
 
-        const accessToken = jwt.sign(
-            {
-                "UserInfo": {
-                    "RegNo": foundStudent.RegNo,
-                    "Role": foundStudent.Role
-                }
-            },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '59s' }
-        );
+    
         const refreshToken = jwt.sign(
-            { "RegNo": foundStudent.RegNo },
+            { "Email": foundStudent.Email,
+            "Role": role
+        },
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '1d' }
         );
@@ -53,7 +46,7 @@ const StudentLogin = async (req, res) => {
         res.cookie('jwt', refreshToken, { httpOnly: true,  sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
         // Send authorization roles and access token to user
-        res.json({ role, accessToken });
+        res.json({ role, refreshToken });
 
     } else {
         res.sendStatus(401);
