@@ -7,7 +7,7 @@ module.exports.addRequirement = async (req, res) => {
 
     var { Title, Description, AssignedTo, Type, Priority, Accepted, Comments,
         File = new Array(), SubmittedFile = new Array(), DateModified, Deadline } = req.body;
-    if (!Title ) return res.status(400).json({ 'message': 'Title is required.'});
+    if (!Title) return res.status(400).json({ 'message': 'Title is required.' });
 
     const duplicate = await Requirement.findOne({ Title: Title }).exec();
     if (duplicate) return res.sendStatus(409); //Conflict 
@@ -50,7 +50,7 @@ module.exports.updateRequirementLead = async (req, res) => {
     if (req.body?.Description) requirement.Description = req.body.Description;
 
     if (req.body?.AssignedTo) { // AssignedTo = Student RegNo
-        var StudentObj = await StudentDB.findOne({RegNo : req.body.AssignedTo})
+        var StudentObj = await StudentDB.findOne({ RegNo: req.body.AssignedTo })
         requirement.AssignedTo = StudentObj;
     }
     if (req.body?.Type) requirement.Type = req.body.Type;
@@ -121,6 +121,54 @@ module.exports.getRequirement = async (req, res) => {
 
 // //--------------------------------------------------------------
 
+
+module.exports.addRequirementComments = async (req, res) => {
+
+    if (!req?.body?.Title || !req?.body?.Student || !req?.body?.Content) {
+        return res.status(400).json({ 'message': 'Req Title, Student RegNo and Content required.' });
+    }
+    const RequirementObj = await Requirement.findOne({ Title: req.body.Title }).exec();
+    const StudentObj = await StudentDB.findOne({ RegNo: req.body.Student }).exec();
+    if (!RequirementObj || !StudentObj) {
+        return res.status(204).json({ "message": `No Requirement matches Title & No such Student` });
+    }
+    try {
+        var AddRequirement = await Requirement.updateOne(
+            { '_id': RequirementObj._id },
+            { $push: { Comments: { 'Student': StudentObj, 'Content': req?.body?.Content } } },
+            // false, // Upsert
+            // true, // Multi
+        );
+        res.send(AddRequirement);
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+}
+
+
+module.exports.deleteRequirementComments = async (req, res) => {
+
+    if (!req?.body?.Title || !req?.body?._id) {
+        return res.status(400).json({ 'message': 'Req Title and Comment ID required.' });
+    }
+    const RequirementObj = await Requirement.findOne({ Title: req.body.Title }).exec();
+    if (!RequirementObj) {
+        return res.status(204).json({ "message": `No Requirement matches Title & No such Student` });
+    }
+    try {
+        var DeleteRequirement = await Requirement.updateOne(
+            { '_id': RequirementObj._id },
+            { $pull: { Comments: { '_id': req?.body?._id} } },
+            // false, // Upsert
+            // true, // Multi
+        );
+        res.send(DeleteRequirement);
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+}
 
 
 

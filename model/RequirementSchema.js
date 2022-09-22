@@ -4,12 +4,12 @@ var requirementSchema = new mongoose.Schema({
     Title: {
         type: String,
         required: true,
-       
+
     },
 
     Description: {
         type: String,
-        
+
     },
 
     AssignedTo: {
@@ -21,34 +21,45 @@ var requirementSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
- 
+
     Priority: {
         type: String,
 
     },
-    
+
     Accepted: {
         type: Boolean,
         default: false
     },
 
-    Comments: {
-        type: String,
+    Comments: [{
 
-    },
+        Student: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Student'
+        },
 
+        Content: {
+            type: String,
+        },
 
-    
+        DateModified: {
+            type: Date,
+            default: Date.now,
+        },
+
+    }],
+
     File: [{
         type: String,
-       
-      }
+
+    }
     ],
 
     SubmittedFile: [{
         type: String,
-        
-      }
+
+    }
     ],
 
     DateModified: {
@@ -59,7 +70,7 @@ var requirementSchema = new mongoose.Schema({
     Deadline: {
         type: Date,
         required: true,
-        
+
     }
 });
 module.exports = mongoose.model("Requirement", requirementSchema);
