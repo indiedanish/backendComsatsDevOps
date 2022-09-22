@@ -1,6 +1,6 @@
 
 var mongoose = require("mongoose");
-var RubricsCommitteeSchema = new mongoose.Schema({
+var EvaluationCommitteeSchema = new mongoose.Schema({
 
     Name: {
         type: String,
@@ -10,6 +10,18 @@ var RubricsCommitteeSchema = new mongoose.Schema({
 
     Remarks: {
         type: String,
+    },
+
+    Teacher: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Teacher'
+
+    },
+
+    Student: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Student'
+
     },
 
     Questions: [
@@ -25,10 +37,11 @@ var RubricsCommitteeSchema = new mongoose.Schema({
             }
         }
     ],
+
 }
 );
 
-module.exports = mongoose.model("RubricsCommittee", RubricsCommitteeSchema);
+module.exports = mongoose.model("EvaluationCommittee", EvaluationCommitteeSchema);
 
 
 
