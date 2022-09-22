@@ -2,7 +2,7 @@ const RubricsCommittee = require("../../model/RubricsCommitteeSchema");
 const RubricsSupervisor = require('../../model/RubricsSupervisorSchema');
 
 module.exports.addCommitteeRubrics = async (req, res) => {
-  var { Name, Remarks, Questions } = req.body;
+  var { Name,  Questions } = req.body;
  
   if (!Name || !Questions) return res.status(400).json({ message: "Wrong Evaluation Object" });
 
@@ -11,7 +11,7 @@ module.exports.addCommitteeRubrics = async (req, res) => {
   if (duplicate) return res.sendStatus(409); //Conflict
 
   try {
-    const newRubricsCommittee = await RubricsCommittee.create({ Name, Remarks, Questions });
+    const newRubricsCommittee = await RubricsCommittee.create({ Name, Questions });
     console.log(newRubricsCommittee);
 
     res.status(201).json({ success: `New ${newRubricsCommittee} created!` });
@@ -23,7 +23,7 @@ module.exports.addCommitteeRubrics = async (req, res) => {
 
 
 module.exports.addSupervisorRubrics = async (req, res) => {
-  var { Name, Remarks, Questions } = req.body;
+  var { Name, Questions } = req.body;
  
   if (!Name || !Questions ) return res.status(400).json({ message: "Wrong Evaluation Object" });
 
@@ -32,7 +32,7 @@ module.exports.addSupervisorRubrics = async (req, res) => {
   if (duplicate) return res.sendStatus(409); //Conflict
 
   try {
-    const newRubricsSupervisor = await RubricsSupervisor.create({ Name, Remarks, Questions });
+    const newRubricsSupervisor = await RubricsSupervisor.create({ Name, Questions });
     console.log(newRubricsSupervisor);
 
     res.status(201).json({ success: `New ${newRubricsSupervisor} created!` });

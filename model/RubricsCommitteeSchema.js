@@ -8,18 +8,12 @@ var RubricsCommitteeSchema = new mongoose.Schema({
         unique: true,
     },
 
-    Remarks: {
-        type: String,
-    },
-
     Questions: [
         {
             Criteria: {
                 type: String,
             },
-            ObtainedMarks: {
-                type: Number
-            },
+  
             TotalMark: {
                 type: Number
             }
