@@ -18,7 +18,7 @@ router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), StudentProjectContro
 router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), StudentProjectController.deleteTeamMember)
 
 // Requirements 
-router.post('/requirement', RequirementController.addRequirement)
+router.post('/requirement', verifyRoles( ROLES_LIST.TeamLead ), RequirementController.addRequirement)
 
 router.put('/requirementLead', verifyRoles( ROLES_LIST.TeamLead ), RequirementController.updateRequirementLead)
 router.put('/requirementMember', verifyRoles( ROLES_LIST.TeamMember ), RequirementController.updateRequirementMember)

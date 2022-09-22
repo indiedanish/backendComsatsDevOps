@@ -52,7 +52,7 @@ verifyAdmin,
 require('./routes/adminRoutes'));
 //{"Email": "dan@dan.com" , "Password": "12345"}
 
-//app.use(verifyJWT);
+app.use(verifyJWT);
 
 app.use('/student', require('./routes/api/student'));
 app.use('/teacher', require('./routes/api/teacher'))

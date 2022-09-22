@@ -4,7 +4,6 @@ var StudentSchema = new mongoose.Schema({
     type: String,
     
   },
-
   RegNo: {
     type: String,
     required: true,
