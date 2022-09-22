@@ -18,6 +18,8 @@ router.get('/allProject',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee
 router.get('/getSupervisorRubrics', EvaluationController.getSupervisorRubrics)
 router.get('/getCommitteeRubrics', EvaluationController.getCommitteeRubrics)
 
+router.post('/SupervisorEvaluation', EvaluationController.AddSupervisorEvaluation)
+router.post('/CommitteeEvaluation', EvaluationController.AddCommitteeEvaluation)
 
 
 

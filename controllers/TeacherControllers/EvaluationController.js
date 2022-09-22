@@ -1,33 +1,116 @@
 const Project = require('../../model/ProjectSchema');
 const { StudentLogin } = require('../authController');
 
-const Student = require('../../model/StudentSchema');
-const Teacher = require('../../model/TeacherSchema');
-const Committee = require('../../model/CommitteeSchema');
+const StudentDB = require('../../model/StudentSchema');
+const TeacherDB = require('../../model/TeacherSchema');
+const CommitteeDB = require('../../model/CommitteeSchema');
 
 const RubricsCommittee = require("../../model/RubricsCommitteeSchema");
 const RubricsSupervisor = require('../../model/RubricsSupervisorSchema');
 
+const EvaluationSupervisor = require('../../model/EvaluationSupervisorSchema');
+const EvaluationCommittee = require('../../model/EvaluationCommitteeSchema');
+
+
+
+
+//EvaluationSupervisorSchema
 
 module.exports.getCommitteeRubrics = async (req, res) => {
     if (!req?.body?.Name) //Name of Evaluation i.e Scope, SRS, SDS
-      return res.status(400).json({ message: "Name required." });
-  
+        return res.status(400).json({ message: "Name required." });
+
     const rubrics = await RubricsCommittee.findOne({ Name: req.body.Name }).exec();
     if (!rubrics) {
-      return res.status(204).json({ message: `No Rubrics matches name` });
+        return res.status(204).json({ message: `No Rubrics matches name` });
     }
     res.json(rubrics);
-  };
-  
-  module.exports.getSupervisorRubrics = async (req, res) => {
+};
+
+module.exports.getSupervisorRubrics = async (req, res) => {
     if (!req?.body?.Name)//Name of Evaluation i.e Scope, SRS, SDS
-      return res.status(400).json({ message: "Name required." });
-  
+        return res.status(400).json({ message: "Name required." });
+
     const rubrics = await RubricsSupervisor.findOne({ Name: req.body.Name }).exec();
     if (!rubrics) {
-      return res.status(204).json({ message: `No Rubrics matches name` });
+        return res.status(204).json({ message: `No Rubrics matches name` });
     }
     res.json(rubrics);
-  };
+};
+
+
+
+
+module.exports.AddSupervisorEvaluation = async (req, res) => {
+
+    var { Name, Teacher, Student, Remarks, Questions } = req.body;
+    //Name of Evaluation i.e SRS, SDS, Teacher Email, Student RegNo,
+    // Remarks and Questions Object
+
+    if (!Name || !Student || !Questions || !Teacher) return res.status(400).json({ 
+        'message': 'Name of Evaluation, Student RegNo and Questions Object required.'
+    });
+
+    const EvaluationType = await RubricsSupervisor.findOne({ Name: req.body.Name }).exec();
   
+    if (!EvaluationType) {
+        return res.status(204).json({ "message": `No such Evaluation exists` });
+    }
+    Student = await StudentDB.findOne({ RegNo: req.body.Student }).exec();
+    if (!Student) {
+        return res.status(204).json({ "message": `No Student matches RegNo` });
+    }
+    Teacher = await TeacherDB.findOne({ Email: req.body.Teacher }).exec();
+    if (!Teacher) {
+        return res.status(204).json({ "message": `No Teacher matches Email` });
+    }
+
+    try {
+        const newEvaluation = await EvaluationSupervisor.create({ Name, Teacher, Student, Remarks, Questions });
+        console.log(newEvaluation);
+        res.status(201).json({ 'success': `New ${newEvaluation} created!` });
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+
+};
+
+
+
+
+
+module.exports.AddCommitteeEvaluation = async (req, res) => {
+
+    var { Name, Teacher, Student, Remarks, Questions } = req.body;
+    //Name of Evaluation i.e SRS, SDS, Teacher Email, Student RegNo,
+    // Remarks and Questions Object
+
+    if (!Name || !Student || !Questions || !Teacher) return res.status(400).json({ 
+        'message': 'Name of Evaluation, Student RegNo and Questions Object required.'
+    });
+
+    const EvaluationType = await RubricsCommittee.findOne({ Name: req.body.Name }).exec();
+  
+    if (!EvaluationType) {
+        return res.status(204).json({ "message": `No such Evaluation exists` });
+    }
+    Student = await StudentDB.findOne({ RegNo: req.body.Student }).exec();
+    if (!Student) {
+        return res.status(204).json({ "message": `No Student matches RegNo` });
+    }
+    Teacher = await TeacherDB.findOne({ Email: req.body.Teacher }).exec();
+    if (!Teacher) {
+        return res.status(204).json({ "message": `No Teacher matches Email` });
+    }
+
+    try {
+        const newEvaluation = await EvaluationCommittee.create({ Name, Teacher, Student, Remarks, Questions });
+        console.log(newEvaluation);
+        res.status(201).json({ 'success': `New ${newEvaluation} created!` });
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+
+};
