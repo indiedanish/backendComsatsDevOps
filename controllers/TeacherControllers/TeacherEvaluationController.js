@@ -132,18 +132,24 @@ module.exports.AddCommitteeEvaluation = async (req, res) => {
         'message': 'Name of Evaluation, Student RegNo and Questions Object required.'
     });
 
-    const EvaluationType = await RubricsCommittee.findOne({ Name: req.body.Name }).exec();
-
-    if (!EvaluationType) {
-        return res.status(204).json({ "message": `No such Evaluation exists` });
-    }
-    Student = await StudentDB.findOne({ RegNo: req.body.Student }).exec();
+ 
+    var Student = await StudentDB.findOne({ RegNo: req.body.Student }).exec();
     if (!Student) {
         return res.status(204).json({ "message": `No Student matches RegNo` });
     }
-    Teacher = await TeacherDB.findOne({ Email: req.body.Teacher }).exec();
+    var Teacher = await TeacherDB.findOne({ Email: req.body.Teacher }).exec();
     if (!Teacher) {
         return res.status(204).json({ "message": `No Teacher matches Email` });
+    }
+
+    var std = Student._id;
+    var teach = Teacher._id;
+  
+
+    const duplicate = await EvaluationCommittee.findOne({ Name: req.body.Name,  Student: std , Teacher: teach });
+    console.log(duplicate)
+    if (duplicate) {
+        return res.status(209).json({ "message": `Record already exists` });
     }
 
     try {
