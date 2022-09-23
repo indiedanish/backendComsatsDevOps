@@ -15,11 +15,24 @@ var ProjectSchema = new mongoose.Schema({
         type: String,
     },
 
-    Requirements: {
+    Requirements: [{
         type: mongoose.Schema.ObjectId,
         ref: 'Requirement'
 
-    },
+    }],
+
+    Sprints: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Sprint'
+
+    }],
+
+    Backlogs: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Backlog'
+
+    }],
+
 
     Deliverable:   [{
         type: mongoose.Schema.ObjectId,
