@@ -4,6 +4,7 @@ const TeacherProjectController = require('../../controllers/TeacherControllers/T
 const StudentProjectController = require('../../controllers/StudentControllers/StudentProjectController');
 const RequirementController = require('../../controllers/StudentControllers/requirementController');4
 const StudentEvaluationController = require('../../controllers/StudentControllers/StudentEvaluationController');
+const SprintsController = require('../../controllers/StudentControllers/SprintController');
 
 
 const ROLES_LIST = require('../../config/roles_list');
@@ -39,6 +40,17 @@ router.get('/getRequirementComments', verifyRoles( ROLES_LIST.TeamLead, ROLES_LI
 
 // Evaluation
 router.get('/getEvaluation', StudentEvaluationController.getEvaluation)
+
+
+
+// Sprints Routes 
+// (Create, View, Edit, Delete sprint) Organize meeting,View Backlogs, delete backlogs, set deadlines
+router.get('/getSprint', SprintController.getSprint)
+router.post('/addSprint', SprintController.addSprint)
+router.put('/updateSprint', SprintController.updateSprint)
+router.delete('/deleteSprint', SprintController.deleteSprint)
+
+
 
 
 
