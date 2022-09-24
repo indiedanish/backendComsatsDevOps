@@ -5,6 +5,7 @@ const tempplateController = require('../controllers/AdminControllers/templateCon
 const announcementController = require('../controllers/AdminControllers/announcementController');
 const rubricsController = require('../controllers/AdminControllers/rubricsController');
 const committeeController = require('../controllers/AdminControllers/committeeController');
+const assignCommitteeController = require('../controllers/AdminControllers/assignCommitteeController');
 
 
 router.post('/student', stdTechCrudController.addNewStudent);
@@ -53,6 +54,14 @@ router.put('/committee', committeeController.updateCommittee);
 router.delete('/committee', committeeController.deleteCommittee); 
 router.get('/getCommittee', committeeController.getCommittee); 
 router.get('/getAllCommittee', committeeController.getAllCommittee); 
+
+
+
+router.put('/assignProjectCommittee', assignCommitteeController.addGroup); 
+router.put('/deleteProjectCommittee', assignCommitteeController.deleteGroup); 
+router.get('/getProjectCommittee', assignCommitteeController.getOneGroup); 
+router.get('/getAllProjectCommittee', assignCommitteeController.getAllGroup); 
+
 
 
 

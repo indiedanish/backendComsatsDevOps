@@ -1,5 +1,38 @@
 const Committee = require('../../model/CommitteeSchema');
 const TeacherDB = require('../../model/TeacherSchema');
+const ProjectDB = require('../../model/ProjectSchema');
+
+module.exports.addGroup = async (req, res) => {
+    var { CommitteeName, ProjectName } = req.body;     // Committe Name and array of teacher emails
+    if (!CommitteeName || !ProjectName) return res.status(400).json({ 'message': 'CommitteeName, Teacher, ProjectName are required.' });
+
+    const Project = await ProjectDB.findOne({ Name: ProjectName });
+
+    if (!Project) {
+        return res.status(209).json({ "message": `No such project exists` });
+    }
+
+    const CommitteeObj = await Committee.findOne({ Name: CommitteeName });
+
+    if (!CommitteeObj) {
+        return res.status(209).json({ "message": `No such Committee exists` });
+    }
+
+    const Group = await Committee.findOne({ Name: CommitteeName , Projects: ProjectName });
+
+    if (Group) {
+        return res.sendStatus(409); //Conflict 
+    };
+
+    var updateCommittee = await Committee.updateOne(
+        { '_id': CommitteeObj._id },
+        { $push: { Projects: Project } },
+
+    );
+   
+}
+
+
 
 module.exports.addCommittee = async (req, res) => {
 
@@ -65,7 +98,7 @@ module.exports.updateCommittee = async (req, res) => {
         validTeachers = [...validTeachers, temp]
     }
 
-    Teacher = validTeachers
+    var Teacher = validTeachers
 
 
 
