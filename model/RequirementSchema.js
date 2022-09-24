@@ -12,6 +12,11 @@ var requirementSchema = new mongoose.Schema({
 
     },
 
+    ProjectName: {
+        type: String,
+
+    },
+
     AssignedTo: {
         type: mongoose.Schema.ObjectId,
         ref: 'Student'

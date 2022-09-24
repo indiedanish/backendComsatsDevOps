@@ -4,7 +4,7 @@ const TeacherProjectController = require('../../controllers/TeacherControllers/T
 const StudentProjectController = require('../../controllers/StudentControllers/StudentProjectController');
 const RequirementController = require('../../controllers/StudentControllers/requirementController');4
 const StudentEvaluationController = require('../../controllers/StudentControllers/StudentEvaluationController');
-const SprintsController = require('../../controllers/StudentControllers/SprintController');
+const SprintController = require('../../controllers/StudentControllers/SprintController');
 
 
 const ROLES_LIST = require('../../config/roles_list');
@@ -21,14 +21,14 @@ router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), StudentProjectContro
 router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), StudentProjectController.deleteTeamMember)
 
 // Requirements 
-router.post('/requirement', verifyRoles( ROLES_LIST.TeamLead ), RequirementController.addRequirement)
+router.post('/requirement',  RequirementController.addRequirement)
 
-router.put('/requirementLead', verifyRoles( ROLES_LIST.TeamLead ), RequirementController.updateRequirementLead)
-router.put('/requirementMember', verifyRoles( ROLES_LIST.TeamMember ), RequirementController.updateRequirementMember)
+router.put('/requirementLead',  RequirementController.updateRequirementLead)
+router.put('/requirementMember',  RequirementController.updateRequirementMember)
 
-router.delete('/requirement', verifyRoles( ROLES_LIST.TeamLead ), RequirementController.deleteRequirement)
-router.get('/getRequirement', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.getRequirement)
-router.get('/getAllRequirement', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.getAllRequirement)
+router.delete('/requirement', RequirementController.deleteRequirement)
+router.get('/getRequirement', RequirementController.getRequirement)
+router.get('/getAllRequirement', RequirementController.getAllRequirement)
 
 //Post, Delete and View Comments in Requirement
 router.put('/addRequirementComments', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.addRequirementComments)
