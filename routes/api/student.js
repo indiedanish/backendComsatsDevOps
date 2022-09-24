@@ -31,9 +31,9 @@ router.get('/getRequirement', RequirementController.getRequirement)
 router.get('/getAllRequirement', RequirementController.getAllRequirement)
 
 //Post, Delete and View Comments in Requirement
-router.put('/addRequirementComments', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.addRequirementComments)
-router.put('/deleteRequirementComments', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.deleteRequirementComments)
-router.get('/getRequirementComments', verifyRoles( ROLES_LIST.TeamLead, ROLES_LIST.TeamMember ), RequirementController.getRequirementComments)
+router.put('/addRequirementComments', RequirementController.addRequirementComments)
+router.put('/deleteRequirementComments', RequirementController.deleteRequirementComments)
+router.get('/getRequirementComments',  RequirementController.getRequirementComments)
 
 //Testing routes jitnay bhi hoon gaay
 

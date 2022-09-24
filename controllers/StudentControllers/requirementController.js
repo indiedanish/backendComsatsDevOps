@@ -4,7 +4,6 @@ const StudentDB = require('../../model/StudentSchema');
 const ProjectDB = require('../../model/ProjectSchema');
 
 
-
 module.exports.addRequirement = async (req, res) => {
 
     var { Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
@@ -222,22 +221,33 @@ module.exports.getRequirement = async (req, res) => {
 
 module.exports.addRequirementComments = async (req, res) => {
 
-    if (!req?.body?.Title || !req?.body?.Student || !req?.body?.Content) {
-        return res.status(400).json({ 'message': 'Req Title, Student RegNo and Content required.' });
+    if (!req?.body?.Title || !req?.body?.Student || !req?.body?.Content || !req?.body?.ProjectName ) {
+        return res.status(400).json({ 'message': 'Project Name, Req Title, Student RegNo and Content required.' });
     }
-    const RequirementObj = await Requirement.findOne({ Title: req.body.Title }).exec();
-    const StudentObj = await StudentDB.findOne({ RegNo: req.body.Student }).exec();
-    if (!RequirementObj || !StudentObj) {
-        return res.status(204).json({ "message": `No Requirement matches Title & No such Student` });
+
+    const Project = await ProjectDB.findOne({ Name: req?.body?.ProjectName });
+
+    if (!Project) {
+        return res.status(209).json({ "message": `No such project exists` });
+    }
+
+    const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req.body.ProjectName });
+    console.log(RequirementObj)
+
+    if (!RequirementObj) {
+        return res.status(209).json({ "message": `No such Requirement exist in the Project` })
+    };
+
+    const StudentObj = await StudentDB.findOne({ RegNo: req.body.Student });
+    if (!StudentObj) {
+        return res.status(204).json({ "message": `No such Student exists` });
     }
     try {
-        var AddRequirement = await Requirement.updateOne(
+        var AddComment = await Requirement.updateOne(
             { '_id': RequirementObj._id },
             { $push: { Comments: { 'Student': StudentObj, 'Content': req?.body?.Content } } },
-            // false, // Upsert
-            // true, // Multi
         );
-        res.send(AddRequirement);
+        res.json(AddComment);
     }
     catch (err) {
         res.status(500).json({ 'message': err.message });
@@ -247,17 +257,32 @@ module.exports.addRequirementComments = async (req, res) => {
 
 module.exports.deleteRequirementComments = async (req, res) => {
 
-    if (!req?.body?.Title || !req?.body?._id) {
-        return res.status(400).json({ 'message': 'Req Title and Comment ID required.' });
+    if (!req?.body?.Title || !req?.body?.Student || !req?.body?.ProjectName ) {
+        return res.status(400).json({ 'message': 'Project Name, Req Title, Student RegNo  required.' });
     }
-    const RequirementObj = await Requirement.findOne({ Title: req.body.Title }).exec();
+
+    const Project = await ProjectDB.findOne({ Name: req?.body?.ProjectName });
+
+    if (!Project) {
+        return res.status(209).json({ "message": `No such project exists` });
+    }
+
+    const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req.body.ProjectName });
+    console.log(RequirementObj)
+
     if (!RequirementObj) {
-        return res.status(204).json({ "message": `No Requirement matches Title & No such Student` });
+        return res.status(209).json({ "message": `No such Requirement exist in the Project` })
+    };
+
+    const StudentObj = await StudentDB.findOne({ RegNo: req.body.Student });
+    if (!StudentObj) {
+        return res.status(204).json({ "message": `No such Student exists` });
     }
+
     try {
         var DeleteRequirement = await Requirement.updateOne(
             { '_id': RequirementObj._id },
-            { $pull: { Comments: { '_id': req?.body?._id } } },
+            { $pull: { Comments: { '_id': req.params._id } } },
             // false, // Upsert
             // true, // Multi
         );
@@ -271,12 +296,21 @@ module.exports.deleteRequirementComments = async (req, res) => {
 //getRequirementComments
 
 module.exports.getRequirementComments = async (req, res) => {
-    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
+    if (!req?.body?.Title || !req?.body?.ProjectName) return res.status(400).json({ 'message': 'Title required.' });
 
-    const RequirementObj = await Requirement.findOne({ Title: req.body.Title }).exec();
-    if (!RequirementObj) {
-        return res.status(204).json({ "message": `No requirement matches Title` });
+    const Project = await ProjectDB.findOne({ Name: req?.body?.ProjectName });
+
+    if (!Project) {
+        return res.status(209).json({ "message": `No such project exists` });
     }
+
+    const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req.body.ProjectName });
+    console.log(RequirementObj)
+
+    if (!RequirementObj) {
+        return res.status(209).json({ "message": `No such Requirement exist in the Project` })
+    };
+   
     DisplayComment = RequirementObj.Comments;
     res.json(DisplayComment);
 }
