@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const TeacherProjectController = require('../../controllers/TeacherControllers/TeacherProjectController');
 const StudentProjectController = require('../../controllers/StudentControllers/StudentProjectController');
+const TeamManagementController = require('../../controllers/StudentControllers/TeamManagementController');
+
 const RequirementController = require('../../controllers/StudentControllers/requirementController');4
 const StudentEvaluationController = require('../../controllers/StudentControllers/StudentEvaluationController');
 const SprintController = require('../../controllers/StudentControllers/SprintController');
@@ -12,20 +13,19 @@ const verifyRoles = require('../../middleware/verifyRoles');
 
 
 // View Projects
-router.get('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), TeacherProjectController.getProject)
-router.get('/allProject', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), TeacherProjectController.getAllProject)
+router.get('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getProject)
+router.get('/allProject', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getAllProject)
+router.put('/project',verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.updateProject)
 
 // Team Management
-router.put('/teamMember', verifyRoles(ROLES_LIST.TeamLead), StudentProjectController.addTeamMember)
-router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), StudentProjectController.updateRole)
-router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), StudentProjectController.deleteTeamMember)
+router.put('/teamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.addTeamMember)
+router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.updateRole)
+router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.deleteTeamMember)
 
 // Requirements 
 router.post('/requirement',  RequirementController.addRequirement)
-
 router.put('/requirementLead',  RequirementController.updateRequirementLead)
 router.put('/requirementMember',  RequirementController.updateRequirementMember)
-
 router.delete('/requirement', RequirementController.deleteRequirement)
 router.get('/getRequirement', RequirementController.getRequirement)
 router.get('/getAllRequirement', RequirementController.getAllRequirement)

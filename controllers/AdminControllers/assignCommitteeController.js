@@ -1,6 +1,7 @@
 const Committee = require("../../model/CommitteeSchema");
 const TeacherDB = require("../../model/TeacherSchema");
 const ProjectDB = require("../../model/ProjectSchema");
+const { set } = require("mongoose");
 
 module.exports.addGroup = async (req, res) => {
     var { CommitteeName, ProjectName } = req.body; 
@@ -32,6 +33,13 @@ module.exports.addGroup = async (req, res) => {
             { _id: CommitteeObj._id },
             { $push: { Projects: Project } }
         );
+
+        Project.GroupCommittee = CommitteeObj;
+
+        var UpdateProject = await ProjectDB.updateOne({ Name: ProjectName }, {$set: {GroupCommittee:CommitteeObj }});
+        console.log(UpdateProject)
+
+
         CommitteeObj = await Committee.findOne({ Name: CommitteeName });
         const result = await CommitteeObj.save();
         res.json(result);

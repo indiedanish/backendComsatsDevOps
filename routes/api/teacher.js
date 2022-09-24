@@ -5,7 +5,11 @@ const ROLES_LIST = require('../../config/roles_list');
 const verifyRoles = require('../../middleware/verifyRoles');
 
 const TeacherProjectController = require('../../controllers/TeacherControllers/TeacherProjectController');
-const EvaluationController = require('../../controllers/TeacherControllers/TeacherEvaluationController');
+const CommitteeEvaluationController = require('../../controllers/TeacherControllers/CommitteeEvaluationController');
+const SupervisorEvaluationController = require('../../controllers/TeacherControllers/SupervisorEvaluationController');
+
+
+const CommitteeAssignedProjectsController = require('../../controllers/TeacherControllers/CommitteeAssignedProjectsController');
 
 // Project Management
 router.post('/project', verifyRoles(ROLES_LIST.Supervisor), TeacherProjectController.addProject)
@@ -15,11 +19,16 @@ router.get('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee ),
 router.get('/allProject',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee ), TeacherProjectController.getAllProject)
   
 // Evaluations
-router.get('/getSupervisorRubrics', EvaluationController.getSupervisorRubrics)
-router.get('/getCommitteeRubrics', EvaluationController.getCommitteeRubrics)
+router.get('/getSupervisorRubrics', SupervisorEvaluationController.getSupervisorRubrics)
+router.get('/getCommitteeRubrics', CommitteeEvaluationController.getCommitteeRubrics)
 
-router.post('/SupervisorEvaluation', EvaluationController.AddSupervisorEvaluation)
-router.post('/CommitteeEvaluation', EvaluationController.AddCommitteeEvaluation)
+router.post('/SupervisorEvaluation', SupervisorEvaluationController.AddSupervisorEvaluation)
+router.post('/CommitteeEvaluation', CommitteeEvaluationController.AddCommitteeEvaluation)
+
+// View AssignedGroups
+
+router.get('/getAssignedGroup', CommitteeAssignedProjectsController.getOneGroup); 
+router.get('/getAllAssignedGroup', CommitteeAssignedProjectsController.getAllGroup); 
 
 
 
