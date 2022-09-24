@@ -1,11 +1,17 @@
 const express = require('express');
 const router = express.Router();
+
 const StudentProjectController = require('../../controllers/StudentControllers/StudentProjectController');
 const TeamManagementController = require('../../controllers/StudentControllers/TeamManagementController');
 
-const RequirementController = require('../../controllers/StudentControllers/requirementController');4
-const StudentEvaluationController = require('../../controllers/StudentControllers/StudentEvaluationController');
+const RequirementController = require('../../controllers/StudentControllers/requirementController');
 const SprintController = require('../../controllers/StudentControllers/SprintController');
+const DeliverablesController = require('../../controllers/StudentControllers/DeliverablesController');
+
+
+const StudentEvaluationController = require('../../controllers/StudentControllers/StudentEvaluationController');
+const CommitteeEvaluationController = require('../../controllers/TeacherControllers/CommitteeEvaluationController');
+const SupervisorEvaluationController = require('../../controllers/TeacherControllers/SupervisorEvaluationController');
 
 
 const ROLES_LIST = require('../../config/roles_list');
@@ -21,6 +27,20 @@ router.put('/project',verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), S
 router.put('/teamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.addTeamMember)
 router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.updateRole)
 router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.deleteTeamMember)
+
+// Deliverables
+router.post('/deliverable',  DeliverablesController.addDeliverable)
+router.put('/deliverable',  DeliverablesController.updateDeliverable)
+router.get('/getAllDeliverable',  DeliverablesController.getAllDeliverable)
+router.get('/getDeliverable',  DeliverablesController.getDeliverable)
+router.delete('/deliverable',  DeliverablesController.deleteDeliverable)
+
+
+
+
+
+//updateDeliverable
+
 
 // Requirements 
 router.post('/requirement',  RequirementController.addRequirement)
@@ -52,6 +72,14 @@ router.delete('/deleteSprint', SprintController.deleteSprint)
 
 
 
+// Evaluations
+router.post('/SupervisorEvaluation', SupervisorEvaluationController.AddSupervisorEvaluation)
+router.get('/getSupervisorEvaluation', SupervisorEvaluationController.getSupervisorEvaluation)
+router.get('/getAllSupervisorEvaluation', SupervisorEvaluationController.getAllSupervisorEvaluation)
+
+router.post('/CommitteeEvaluation', CommitteeEvaluationController.AddCommitteeEvaluation)
+router.get('/getCommitteeEvaluation', CommitteeEvaluationController.getCommitteeEvaluation)
+router.get('/getAllCommitteeEvaluation', CommitteeEvaluationController.getAllCommitteeEvaluation)
 
 
 // Backlogs

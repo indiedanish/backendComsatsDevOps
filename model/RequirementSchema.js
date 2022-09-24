@@ -39,7 +39,6 @@ var requirementSchema = new mongoose.Schema({
 
     Comments: [{
 
-        
 
         Student: {
             type: mongoose.Schema.ObjectId,
@@ -66,8 +65,7 @@ var requirementSchema = new mongoose.Schema({
     SubmittedFile: [{
         type: String,
 
-    }
-    ],
+    }],
 
     DateModified: {
         type: Date,
