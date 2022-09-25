@@ -29,18 +29,11 @@ const StudentLogin = async (req, res) => {
         // regno+pass+role = Access $dfadfsdfkhsdbfhsebfwjfbiwjefwibejfwbejfwbefjweb
         // regno+pass+role = Refresh $sefsdfssdgdsfgdfgdfgdfgdfgdfgdfg
 
-        const accessToken = jwt.sign(
-            {
-                "UserInfo": {
-                    "RegNo": foundStudent.RegNo,
-                    "Role": foundStudent.Role
-                }
-            },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '59s' }
-        );
+       
         const refreshToken = jwt.sign(
-            { "RegNo": foundStudent.RegNo },
+            { "RegNo": foundStudent.RegNo,
+                "Role" : role
+        },
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '1d' }
         );
@@ -53,7 +46,7 @@ const StudentLogin = async (req, res) => {
         res.cookie('jwt', refreshToken, { httpOnly: true,  sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
         // Send authorization roles and access token to user
-        res.json({ role, accessToken });
+        res.json({ role, refreshToken });
 
     } else {
         res.sendStatus(401);
@@ -110,21 +103,26 @@ const TeacherLogin = async (req, res) => {
 
  
 const AdminLogin = async (req, res) => {
+    console.log(req.body)
       
     const { Email, Password } = req.body;
     
-    if (!Email || !Password ) return res.status(400).json({ 'message': 'Email and password are required.' });
+    if (!Email || !Password ) return res.status(401).json({ 'message': 'Email and password are required.' });
 
 
      const foundAdmin = await Admin.findOne({ Email: Email }).exec();
 
-
+    if (foundAdmin == null) return res.sendStatus(401); //Unauthorized
     if ( Email != foundAdmin.Email && Password != foundAdmin.Passoword) return res.sendStatus(401); //Unauthorized 
   
+    console.log("FOUND")
       
 
         const refreshToken = jwt.sign(
-            { "Email": foundAdmin.Email },
+            { "Email": foundAdmin.Email,
+                "Role" : "Admin"
+        
+        },
            "" + process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '1d' }
         );
@@ -134,7 +132,7 @@ const AdminLogin = async (req, res) => {
         const result = await foundAdmin.save();
 
         // Creates Secure Cookie with refresh token
-        res.cookie('jwt', refreshToken, { httpOnly: true,  sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
+        res.cookie('jwt', refreshToken, {  secure: true,  sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
         // Send authorization roles and access token to user
         res.json({refreshToken });
