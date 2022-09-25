@@ -1,10 +1,17 @@
 var mongoose = require("mongoose");
-var testPlanSchema = new mongoose.Schema({
+var TestPlanSchema = new mongoose.Schema({
+
+  
 
   TestPlanTitle: {
     type: String,
     required: true,
   },
+
+  ProjectName: {
+    type: String,
+    required: true,
+},
 
   Description: {
     type: String,
@@ -32,9 +39,6 @@ var testPlanSchema = new mongoose.Schema({
     },
   ],
 
-  DateModified: {
-    type: Date,
-    default: Date.now,
-  },
+
 });
-module.exports = mongoose.model("TestPlan", testPlanSchema);
+module.exports = mongoose.model("TestPlan", TestPlanSchema);
