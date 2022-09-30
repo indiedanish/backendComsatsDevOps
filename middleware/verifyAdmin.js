@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const verifyAdmin = (req, res, next) => {
     const cookies = req.cookies;
+    console.log("COOKIES")
     if (!cookies?.jwt) return res.sendStatus(401);
 
     const RefreshToken = cookies.jwt;
