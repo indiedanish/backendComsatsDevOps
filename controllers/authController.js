@@ -111,7 +111,7 @@ const AdminLogin = async (req, res) => {
 
 
      const foundAdmin = await Admin.findOne({ Email: Email }).exec();
-        console.log( foundAdmin.Password==  Password)
+       
    if (foundAdmin == null) return res.sendStatus(401); //Unauthorized
     if ( Password != foundAdmin.Password) return res.sendStatus(401); //Unauthorized 
   
