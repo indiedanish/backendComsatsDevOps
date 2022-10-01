@@ -1,19 +1,23 @@
 var mongoose = require("mongoose");
 var StudentSchema = new mongoose.Schema({
+  
   Name: {
     type: String,
     
   },
+  
   RegNo: {
     type: String,
     required: true,
     unique: true,
   },
+  
   Email: {
     type: String,
     required: true,
     unique: true,
   },
+  
   Password: {
     type: String,
     required: true,
@@ -44,18 +48,18 @@ var StudentSchema = new mongoose.Schema({
  
   },
 
-  CommitteeEvaluation: {
+  CommitteeEvaluation: [ {
   
     type: mongoose.Schema.ObjectId,
       ref: 'EvaluationCommittee'
  
-  },
+  }],
 
-  SupervisorEvaluation: {
+  SupervisorEvaluation: [ {
     type: mongoose.Schema.ObjectId,
     ref: 'EvaluationSupervisor'
 
-  },
+  }],
 
   Notifications: [{
     type: mongoose.Schema.ObjectId,

@@ -7,6 +7,11 @@ var DeliverableSchema = new mongoose.Schema({
     unique: true,
   },
 
+  ProjectName: {
+    type: String,
+    required: true,
+  },
+
   DateModified: {
     type: Date,
     default: Date.now,

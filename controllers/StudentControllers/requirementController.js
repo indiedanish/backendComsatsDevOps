@@ -1,25 +1,69 @@
 const Requirement = require('../../model/RequirementSchema');
 const TeacherDB = require('../../model/TeacherSchema');
 const StudentDB = require('../../model/StudentSchema');
+const ProjectDB = require('../../model/ProjectSchema');
 
 
 module.exports.addRequirement = async (req, res) => {
 
-    var { Title, Description, AssignedTo, Type, Priority, Accepted, Comments,
+    var { Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
         File = new Array(), SubmittedFile = new Array(), DateModified, Deadline } = req.body;
     if (!Title) return res.status(400).json({ 'message': 'Title is required.' });
 
-    const duplicate = await Requirement.findOne({ Title: Title }).exec();
-    if (duplicate) return res.sendStatus(409); //Conflict 
-
     try {
+
+        const Project = await ProjectDB.findOne({ Name: ProjectName });
+        if (!Project) {
+            return res.status(209).json({ "message": `No such project exists` });
+        }
+        const RequirementObj = await Requirement.findOne({ Title: Title, ProjectName: ProjectName });
+
+        if (RequirementObj) {
+            return res.status(209).json({ "message": `Record already exists` })
+        };
+
         const newRequirement = await Requirement.create({
-            Title, Description, AssignedTo, Type, Priority, Accepted, Comments,
+            Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
             File, SubmittedFile, DateModified, Deadline
         });
-        console.log(newRequirement);
+
+        var updateProject = await ProjectDB.updateOne(
+            { '_id': Project._id },
+            { $push: { Requirements: newRequirement } },
+        )
 
         res.status(201).json({ 'success': `New ${newRequirement} created!` });
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+
+}
+
+
+module.exports.deleteRequirement = async (req, res) => {
+    if (!req?.body?.Title || !req?.body?.ProjectName) return res.status(400).json({ 'message': 'Title required.' });
+    try {
+
+        const Project = await ProjectDB.findOne({ Name: req?.body?.ProjectName });
+
+        if (!Project) {
+            return res.status(209).json({ "message": `No such project exists` });
+        }
+
+        const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req?.body?.ProjectName });
+
+        if (!RequirementObj) {
+            return res.status(209).json({ "message": `No such project exists` })
+        };
+
+        var updateProject = await ProjectDB.updateOne(
+            { '_id': Project._id },
+            { $pull: { Requirements: RequirementObj._id } },
+
+        );
+        const result = await RequirementObj.deleteOne();
+        res.json(result);
     }
     catch (err) {
         res.status(500).json({ 'message': err.message });
@@ -27,79 +71,112 @@ module.exports.addRequirement = async (req, res) => {
 }
 
 
-module.exports.deleteRequirement = async (req, res) => {
-    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
-
-    const reqt = await Requirement.findOne({ Title: req.body.Title }).exec();
-    if (!reqt) {
-        return res.status(204).json({ "message": `No such Requirement exists` });
-    }
-    const result = await reqt.deleteOne();
-    res.json(result);
-}
-
 
 module.exports.updateRequirementLead = async (req, res) => {
-    if (!req?.body?.Title) { //Name of Requirement
+    if (!req?.body?.Title || !req?.body?.ProjectName) { //Name of Requirement
         return res.status(400).json({ 'message': 'Name required.' });
     }
-    const requirement = await Requirement.findOne({ Title: req.body.Title }).exec();
-    if (!requirement) {
-        return res.status(204).json({ "message": `No Committee matches Name` });
+
+    try {
+        const Project = await ProjectDB.findOne({ Name: req?.body?.ProjectName });
+
+        if (!Project) {
+            return res.status(209).json({ "message": `No such project exists` });
+        }
+
+        const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req?.body?.ProjectName });
+
+        if (!RequirementObj) {
+            return res.status(209).json({ "message": `No such Requirement in the Project` })
+        };
+
+        if (req.body?.Description) RequirementObj.Description = req.body.Description;
+
+        if (req.body?.AssignedTo) { // AssignedTo = Student RegNo
+            var StudentObj = await StudentDB.findOne({ RegNo: req.body.AssignedTo })
+            if (!StudentObj) {
+                return res.status(209).json({ "message": `No such Student in the Project` })
+            }
+            RequirementObj.AssignedTo = StudentObj;
+        }
+        if (req.body?.Type) RequirementObj.Type = req.body.Type;
+        if (req.body?.Priority) RequirementObj.Priority = req.body.Priority;
+        if (req.body?.Accepted) RequirementObj.Accepted = req.body.Accepted;
+
+        if (req.body?.File) RequirementObj.File = req.body.File;
+        if (req.body?.SubmittedFile) RequirementObj.SubmittedFile = req.body.SubmittedFile;
+        if (req.body?.DateModified) RequirementObj.DateModified = req.body.DateModified;
+        if (req.body?.Deadline) RequirementObj.Deadline = req.body.Deadline;
+        if (req.body?.Rename) {
+            const check = await Requirement.findOne({ Title: Rename, ProjectName: req?.body?.ProjectName });
+            if (check) {
+                return res.status(409).json({ "message": `Can't Rename: Already a Requirement with similar Name exists` });
+            }
+
+            RequirementObj.Title = req.body.Rename;
+        }
+
+        const result = await RequirementObj.save();
+        res.json(result);
+
     }
-    if (req.body?.Description) requirement.Description = req.body.Description;
-
-    if (req.body?.AssignedTo) { // AssignedTo = Student RegNo
-        var StudentObj = await StudentDB.findOne({ RegNo: req.body.AssignedTo })
-        requirement.AssignedTo = StudentObj;
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
     }
-    if (req.body?.Type) requirement.Type = req.body.Type;
-    if (req.body?.Priority) requirement.Priority = req.body.Priority;
-    if (req.body?.Accepted) requirement.Accepted = req.body.Accepted;
-
-    if (req.body?.File) requirement.File = req.body.File;
-    if (req.body?.SubmittedFile) requirement.SubmittedFile = req.body.SubmittedFile;
-    if (req.body?.DateModified) requirement.DateModified = req.body.DateModified;
-    if (req.body?.Deadline) requirement.Deadline = req.body.Deadline;
-    if (req.body?.Rename) requirement.Title = req.body.Rename;
-
-
-
-
-    const result = await requirement.save();
-    res.json(result);
 }
-
-
-
 
 
 module.exports.updateRequirementMember = async (req, res) => {
-    if (!req?.body?.Title) { //Name of Requirement
+
+    if (!req?.body?.Title || !req?.body?.ProjectName) { //Name of Requirement
         return res.status(400).json({ 'message': 'Name required.' });
     }
-    const requirement = await Requirement.findOne({ Title: req.body.Title }).exec();
-    if (!requirement) {
-        return res.status(204).json({ "message": `No Committee matches Name` });
+
+    try {
+        const Project = await ProjectDB.findOne({ Name: req?.body?.ProjectName });
+
+        if (!Project) {
+            return res.status(209).json({ "message": `No such project exists` });
+        }
+
+        const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req?.body?.ProjectName });
+
+        if (!RequirementObj) {
+            return res.status(209).json({ "message": `No such Requirement in the Project` })
+        };
+
+        if (req.body?.Priority) RequirementObj.Priority = req.body.Priority;
+        if (req.body?.Accepted) RequirementObj.Accepted = req.body.Accepted;
+        if (req.body?.SubmittedFile) RequirementObj.SubmittedFile = req.body.SubmittedFile;
+        if (req.body?.DateModified) RequirementObj.DateModified = req.body.DateModified;
+
+
+        const result = await RequirementObj.save();
+        res.json(result);
+
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
     }
 
-    if (req.body?.Priority) requirement.Priority = req.body.Priority;
-    if (req.body?.Accepted) requirement.Accepted = req.body.Accepted;
-
-    if (req.body?.SubmittedFile) requirement.SubmittedFile = req.body.SubmittedFile;
-    if (req.body?.DateModified) requirement.DateModified = req.body.DateModified;
-
-    const result = await requirement.save();
-    res.json(result);
 }
 
 
-
 module.exports.getAllRequirement = async (req, res) => {
-    const requirement = await Requirement.find();
-    if (!requirement) return res.status(204).json({ 'message': 'No Requirements found.' });
+
     try {
-        res.json(requirement);
+
+        if (!req?.body?.ProjectName) { //Name of Requirement
+            return res.status(400).json({ 'message': 'Project Name required.' });
+        }
+        const Project = await ProjectDB.findOne({ Name: req?.body?.ProjectName });
+
+        if (!Project) {
+            return res.status(209).json({ "message": `No such project exists` });
+        }
+        const ProjectContent = await ProjectDB.findOne({ Name: req?.body?.ProjectName }).populate({ path: 'Requirements' })
+        res.json(ProjectContent.Requirements);
+
     }
     catch (err) {
         res.status(500).json({ 'message': err.message });
@@ -107,13 +184,29 @@ module.exports.getAllRequirement = async (req, res) => {
 }
 
 module.exports.getRequirement = async (req, res) => {
-    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
+    try {
+        if (!req?.body?.Title || !req?.body?.ProjectName) return res.status(400).json({ 'message': 'Title required.' });
 
-    const requirement = await Requirement.findOne({ Title: req.body.Title }).exec();
-    if (!requirement) {
-        return res.status(204).json({ "message": `No requirement matches Title` });
+        const Project = await ProjectDB.findOne({ Name: req?.body?.ProjectName });
+
+        if (!Project) {
+            return res.status(209).json({ "message": `No such project exists` });
+        }
+
+        const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req?.body?.ProjectName });
+
+        if (!RequirementObj) {
+            return res.status(209).json({ "message": `No such Requirement exist in the Project` })
+        };
+
+        res.json(RequirementObj);
+
     }
-    res.json(requirement);
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+
+
 }
 
 
@@ -124,22 +217,33 @@ module.exports.getRequirement = async (req, res) => {
 
 module.exports.addRequirementComments = async (req, res) => {
 
-    if (!req?.body?.Title || !req?.body?.Student || !req?.body?.Content) {
-        return res.status(400).json({ 'message': 'Req Title, Student RegNo and Content required.' });
+    if (!req?.body?.Title || !req?.body?.Student || !req?.body?.Content || !req?.body?.ProjectName) {
+        return res.status(400).json({ 'message': 'Project Name, Req Title, Student RegNo and Content required.' });
     }
-    const RequirementObj = await Requirement.findOne({ Title: req.body.Title }).exec();
-    const StudentObj = await StudentDB.findOne({ RegNo: req.body.Student }).exec();
-    if (!RequirementObj || !StudentObj) {
-        return res.status(204).json({ "message": `No Requirement matches Title & No such Student` });
+
+    const Project = await ProjectDB.findOne({ Name: req?.body?.ProjectName });
+
+    if (!Project) {
+        return res.status(209).json({ "message": `No such project exists` });
+    }
+
+    const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req.body.ProjectName });
+    console.log(RequirementObj)
+
+    if (!RequirementObj) {
+        return res.status(209).json({ "message": `No such Requirement exist in the Project` })
+    };
+
+    const StudentObj = await StudentDB.findOne({ RegNo: req.body.Student });
+    if (!StudentObj) {
+        return res.status(204).json({ "message": `No such Student exists` });
     }
     try {
-        var AddRequirement = await Requirement.updateOne(
+        var AddComment = await Requirement.updateOne(
             { '_id': RequirementObj._id },
             { $push: { Comments: { 'Student': StudentObj, 'Content': req?.body?.Content } } },
-            // false, // Upsert
-            // true, // Multi
         );
-        res.send(AddRequirement);
+        res.json(AddComment);
     }
     catch (err) {
         res.status(500).json({ 'message': err.message });
@@ -149,17 +253,32 @@ module.exports.addRequirementComments = async (req, res) => {
 
 module.exports.deleteRequirementComments = async (req, res) => {
 
-    if (!req?.body?.Title || !req?.body?._id) {
-        return res.status(400).json({ 'message': 'Req Title and Comment ID required.' });
+    if (!req?.body?.Title || !req?.body?.Student || !req?.body?.ProjectName) {
+        return res.status(400).json({ 'message': 'Project Name, Req Title, Student RegNo  required.' });
     }
-    const RequirementObj = await Requirement.findOne({ Title: req.body.Title }).exec();
+
+    const Project = await ProjectDB.findOne({ Name: req?.body?.ProjectName });
+
+    if (!Project) {
+        return res.status(209).json({ "message": `No such project exists` });
+    }
+
+    const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req.body.ProjectName });
+    console.log(RequirementObj)
+
     if (!RequirementObj) {
-        return res.status(204).json({ "message": `No Requirement matches Title & No such Student` });
+        return res.status(209).json({ "message": `No such Requirement exist in the Project` })
+    };
+
+    const StudentObj = await StudentDB.findOne({ RegNo: req.body.Student });
+    if (!StudentObj) {
+        return res.status(204).json({ "message": `No such Student exists` });
     }
+
     try {
         var DeleteRequirement = await Requirement.updateOne(
             { '_id': RequirementObj._id },
-            { $pull: { Comments: { '_id': req?.body?._id} } },
+            { $pull: { Comments: { '_id': req.params._id } } },
             // false, // Upsert
             // true, // Multi
         );
@@ -173,12 +292,21 @@ module.exports.deleteRequirementComments = async (req, res) => {
 //getRequirementComments
 
 module.exports.getRequirementComments = async (req, res) => {
-    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
+    if (!req?.body?.Title || !req?.body?.ProjectName) return res.status(400).json({ 'message': 'Title required.' });
 
-    const RequirementObj = await Requirement.findOne({ Title: req.body.Title }).exec();
-    if (!RequirementObj) {
-        return res.status(204).json({ "message": `No requirement matches Title` });
+    const Project = await ProjectDB.findOne({ Name: req?.body?.ProjectName });
+
+    if (!Project) {
+        return res.status(209).json({ "message": `No such project exists` });
     }
+
+    const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req.body.ProjectName });
+    console.log(RequirementObj)
+
+    if (!RequirementObj) {
+        return res.status(209).json({ "message": `No such Requirement exist in the Project` })
+    };
+
     DisplayComment = RequirementObj.Comments;
     res.json(DisplayComment);
 }

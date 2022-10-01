@@ -31,7 +31,6 @@ module.exports.addProject = async (req, res) => {
 
             GroupSupervisor = await Teacher.findOne({ Email: GroupSupervisor });
 
-
             if (!GroupSupervisor) {
                 return res.status(204).json({ "message": `No such Teacher exists` });
             }
@@ -54,6 +53,7 @@ module.exports.addProject = async (req, res) => {
 
         }
 
+        GroupMembers = TeamLeader;
         const newProject = await Project.create({
             Name, Description, Status, Deliverable, TeamLeader, GroupMembers,
             GroupStatus, GroupSupervisor, GroupCoSupervisor, GroupCommittee, Average
