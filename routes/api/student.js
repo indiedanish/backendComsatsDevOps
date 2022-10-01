@@ -41,13 +41,13 @@ router.get('/getRequirementComments',  RequirementController.getRequirementComme
 //Testing routes jitnay bhi hoon gaay
 router.get('/getTestPlan', TestPlanController.getTestPlan)
 router.post('/addTestPlan', TestPlanController.addTestPlan)
-//router.put('/updateTestPlan', TestPlanController.updateTestPlan)
+router.put('/updateTestPlan', TestPlanController.updateTestPlan)
 router.delete('/deleteTestPlan', TestPlanController.deleteTestPlan)
 
 //Debugging Routes
 router.get('/getBugReport', BugReportController.getBugReport)
 router.post('/addBugReport', BugReportController.addBugReport)
-//router.put('/updateBugReport', BugReportController.updateBugReport)
+router.put('/updateBugReport', BugReportController.updateBugReport)
 router.delete('/deleteBugReport', BugReportController.deleteBugReport)
 
 

@@ -60,3 +60,33 @@ module.exports.deleteBugReport = async (req, res) => {
     res.json(result);
 }
 
+module.exports.updateBugReport = async (req, res) => {
+
+    var { BugReportTitle, ProjectName} = req.body;
+    if (!ProjectName || !BugReportTitle) return res.status(400).json({ 'message': 'Title and Name are required.' });
+
+    const bugreport = await BugReportDB.findOne({ BugReportTitle: req.body.BugReportTitle, ProjectName: ProjectName });
+    if (!bugreport) {
+        return res.status(204).json({ "message": `No bugreport matches Title` });
+    }
+
+    const requirementObj = await RequirementDB.findOne({ Title: req.body.DebuggingRequirement, ProjectName: ProjectName });
+    if (!requirementObj) {
+        return res.status(204).json({ "message": `No requirement matches Title` });
+    }
+
+    //BugReportTitle, ProjectName, Description, DateModified, DebuggingRequirement, SubmittedFile
+
+    if (req.body?.BugReportTitle) bugreport.BugReportTitle = req.body.BugReportTitle;
+    if (req.body?.ProjectName) bugreport.ProjectName = req.body.ProjectName;
+    if (req.body?.Description) bugreport.Description = req.body.Description;
+    if (req.body?.DateModified) bugreport.DateModified = req.body.DateModified;
+    if (req.body?.SubmittedFile) bugreport.SubmittedFile = req.body.SubmittedFile;
+    if (req.body?.DebuggingRequirement) requirementObj.DebuggingRequirement = requirementObj;
+
+
+    const result = await bugreport.save();
+    res.json(result);
+}
+
+

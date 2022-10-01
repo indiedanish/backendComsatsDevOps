@@ -60,3 +60,33 @@ module.exports.deleteTestPlan = async (req, res) => {
     res.json(result);
 }
 
+module.exports.updateTestPlan = async (req, res) => {
+
+    var { TestPlanTitle, ProjectName} = req.body;
+    if (!ProjectName || !TestPlanTitle) return res.status(400).json({ 'message': 'Title and Name are required.' });
+
+    const testplan = await TestPlanDB.findOne({ TestPlanTitle: req.body.TestPlanTitle, ProjectName: ProjectName });
+    if (!testplan) {
+        return res.status(204).json({ "message": `No testplan matches Title` });
+    }
+
+    const requirementObj = await RequirementDB.findOne({ Title: req.body.TestingRequirement, ProjectName: ProjectName });
+    if (!requirementObj) {
+        return res.status(204).json({ "message": `No requirement matches Title` });
+    }
+
+    
+    //TestPlanTitle,ProjectName, Description, DateModified, TestingRequirement, TestPass, SubmittedFile
+    if (req.body?.TestPlanTitle) testplan.TestPlanTitle = req.body.TestPlanTitle;
+    if (req.body?.ProjectName) testplan.ProjectName = req.body.ProjectName;
+    if (req.body?.Description) testplan.Description = req.body.Description;
+    if (req.body?.DateModified) testplan.DateModified = req.body.DateModified;
+    if (req.body?.TestPass) testplan.TestPass = req.body.TestPass;
+    if (req.body?.SubmittedFile) testplan.SubmittedFile = req.body.SubmittedFile;
+    if (req.body?.TestingRequirement) requirementObj.TestingRequirement = requirementObj;
+
+
+    const result = await testplan.save();
+    res.json(result);
+}
+
