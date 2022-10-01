@@ -7,6 +7,8 @@ const RequirementController = require('../../controllers/StudentControllers/requ
 const StudentEvaluationController = require('../../controllers/StudentControllers/StudentEvaluationController');
 const SprintController = require('../../controllers/StudentControllers/SprintController');
 const TestPlanController = require('../../controllers/StudentControllers/TestPlanController');
+const BugReportController = require('../../controllers/StudentControllers/BugReportController');
+
 
 
 const ROLES_LIST = require('../../config/roles_list');
@@ -41,6 +43,13 @@ router.get('/getTestPlan', TestPlanController.getTestPlan)
 router.post('/addTestPlan', TestPlanController.addTestPlan)
 //router.put('/updateTestPlan', TestPlanController.updateTestPlan)
 router.delete('/deleteTestPlan', TestPlanController.deleteTestPlan)
+
+//Debugging Routes
+router.get('/getBugReport', BugReportController.getBugReport)
+router.post('/addBugReport', BugReportController.addBugReport)
+//router.put('/updateBugReport', BugReportController.updateBugReport)
+router.delete('/deleteBugReport', BugReportController.deleteBugReport)
+
 
 
 // Evaluation

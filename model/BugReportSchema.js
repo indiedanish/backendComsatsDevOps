@@ -6,6 +6,11 @@ var bugReportSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+
+      ProjectName: {
+        type: String,
+        required: true,
+    },
     
       Description: {
         type: String,
@@ -30,10 +35,7 @@ var bugReportSchema = new mongoose.Schema({
         },
       ],
     
-      DateModified: {
-        type: Date,
-        default: Date.now,
-      },
+    
     });
 
 module.exports = mongoose.model("BugReport", bugReportSchema);
