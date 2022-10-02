@@ -54,7 +54,9 @@ router.put('/requirementLead', RequirementController.updateRequirementLead)
 router.put('/requirementMember', RequirementController.updateRequirementMember)
 router.delete('/requirement', RequirementController.deleteRequirement)
 router.get('/getRequirement', RequirementController.getRequirement)
-router.get('/getAllRequirement', RequirementController.getAllRequirement)
+router.post('/getAllRequirement', RequirementController.getAllRequirement)
+router.post('/getStudentRequirement', RequirementController.getStudentRequirement)
+
 
 //Post, Delete and View Comments in Requirement
 router.put('/addRequirementComments', RequirementController.addRequirementComments)
