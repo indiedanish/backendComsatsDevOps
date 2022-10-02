@@ -10,7 +10,7 @@ const bcrypt = require('bcrypt');
 module.exports.addNewStudent = async (req, res) => {
 
     var { Name, RegNo, Email, Password, PhoneNumber, Gender, Position, FypStatus, 
-        CommitteeEvaluation, SupervisorEvaluation, Notifications, OnlineStatus } = req.body;
+        CommitteeEvaluation, SupervisorEvaluation, Notifications, OnlineStatus, Project } = req.body;
     if (!Name || !RegNo || !Password) return res.status(400).json({ 'message': 'Username, Reg No and password are required.' });
     var Role= "TeamMember"
     // Check if user already exists
@@ -22,7 +22,7 @@ module.exports.addNewStudent = async (req, res) => {
 
         const newStudent = await Student.create({  Name, RegNo, Email, Password, PhoneNumber, Gender, 
              Role, Position, FypStatus, CommitteeEvaluation, SupervisorEvaluation, 
-             Notifications, OnlineStatus });
+             Notifications, OnlineStatus, Project });
 
         console.log(newStudent);
 
