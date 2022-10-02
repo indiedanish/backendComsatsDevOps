@@ -60,6 +60,9 @@ module.exports.addProject = async (req, res) => {
         });
         console.log(newProject);
 
+        TeamLeader.Project = newProject;
+
+
         res.status(201).json({ 'success': `New ${newProject} created!` });
     }
     catch (err) {
@@ -93,7 +96,7 @@ module.exports.updateProject = async (req, res) => {
 
     }
 
-    if (req.body?.GroupMembers) project.GroupMembers = req.body.GroupMembers;
+    if (req.body?.GroupMembers) project.GroupMembers = [...project.GroupMembers, req.body.GroupMembers ] ;
     if (req.body?.GroupStatus) project.GroupStatus = req.body.GroupStatus;
 
     if (req.body?.GroupSupervisor) {

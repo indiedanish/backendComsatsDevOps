@@ -20,6 +20,7 @@ module.exports.addTeamMember = async (req, res) => {
             if (!temp) {
                 return res.status(204).json({ "message": `No such Student exists` });
             }
+            temp.Project = project;
             check = [...check, temp]
         }
         Student = check
