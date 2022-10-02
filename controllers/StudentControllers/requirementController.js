@@ -8,7 +8,8 @@ module.exports.addRequirement = async (req, res) => {
 
     var { Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
         File = new Array(), SubmittedFile = new Array(), DateModified, Deadline } = req.body;
-    if (!Title) return res.status(400).json({ 'message': 'Title is required.' });
+    if (!Title|| !AssignedTo || !ProjectName) return res.status(400).json({ 'message': 
+    'Title of Requirement, Assigned To, Priority and Project Name required.' });
 
     try {
 
@@ -21,6 +22,12 @@ module.exports.addRequirement = async (req, res) => {
         if (RequirementObj) {
             return res.status(209).json({ "message": `Record already exists` })
         };
+
+        const AssignedTo = await StudentDB.findOne({ RegNo: req?.body?.AssignedTo });
+
+        if (!AssignedTo) {
+            return res.status(209).json({ "message": `No such student exists` });
+        }
 
         const newRequirement = await Requirement.create({
             Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
@@ -182,6 +189,46 @@ module.exports.getAllRequirement = async (req, res) => {
         res.status(500).json({ 'message': err.message });
     }
 }
+
+
+
+
+module.exports.getStudentRequirement = async (req, res) => {
+
+    try {
+
+        if (!req?.body?.ProjectName) { //Project Name of Requirement
+            return res.status(400).json({ 'message': 'Project Name required.' });
+        }
+        const Project = await ProjectDB.findOne({ Name: req?.body?.ProjectName });
+
+        if (!Project) {
+            return res.status(209).json({ "message": `No such project exists` });
+        }
+
+        if (!req?.body?.Student) { //RegNo of Requirement
+            return res.status(400).json({ 'message': 'Student RegNO required.' });
+        }
+        const student = await StudentDB.findOne({ RegNo: req?.body?.Student });
+
+        if (!student) {
+            return res.status(209).json({ "message": `No such student exists` });
+        }
+       
+        const StudentRequirements = await Requirement.find({ ProjectName: req?.body?.ProjectName, AssignedTo: student })
+        console.log(StudentRequirements)
+        res.json(StudentRequirements);
+
+
+    }
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+}
+
+
+
+
 
 module.exports.getRequirement = async (req, res) => {
     try {
