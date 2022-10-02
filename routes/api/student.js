@@ -12,6 +12,9 @@ const DeliverablesController = require('../../controllers/StudentControllers/Del
 const StudentEvaluationController = require('../../controllers/StudentControllers/StudentEvaluationController');
 const CommitteeEvaluationController = require('../../controllers/TeacherControllers/CommitteeEvaluationController');
 const SupervisorEvaluationController = require('../../controllers/TeacherControllers/SupervisorEvaluationController');
+const TestPlanController = require('../../controllers/StudentControllers/TestPlanController');
+const BugReportController = require('../../controllers/StudentControllers/BugReportController');
+
 
 
 const ROLES_LIST = require('../../config/roles_list');
@@ -56,6 +59,17 @@ router.put('/deleteRequirementComments', RequirementController.deleteRequirement
 router.get('/getRequirementComments',  RequirementController.getRequirementComments)
 
 //Testing routes jitnay bhi hoon gaay
+router.get('/getTestPlan', TestPlanController.getTestPlan)
+router.post('/addTestPlan', TestPlanController.addTestPlan)
+router.put('/updateTestPlan', TestPlanController.updateTestPlan)
+router.delete('/deleteTestPlan', TestPlanController.deleteTestPlan)
+
+//Debugging Routes
+router.get('/getBugReport', BugReportController.getBugReport)
+router.post('/addBugReport', BugReportController.addBugReport)
+router.put('/updateBugReport', BugReportController.updateBugReport)
+router.delete('/deleteBugReport', BugReportController.deleteBugReport)
+
 
 
 // Evaluation
