@@ -61,7 +61,6 @@ module.exports.addProject = async (req, res) => {
             GroupStatus, GroupSupervisor, GroupCoSupervisor, GroupCommittee, Average
         });
 
-        console.log("Hi212i")
 
 
         const project =  await Project.findOne({ Name: req.body.Name });
@@ -77,6 +76,11 @@ module.exports.addProject = async (req, res) => {
             var UpdateStudent = await Student.updateOne(
                 { '_id': TeamLead._id },
                 {  'Project': project},
+            );  
+
+            var UpdateStudent2 = await Student.updateOne(
+                { '_id': TeamLead._id },
+                {  'Role': "TeamLead"},
             );  
 
 

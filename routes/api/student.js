@@ -25,7 +25,7 @@ const verifyRoles = require('../../middleware/verifyRoles');
 
 
 router.post('/getStudent', stdTechCrudController.getStudent);
-router.get('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getProject)
+router.post('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getProject)
 router.get('/allProject', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getAllProject)
 router.put('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.updateProject)
 
@@ -33,7 +33,7 @@ router.put('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), 
 router.put('/teamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.addTeamMember)
 router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.updateRole)
 router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.deleteTeamMember)
-router.post('/getTeamMembers', TeamManagementController.getTeamMembers)
+router.post('/getTeamMembers',  TeamManagementController.getTeamMembers)
 
 
 // Deliverables

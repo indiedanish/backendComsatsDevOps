@@ -136,7 +136,11 @@ module.exports.getAllProject = async (req, res) => {
 module.exports.getProject = async (req, res) => {
     if (!req?.body?.Name) return res.status(400).json({ 'message': 'Name required.' });
 
-    const project = await ProjectDB.findOne({ Name: req.body.Name });
+    const project = await ProjectDB.findOne({ Name: req.body.Name }).populate('GroupMembers')
+    .populate({path: 'Requirements', modal:'Requirements', populate: {path : 'AssignedTo', modal:'Student'}})
+    .populate('Sprints').populate('Deliverable').populate('TeamLeader')
+    .populate('GroupSupervisor').populate('GroupCoSupervisor').populate('GroupCommittee');
+    
     if (!project) {
         return res.status(204).json({ "message": `No Project matches Title` });
     }

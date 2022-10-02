@@ -9,30 +9,28 @@ module.exports.addTeamMember = async (req, res) => {
         'message': 'Name of Project and Student Array required.'
     });
 
+
+    const student = await StudentDB.findOne({ RegNo: Student });
+
+
     const project = await ProjectDB.findOne({ Name: req.body.Name });
     if (!project) {
         return res.status(204).json({ "message": `No Project matches Name` });
     }
     try {
-        check = new Array();
-        for (var i = 0; i < Student.length; i++) {
-            temp = await StudentDB.findOne({ RegNo: Student[i] });
-            if (!temp) {
-                return res.status(204).json({ "message": `No such Student exists` });
-            }
-            temp.Project = project;
 
-            check = [...check, temp]
-        }
-        Student = check
+        var astudent = await ProjectDB.updateOne(
+            { '_id': project._id },
+            { $push :{ GroupMembers: student } },
+           
+        );
+    const result = await project.save();
+    res.json(result);
 
-        if (req.body?.Student) project.GroupMembers = Student;
-        const result = await project.save();
-        res.json(result);
     }
     catch (err) {
-        res.status(500).json({ 'message': err.message });
-    }
+    res.status(500).json({ 'message': err.message });
+}
 }
 
 
@@ -101,12 +99,13 @@ module.exports.getTeamMembers = async (req, res) => {
     if (!Name) return res.status(400).json({
         'message': 'Name of Project required.'
     });
-    const project = await ProjectDB.findOne({ Name: req.body.Name }).populate('GroupMembers');
-  
-  
-   // populate('Selected')
- //   .populate({path: 'Selected', model: 'Category',populate:{path:'EnteredCourse',model:'Course'}})
-  
+    const project = await ProjectDB.findOne({ Name: req.body.Name }).populate('GroupMembers')
+        .populate('Requirements');
+
+
+    // populate('Selected')
+    //   .populate({path: 'Selected', model: 'Category',populate:{path:'EnteredCourse',model:'Course'}})
+
     if (!project) {
         return res.status(204).json({ "message": `No Project matches Name` });
     }
