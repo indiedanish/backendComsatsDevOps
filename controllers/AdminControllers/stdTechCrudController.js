@@ -80,6 +80,7 @@ module.exports.deleteStudent = async (req, res) => {
 
 
 module.exports.getStudent = async (req, res) => {
+    
     if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
 
     const student = await Student.findOne({ RegNo: req.body.RegNo }).populate({ path: 'Project' })
@@ -87,7 +88,9 @@ module.exports.getStudent = async (req, res) => {
     if (!student) {
         return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
     }
+    console.log("IM HERE",student)
     res.json(student);
+
 }
 
 module.exports.getAllStudent = async (req, res) => {
