@@ -100,9 +100,9 @@ router.post('/CommitteeEvaluation', CommitteeEvaluationController.AddCommitteeEv
 router.get('/getCommitteeEvaluation', CommitteeEvaluationController.getCommitteeEvaluation)
 router.get('/getAllCommitteeEvaluation', CommitteeEvaluationController.getAllCommitteeEvaluation)
 
-router.post('/getNotifications', NotificationController.getNotifications)
+//router.post('/getNotifications', NotificationController.getNotifications)
 //get all notifictions from students database, req.body will have student ki email.
-router.post('/sendNotification', NotificationController.sendNotification)
+//router.post('/sendNotification', NotificationController.sendNotification)
 //req.body will have 1. Aus student ki email ()Sender email jis ko Notification bejhni, Notification title vagira schema se dekh laina, phir jo bejh raah aus ki email 
 
 
