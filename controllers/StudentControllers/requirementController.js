@@ -206,18 +206,20 @@ module.exports.getStudentRequirement = async (req, res) => {
             return res.status(209).json({ "message": `No such project exists` });
         }
 
-        if (!req?.body?.Student) { //RegNo of Requirement
+        if (!req?.body?.RegNo) { //RegNo of Requirement
             return res.status(400).json({ 'message': 'Student RegNO required.' });
         }
-        const student = await StudentDB.findOne({ RegNo: req?.body?.Student });
+        const student = await StudentDB.findOne({ RegNo: req?.body?.RegNo });
 
         if (!student) {
             return res.status(209).json({ "message": `No such student exists` });
         }
        
-        const StudentRequirements = await Requirement.find({ ProjectName: req?.body?.ProjectName, AssignedTo: student })
+        const StudentRequirements = await Requirement.find({ ProjectName: req?.body?.ProjectName, AssignedTo: student }).populate('AssignedTo')
         console.log(StudentRequirements)
         res.json(StudentRequirements);
+        
+;
 
 
     }
