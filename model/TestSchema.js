@@ -1,3 +1,0 @@
-//bananai hai
-
-// 

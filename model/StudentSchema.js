@@ -48,6 +48,13 @@ var StudentSchema = new mongoose.Schema({
  
   },
 
+  Project:  {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Project'
+
+  },
+
+
   CommitteeEvaluation: [ {
   
     type: mongoose.Schema.ObjectId,

@@ -19,9 +19,9 @@ module.exports.addProject = async (req, res) => {
 
         if (req.body.TeamLeader) {
 
-            TeamLeader = await Student.findOne({ RegNo: TeamLeader });
+           const TeamLeadObj = await Student.findOne({ RegNo: TeamLeader });
 
-            if (!TeamLeader) {
+            if (!TeamLeadObj) {
                 return res.status(204).json({ "message": `No such student exists` });
             }
 
@@ -58,9 +58,26 @@ module.exports.addProject = async (req, res) => {
             Name, Description, Status, Deliverable, TeamLeader, GroupMembers,
             GroupStatus, GroupSupervisor, GroupCoSupervisor, GroupCommittee, Average
         });
-        console.log(newProject);
+
+        const project =  await Project.findOne({ Name: req.body.Name });
+        if (req.body.TeamLeader) {
+            const TeamLead = await Student.findOne({ RegNo: TeamLeader });
+
+
+            if (!TeamLead) {
+                return res.status(204).json({ "message": `No such student exists` });
+            }
+
+            var UpdateStudent = await Student.updateOne(
+                { '_id': TeamLead._id },
+                {  'Project': project},
+            );  
+
+
+        }
 
         res.status(201).json({ 'success': `New ${newProject} created!` });
+     
     }
     catch (err) {
         res.status(500).json({ 'message': err.message });
@@ -93,7 +110,7 @@ module.exports.updateProject = async (req, res) => {
 
     }
 
-    if (req.body?.GroupMembers) project.GroupMembers = req.body.GroupMembers;
+    if (req.body?.GroupMembers) project.GroupMembers = [...project.GroupMembers, req.body.GroupMembers ] ;
     if (req.body?.GroupStatus) project.GroupStatus = req.body.GroupStatus;
 
     if (req.body?.GroupSupervisor) {
