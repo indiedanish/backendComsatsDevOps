@@ -16,15 +16,18 @@ const TestPlanController = require('../../controllers/StudentControllers/TestPla
 const BugReportController = require('../../controllers/StudentControllers/BugReportController');
 
 
+const stdTechCrudController = require('../../controllers/AdminControllers/stdTechCrudController');
+
+const NotificationController = require('../../controllers/StudentControllers/NotificationController');
 
 const ROLES_LIST = require('../../config/roles_list');
 const verifyRoles = require('../../middleware/verifyRoles');
 
 
-// View Projects
+router.post('/getStudent', stdTechCrudController.getStudent);
 router.get('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getProject)
 router.get('/allProject', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getAllProject)
-router.put('/project',verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.updateProject)
+router.put('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.updateProject)
 
 // Team Management
 router.put('/teamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.addTeamMember)
@@ -32,11 +35,11 @@ router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), TeamManagementContro
 router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.deleteTeamMember)
 
 // Deliverables
-router.post('/deliverable',  DeliverablesController.addDeliverable)
-router.put('/deliverable',  DeliverablesController.updateDeliverable)
-router.get('/getAllDeliverable',  DeliverablesController.getAllDeliverable)
-router.get('/getDeliverable',  DeliverablesController.getDeliverable)
-router.delete('/deliverable',  DeliverablesController.deleteDeliverable)
+router.post('/deliverable', DeliverablesController.addDeliverable)
+router.put('/deliverable', DeliverablesController.updateDeliverable)
+router.get('/getAllDeliverable', DeliverablesController.getAllDeliverable)
+router.get('/getDeliverable', DeliverablesController.getDeliverable)
+router.delete('/deliverable', DeliverablesController.deleteDeliverable)
 
 
 
@@ -46,9 +49,9 @@ router.delete('/deliverable',  DeliverablesController.deleteDeliverable)
 
 
 // Requirements 
-router.post('/requirement',  RequirementController.addRequirement)
-router.put('/requirementLead',  RequirementController.updateRequirementLead)
-router.put('/requirementMember',  RequirementController.updateRequirementMember)
+router.post('/requirement', RequirementController.addRequirement)
+router.put('/requirementLead', RequirementController.updateRequirementLead)
+router.put('/requirementMember', RequirementController.updateRequirementMember)
 router.delete('/requirement', RequirementController.deleteRequirement)
 router.get('/getRequirement', RequirementController.getRequirement)
 router.get('/getAllRequirement', RequirementController.getAllRequirement)
@@ -56,7 +59,7 @@ router.get('/getAllRequirement', RequirementController.getAllRequirement)
 //Post, Delete and View Comments in Requirement
 router.put('/addRequirementComments', RequirementController.addRequirementComments)
 router.put('/deleteRequirementComments', RequirementController.deleteRequirementComments)
-router.get('/getRequirementComments',  RequirementController.getRequirementComments)
+router.get('/getRequirementComments', RequirementController.getRequirementComments)
 
 //Testing routes jitnay bhi hoon gaay
 router.get('/getTestPlan', TestPlanController.getTestPlan)
@@ -94,6 +97,11 @@ router.get('/getAllSupervisorEvaluation', SupervisorEvaluationController.getAllS
 router.post('/CommitteeEvaluation', CommitteeEvaluationController.AddCommitteeEvaluation)
 router.get('/getCommitteeEvaluation', CommitteeEvaluationController.getCommitteeEvaluation)
 router.get('/getAllCommitteeEvaluation', CommitteeEvaluationController.getAllCommitteeEvaluation)
+
+router.post('/getNotifications', NotificationController.getNotifications)
+//get all notifictions from students database, req.body will have student ki email.
+router.post('/sendNotification', NotificationController.sendNotification)
+//req.body will have 1. Aus student ki email ()Sender email jis ko Notification bejhni, Notification title vagira schema se dekh laina, phir jo bejh raah aus ki email 
 
 
 // Backlogs
