@@ -215,8 +215,8 @@ module.exports.getStudentRequirement = async (req, res) => {
             return res.status(209).json({ "message": `No such student exists` });
         }
        
-        const StudentRequirements = await Requirement.find({ ProjectName: req?.body?.ProjectName, AssignedTo: student })
-        console.log(StudentRequirements)
+        const StudentRequirements = await Requirement.find({ ProjectName: req?.body?.ProjectName, AssignedTo: student }).populate('AssignedTo')
+        
         res.json(StudentRequirements);
 
 

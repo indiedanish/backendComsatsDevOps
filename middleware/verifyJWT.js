@@ -9,9 +9,7 @@ const verifyJWT = (req, res, next) => {
     if (!cookies?.jwt) return res.sendStatus(401);
     
     const RefreshToken = cookies.jwt;
-
-
-    
+  
 
     
     jwt.verify(

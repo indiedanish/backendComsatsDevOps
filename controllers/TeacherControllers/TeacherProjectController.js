@@ -13,15 +13,17 @@ module.exports.addProject = async (req, res) => {
         GroupStatus, GroupSupervisor, GroupCoSupervisor, GroupCommittee, Average } = req.body;
     if (!Name) return res.status(400).json({ 'message': 'Name is required.' });
 
+    var RegNo = TeamLeader;
+
     const duplicate = await Project.findOne({ Name: Name }).exec();
     if (duplicate) return res.sendStatus(409); //Conflict 
     try {
 
         if (req.body.TeamLeader) {
 
-           const TeamLeadObj = await Student.findOne({ RegNo: TeamLeader });
+            TeamLeader = await Student.findOne({ RegNo: RegNo });
 
-            if (!TeamLeadObj) {
+            if (!TeamLeader) {
                 return res.status(204).json({ "message": `No such student exists` });
             }
 
@@ -59,12 +61,16 @@ module.exports.addProject = async (req, res) => {
             GroupStatus, GroupSupervisor, GroupCoSupervisor, GroupCommittee, Average
         });
 
+        console.log("Hi212i")
+
+
         const project =  await Project.findOne({ Name: req.body.Name });
         if (req.body.TeamLeader) {
-            const TeamLead = await Student.findOne({ RegNo: TeamLeader });
+            const TeamLead = await Student.findOne({ RegNo: RegNo });
 
 
             if (!TeamLead) {
+                console.log("Hii")
                 return res.status(204).json({ "message": `No such student exists` });
             }
 
@@ -169,7 +175,7 @@ module.exports.getAllProject = async (req, res) => {
 }
 
 module.exports.getProject = async (req, res) => {
-    if (!req?.body?.Name) return res.status(400).json({ 'message': 'Name required.' });
+    if (!req?.body?.Name) return res.status(400).json({ 'message': 'Name of Project required.' });
 
     const project = await Project.findOne({ Name: req.body.Name }).exec();
     if (!project) {

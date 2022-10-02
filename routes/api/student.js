@@ -33,6 +33,8 @@ router.put('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), 
 router.put('/teamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.addTeamMember)
 router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.updateRole)
 router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.deleteTeamMember)
+router.post('/getTeamMembers', TeamManagementController.getTeamMembers)
+
 
 // Deliverables
 router.post('/deliverable', DeliverablesController.addDeliverable)
@@ -100,9 +102,9 @@ router.post('/CommitteeEvaluation', CommitteeEvaluationController.AddCommitteeEv
 router.get('/getCommitteeEvaluation', CommitteeEvaluationController.getCommitteeEvaluation)
 router.get('/getAllCommitteeEvaluation', CommitteeEvaluationController.getAllCommitteeEvaluation)
 
-router.post('/getNotifications', NotificationController.getNotifications)
+//router.post('/getNotifications', NotificationController.getNotifications)
 //get all notifictions from students database, req.body will have student ki email.
-router.post('/sendNotification', NotificationController.sendNotification)
+//router.post('/sendNotification', NotificationController.sendNotification)
 //req.body will have 1. Aus student ki email ()Sender email jis ko Notification bejhni, Notification title vagira schema se dekh laina, phir jo bejh raah aus ki email 
 
 

@@ -65,7 +65,7 @@ module.exports.updateRole = async (req, res) => {
 
 module.exports.deleteTeamMember = async (req, res) => {
     var { Name, Student } = req.body;
-    if (!Name || !Student) return res.status(400).json({ 
+    if (!Name || !Student) return res.status(400).json({
         'message': 'Name of Project and Student RegNo required.'
     });
     const project = await ProjectDB.findOne({ Name: req.body.Name }).exec();
@@ -79,14 +79,38 @@ module.exports.deleteTeamMember = async (req, res) => {
 
         console.log(project.GroupMembers)
 
-           var astudent =  await ProjectDB.updateOne(
-                { '_id': project._id }, 
-                { $pull: { GroupMembers: StudentID  } },
-                // false, // Upsert
-                // true, // Multi
-            );
+        var astudent = await ProjectDB.updateOne(
+            { '_id': project._id },
+            { $pull: { GroupMembers: StudentID } },
+            // false, // Upsert
+            // true, // Multi
+        );
 
-             res.send(astudent);
+        res.send(astudent);
 
     }
+}
+
+
+
+
+
+
+module.exports.getTeamMembers = async (req, res) => {
+    var { Name } = req.body;
+    if (!Name) return res.status(400).json({
+        'message': 'Name of Project required.'
+    });
+    const project = await ProjectDB.findOne({ Name: req.body.Name }).populate('GroupMembers');
+  
+  
+   // populate('Selected')
+ //   .populate({path: 'Selected', model: 'Category',populate:{path:'EnteredCourse',model:'Course'}})
+  
+    if (!project) {
+        return res.status(204).json({ "message": `No Project matches Name` });
+    }
+
+    res.send(project);
+
 }
