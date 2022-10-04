@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 
 
 module.exports.addNewStudent = async (req, res) => {
-
+    console.log("IM HERE")
     var { Name, RegNo, Email, Password, PhoneNumber, Gender, Position, FypStatus, 
         CommitteeEvaluation, SupervisorEvaluation, Notifications, OnlineStatus, Project } = req.body;
     if (!Name || !RegNo || !Password) return res.status(400).json({ 'message': 'Username, Reg No and password are required.' });
@@ -66,11 +66,12 @@ module.exports.updateStudent = async (req, res) => {
 
 
 module.exports.deleteStudent = async (req, res) => {
-    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
 
-    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
+    if (!req?.params?.regno) return res.status(400).json({ 'message': 'Student RegNo required.' });
+
+    const student = await Student.findOne({ RegNo: req.params.regno }).exec();
     if (!student) {
-        return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
+        return res.status(204).json({ "message": `No student matches RegNo ${req.params.regno}.` });
     }
     const result = await student.deleteOne(); //{ _id: req.body.id }
     res.json(result);

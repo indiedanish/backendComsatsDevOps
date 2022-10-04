@@ -14,7 +14,7 @@ router.post('/teacher', stdTechCrudController.addNewTeacher);
 router.put('/student', stdTechCrudController.updateStudent);
 router.put('/teacher', stdTechCrudController.updateTeacher);
 
-router.delete('/student', stdTechCrudController.deleteStudent);
+router.delete('/student/:regno', stdTechCrudController.deleteStudent);
 router.delete('/teacher', stdTechCrudController.deleteTeacher);
 
 router.get('/getStudent', stdTechCrudController.getStudent);
