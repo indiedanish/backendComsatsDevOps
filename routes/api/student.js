@@ -33,7 +33,7 @@ router.put('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), 
 router.put('/teamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.addTeamMember)
 router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.updateRole)
 router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.deleteTeamMember)
-router.post('/getTeamMembers', TeamManagementController.getTeamMembers)
+router.post('/getTeamMembers',  TeamManagementController.getTeamMembers)
 
 
 // Deliverables

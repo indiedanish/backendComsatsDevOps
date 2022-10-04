@@ -15,7 +15,7 @@ router.put('/student', stdTechCrudController.updateStudent);
 router.put('/teacher', stdTechCrudController.updateTeacher);
 
 router.delete('/student/:regno', stdTechCrudController.deleteStudent);
-router.delete('/teacher', stdTechCrudController.deleteTeacher);
+router.delete('/teacher/:email', stdTechCrudController.deleteTeacher);
 
 router.get('/getStudent', stdTechCrudController.getStudent);
 router.get('/getTeacher', stdTechCrudController.getTeacher);
@@ -25,7 +25,7 @@ router.get('/getAllTeachers', stdTechCrudController.getAllTeacher);
 
 router.post('/template', tempplateController.addTemplate); 
 router.put('/template', tempplateController.updateTemplate); 
-router.delete('/template', tempplateController.deleteTemplate); 
+router.delete('/template/:title', tempplateController.deleteTemplate); 
 router.get('/getAllTemplate', tempplateController.getAllTemplate); 
 router.get('/getTemplate', tempplateController.getTemplate); 
 
