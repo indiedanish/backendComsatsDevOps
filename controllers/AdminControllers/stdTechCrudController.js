@@ -149,17 +149,21 @@ module.exports.addNewTeacher = async (req, res) => {
 
 
 module.exports.updateTeacher = async (req, res) => {
-    if (!req?.body?.Email) {
+
+    console.log("Here" +req?.params?.Email)
+    console.log("")
+    if (!req?.params?.Email) {
         return res.status(400).json({ 'message': 'Email parameter is required.' });
     }
+    console.log("Check")
 
-    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
+    const teacher = await Teacher.findOne({ Email: req.params.Email }).exec();
 
     if (!teacher) {
-        return res.status(204).json({ "message": `No teacher matches  ${req.body.Email}.` });
+        return res.status(204).json({ "message": `No teacher matches  ${req.params.Email}.` });
     }
     if (req.body?.Name) teacher.Name = req.body.Name;
-    if (req.body?.Email) teacher.Email = req.body.Email;
+    if (req.body?.Email) teacher.Email = req.params.Email;
     if (req.body?.PhoneNumber) teacher.PhoneNumber = req.body.PhoneNumber;
     if (req.body?.Gender) teacher.Gender = req.body.Gender;
     if (req.body?.isSupervisor) teacher.isSupervisor = req.body.isSupervisor;
@@ -181,11 +185,14 @@ module.exports.updateTeacher = async (req, res) => {
 
 
 module.exports.deleteTeacher = async (req, res) => {
-    if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teachers Email required.' });
 
-    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
+    if (!req?.params?.email) return res.status(400).json({ 'message': 'Teachers Email required.' });
+
+    console.log("Hi")
+
+    const teacher = await Teacher.findOne({ Email: req?.params?.email });
     if (!teacher) {
-        return res.status(204).json({ "message": `No teacher matches email ${req.body.Email}.` });
+        return res.status(204).json({ "message": `No teacher matches email ${!req?.params?.email}.` });
     }
     const result = await teacher.deleteOne(); //{ _id: req.body.id }
     res.json(result);

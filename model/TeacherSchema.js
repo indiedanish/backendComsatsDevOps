@@ -29,7 +29,7 @@ var TeacherSchema = new mongoose.Schema({
     required: true,
   },
 
-  Desgination: {
+  Designation: {
     type: String,
   },
   RefreshToken: {

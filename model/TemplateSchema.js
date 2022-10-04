@@ -22,7 +22,6 @@ var TemplateSchema = new mongoose.Schema({
 
   File: {
     type: String,
-    required: true,
   }
 
 });
