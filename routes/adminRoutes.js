@@ -31,7 +31,7 @@ router.get('/getTemplate', tempplateController.getTemplate);
 
 router.post('/announcement', announcementController.addAnnouncement); 
 router.put('/announcement', announcementController.updateAnnouncement); 
-router.delete('/announcement', announcementController.deleteAnnouncement); 
+router.delete('/announcement/:title', announcementController.deleteAnnouncement); 
 router.get('/getAllAnnouncement', announcementController.getAllAnnouncement); 
 router.get('/getAnnouncement', announcementController.getAnnouncement); 
 
