@@ -8,9 +8,12 @@ const bcrypt = require('bcrypt');
 
 
 module.exports.addNewStudent = async (req, res) => {
+
     console.log("IM HERE")
+    console.log(req.body.ProfilePicture)
+
     var { Name, RegNo, Email, Password, PhoneNumber, Gender, Position, FypStatus, 
-        CommitteeEvaluation, SupervisorEvaluation, Notifications, OnlineStatus, Project } = req.body;
+        CommitteeEvaluation, SupervisorEvaluation, Notifications, OnlineStatus, Project, ProfilePicture } = req.body;
     if (!Name || !RegNo || !Password) return res.status(400).json({ 'message': 'Username, Reg No and password are required.' });
     var Role= "TeamMember"
     // Check if user already exists
@@ -21,7 +24,7 @@ module.exports.addNewStudent = async (req, res) => {
         Password = await bcrypt.hash(Password, 10);
 
         const newStudent = await Student.create({  Name, RegNo, Email, Password, PhoneNumber, Gender, 
-             Role, Position, FypStatus, CommitteeEvaluation, SupervisorEvaluation, 
+             Role, Position, FypStatus, CommitteeEvaluation, SupervisorEvaluation, ProfilePicture,
              Notifications, OnlineStatus, Project });
 
         console.log(newStudent);
@@ -45,6 +48,8 @@ module.exports.updateStudent = async (req, res) => {
         return res.status(204).json({ "message": `No Student matches RegNo ${req.body.RegNo}.` });
     }
     if (req.body?.Name) student.Name = req.body.Name;
+    if (req.body?.ProfilePicture) student.ProfilePicture = req.body.ProfilePicture;
+
     if (req.body?.RegNo) student.RegNo = req.body.RegNo;
     if (req.body?.Email) student.Email = req.body.Email;
     if (req.body?.PhoneNumber) student.PhoneNumber = req.body.PhoneNumber;
@@ -120,7 +125,7 @@ module.exports.getAllStudent = async (req, res) => {
 
 module.exports.addNewTeacher = async (req, res) => {
 
-    var { Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation } = req.body;
+    var { Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation, ProfilePicture } = req.body;
     // Name = "Ali"
     // Email = "ali@yahoo.com"
     // Password = "1234",
@@ -138,7 +143,7 @@ module.exports.addNewTeacher = async (req, res) => {
         //encrypt the password
         Password = await bcrypt.hash(Password, 10);
 
-        const newTeacher = await Teacher.create({ Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation });
+        const newTeacher = await Teacher.create({ Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation , ProfilePicture});
         console.log(newTeacher);
 
         res.status(201).json({ 'success': `New user ${newTeacher} created!` });
@@ -165,6 +170,7 @@ module.exports.updateTeacher = async (req, res) => {
         return res.status(204).json({ "message": `No teacher matches  ${req.body.Email}.` });
     }
     if (req.body?.Name) teacher.Name = req.body.Name;
+    if (req.body?.ProfilePicture) teacher.ProfilePicture = req.body.ProfilePicture;
     if (req.body?.Email) teacher.Email = req.body.Email;
     if (req.body?.PhoneNumber) teacher.PhoneNumber = req.body.PhoneNumber;
     if (req.body?.Gender) teacher.Gender = req.body.Gender;

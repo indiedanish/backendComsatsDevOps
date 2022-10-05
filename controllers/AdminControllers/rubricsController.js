@@ -93,4 +93,31 @@ module.exports.getSupervisorRubrics = async (req, res) => {
 };
 
 
+module.exports.supervisorAddQuestion= async (req, res) => {
+
+  var { Name,  Question_Object } = req.body;
+
+  if (!Name || !Question_Object) {
+      return res.status(400).json({ 'message': 'Name of Evaluation and Question is required.' });
+  }
+  const rubrics = await RubricsSupervisor.findOne({ Name: req.body.Name });
+  if (!rubrics) {
+    return res.status(204).json({ message: `No Rubrics matches name` });
+  }
+  if (req.body?.Question_Object) {
+
+    var updateRubrics = await RubricsSupervisor.updateOne(
+      { '_id': rubrics._id },
+      { $push: { Questions: Question_Object } },
+  )
+  }
+
+
+
+
+
+  const result = await rubrics.save();
+  res.json(result);
+}
+
 
