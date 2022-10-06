@@ -6,14 +6,14 @@ const Announcement = require('../../model/AnnouncementSchema');
 module.exports.addAnnouncement = async (req, res) => {
 
 
-    var { Title, Description} = req.body;
+    var { Title, Description, ModifiedDate} = req.body;
     if (!Title) return res.status(400).json({ 'message': 'Title is required.' });
 
     const duplicate = await Announcement.findOne({ Title: Title }).exec();
     if (duplicate) return res.sendStatus(409); //Conflict 
     try {
 
-        const newAnnouncement = await Announcement.create({ Title, Description });
+        const newAnnouncement = await Announcement.create({ Title, Description, ModifiedDate});
         console.log(newAnnouncement);
 
         res.status(201).json({ 'success': `New ${newAnnouncement} created!` });
@@ -25,13 +25,16 @@ module.exports.addAnnouncement = async (req, res) => {
 
 
 module.exports.deleteAnnouncement = async (req, res) => {
-    if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
+    console.log("Here" + req?.params?.title)
 
-    const template = await Announcement.findOne({ Title: req.body.Title }).exec();
-    if (!template) {
+    if (!req?.params?.title) return res.status(400).json({ 'message': 'Title required.' });
+
+
+    const announcement = await Announcement.findOne({ Title: req.params.title });
+    if (!announcement) {
         return res.status(204).json({ "message": `No such announcements exists` });
     }
-    const result = await template.deleteOne();
+    const result = await announcement.deleteOne();
     res.json(result);
 }
 
@@ -40,7 +43,7 @@ module.exports.updateAnnouncement = async (req, res) => {
     if (!req?.body?.Title) {
         return res.status(400).json({ 'message': 'Title is required.' });
     }
-    const announcement = await Announcement.findOne({ Title: req.body.Title }).exec();
+    const announcement = await Announcement.findOne({ Title: req.body.Title });
     if (!announcement) {
         return res.status(204).json({ "message": `No Announcement matches Title` });
     }
@@ -68,7 +71,7 @@ module.exports.getAllAnnouncement = async (req, res) => {
 module.exports.getAnnouncement = async (req, res) => {
     if (!req?.body?.Title) return res.status(400).json({ 'message': 'Title required.' });
 
-    const announcement = await Announcement.findOne({ Title: req.body.Title }).exec();
+    const announcement = await Announcement.findOne({ Title: req.body.Title });
     if (!announcement) {
         return res.status(204).json({ "message": `No announcement matches Title` });
     }

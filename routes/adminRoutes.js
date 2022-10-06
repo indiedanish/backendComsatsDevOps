@@ -31,7 +31,7 @@ router.get('/getTemplate', tempplateController.getTemplate);
 
 router.post('/announcement', announcementController.addAnnouncement); 
 router.put('/announcement', announcementController.updateAnnouncement); 
-router.delete('/announcement', announcementController.deleteAnnouncement); 
+router.delete('/announcement/:title', announcementController.deleteAnnouncement); 
 router.get('/getAllAnnouncement', announcementController.getAllAnnouncement); 
 router.get('/getAnnouncement', announcementController.getAnnouncement); 
 
@@ -40,6 +40,15 @@ router.post('/supervisorRubrics', rubricsController.addSupervisorRubrics);
 // router.put('/supervisorRubrics', rubricsController.updateAnnouncement); 
 router.delete('/supervisorRubrics', rubricsController.deleteSupervisorRubrics); 
 router.get('/getSupervisorRubrics', rubricsController.getSupervisorRubrics); 
+
+router.put('/supervisorAddQuestion', rubricsController.supervisorAddQuestion); 
+router.put('/supervisorDeleteQuestion', rubricsController.supervisorDeleteQuestion); 
+
+router.put('/committeeAddQuestion', rubricsController.committeeAddQuestion); 
+router.put('/committeeDeleteQuestion', rubricsController.committeeDeleteQuestion); 
+
+
+
 
 
  router.post('/committeeRubrics', rubricsController.addCommitteeRubrics); 
@@ -64,11 +73,6 @@ router.get('/getAllProjectCommittee', assignCommitteeController.getAllGroup);
 
 
 
-<<<<<<< HEAD
-=======
-router.put('/student', adminController.updateStudent);
-// router.put('/teacher', adminController.updateTeacher);
->>>>>>> 6932506 (AdminController)
 
 
 

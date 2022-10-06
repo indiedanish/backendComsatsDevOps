@@ -14,6 +14,11 @@ var TeacherSchema = new mongoose.Schema({
     required: true,
   },
 
+  ProfilePicture: {
+    type: String,
+    
+  },
+
   PhoneNumber: {
     type: Number,
     required: true,  },

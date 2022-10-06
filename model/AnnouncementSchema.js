@@ -11,6 +11,11 @@ var AnnouncementSchema = new mongoose.Schema({
     type: String,
   },
 
+  DateModified: {
+    type: Date,
+    default: Date.now,
+  },
+
 
 });
 

@@ -32,6 +32,11 @@ var StudentSchema = new mongoose.Schema({
   
   },
 
+  ProfilePicture: {
+    type: String,
+    
+  },
+
   Role: {
     type: String,
 
