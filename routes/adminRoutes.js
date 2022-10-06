@@ -42,6 +42,11 @@ router.delete('/supervisorRubrics', rubricsController.deleteSupervisorRubrics);
 router.get('/getSupervisorRubrics', rubricsController.getSupervisorRubrics); 
 
 router.put('/supervisorAddQuestion', rubricsController.supervisorAddQuestion); 
+router.put('/supervisorDeleteQuestion', rubricsController.supervisorDeleteQuestion); 
+
+router.put('/committeeAddQuestion', rubricsController.committeeAddQuestion); 
+router.put('/committeeDeleteQuestion', rubricsController.committeeDeleteQuestion); 
+
 
 
 

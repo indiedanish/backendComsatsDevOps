@@ -71,10 +71,9 @@ module.exports.deleteSupervisorRubrics = async (req, res) => {
 //---------------------------------------------------------------
 
 module.exports.getCommitteeRubrics = async (req, res) => {
-  if (!req?.body?.Name)
-    return res.status(400).json({ message: "Name required." });
 
-  const rubrics = await RubricsCommittee.findOne({ Name: req.body.Name }).exec();
+
+  const rubrics = await RubricsCommittee.find();
   if (!rubrics) {
     return res.status(204).json({ message: `No Rubrics matches name` });
   }
@@ -110,13 +109,91 @@ module.exports.supervisorAddQuestion= async (req, res) => {
       { $push: { Questions: Question_Object } },
   )
   }
+  const result = await rubrics.save();
+  res.json(result);
+}
+
+module.exports.supervisorDeleteQuestion= async (req, res) => {
+
+  var { Name,  Question_id } = req.body;
+
+
+  if (!Name || !Question_id) {
+      return res.status(400).json({ 'message': 'Name of Evaluation and Question ID is required.' });
+  }
+
+  const rubrics = await RubricsSupervisor.findOne({ Name: req.body.Name });
+  if (!rubrics) {
+    return res.status(204).json({ message: `No Rubrics matches name` });
+  }
+  if (req.body?.Question_id) {
+
+    var updateRubrics = await RubricsSupervisor.updateOne(
+      { '_id': rubrics._id },
+      { $pull: { Questions: {'_id': Question_id  }}},
+  )
+  }
+  res.json(rubrics.Questions);
+
+}
 
 
 
 
+module.exports.committeeAddQuestion= async (req, res) => {
 
+  var { Name,  Question_Object } = req.body;
+
+  if (!Name || !Question_Object) {
+      return res.status(400).json({ 'message': 'Name of Evaluation and Question is required.' });
+  }
+  const rubrics = await RubricsCommittee.findOne({ Name: req.body.Name });
+  if (!rubrics) {
+    return res.status(204).json({ message: `No Rubrics matches name` });
+  }
+  if (req.body?.Question_Object) {
+
+    var updateRubrics = await RubricsCommittee.updateOne(
+      { '_id': rubrics._id },
+      { $push: { Questions: Question_Object } },
+  )
+  }
   const result = await rubrics.save();
   res.json(result);
 }
 
 
+
+
+
+
+
+
+module.exports.committeeDeleteQuestion= async (req, res) => {
+
+  var { Name,  Question_id } = req.body;
+
+  console.log("Here", req.body)
+
+  if (!Name || !Question_id) {
+      return res.status(400).json({ 'message': 'Name of Evaluation and Question ID is required.' });
+  }
+  console.log("Bye");
+
+  const rubrics = await RubricsCommittee.findOne({ Name: req.body.Name });
+  if (!rubrics) {
+    return res.status(204).json({ message: `No Rubrics matches name` });
+  }
+  if (req.body?.Question_id) {
+
+    var updateRubrics = await RubricsCommittee.updateOne(
+      { '_id': rubrics._id },
+      { $pull: { Questions: {'_id': Question_id  }}},
+  )
+  }
+  console.log(rubrics)
+  res.json(rubrics);
+
+  
+
+}
