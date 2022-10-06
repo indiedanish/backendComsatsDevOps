@@ -50,17 +50,10 @@ app.use('/auth', require('./routes/auth'));
 app.use('/refresh', require('./routes/refresh'));
 app.use('/logout', require('./routes/logout'));
 
-<<<<<<< HEAD
 app.use('/admin',
 verifyAdmin, 
 require('./routes/adminRoutes'));
 //{"Email": "dan@dan.com" , "Password": "12345"}
-=======
-app.use('/admin', 
-//verifyAdmin,
- require('./routes/adminRoutes'));
-
->>>>>>> 6932506 (AdminController)
 
 app.use(verifyJWT);
 

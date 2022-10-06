@@ -68,11 +68,6 @@ router.get('/getAllProjectCommittee', assignCommitteeController.getAllGroup);
 
 
 
-<<<<<<< HEAD
-=======
-router.put('/student', adminController.updateStudent);
-// router.put('/teacher', adminController.updateTeacher);
->>>>>>> 6932506 (AdminController)
 
 
 

@@ -82,10 +82,9 @@ module.exports.getCommitteeRubrics = async (req, res) => {
 };
 
 module.exports.getSupervisorRubrics = async (req, res) => {
-  if (!req?.body?.Name)
-    return res.status(400).json({ message: "Name required." });
 
-  const rubrics = await RubricsSupervisor.findOne({ Name: req.body.Name }).exec();
+
+  const rubrics = await RubricsSupervisor.find();
   if (!rubrics) {
     return res.status(204).json({ message: `No Rubrics matches name` });
   }
