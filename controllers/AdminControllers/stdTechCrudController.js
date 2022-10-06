@@ -15,7 +15,7 @@ module.exports.addNewStudent = async (req, res) => {
     var { Name, RegNo, Email, Password, PhoneNumber, Gender, Position, FypStatus, 
         CommitteeEvaluation, SupervisorEvaluation, Notifications, OnlineStatus, Project, ProfilePicture } = req.body;
     if (!Name || !RegNo || !Password) return res.status(400).json({ 'message': 'Username, Reg No and password are required.' });
-    var Role= "TeamMember"
+    var Role = "TeamMember"
     // Check if user already exists
     const duplicate = await Student.findOne({ RegNo: RegNo }).exec();
     if (duplicate) return res.sendStatus(409); //Conflict 
@@ -39,10 +39,14 @@ module.exports.addNewStudent = async (req, res) => {
 
 
 module.exports.updateStudent = async (req, res) => {
-    console.log(req.body)
-    if (!req?.body?.RegNo) {
-        return res.status(400).json({ 'message': 'ID parameter is required.' });
-    }
+    console.log("IM BODY", req.body)
+    var {RegNo} = req.body;
+  
+ 
+    if (!RegNo) return res.status(400).json({ 'message': 'RegNo is required.' });
+
+ 
+
     const student = await Student.findOne({ RegNo: req.body.RegNo });
     if (!student) {
         return res.status(204).json({ "message": `No Student matches RegNo ${req.body.RegNo}.` });
@@ -87,15 +91,15 @@ module.exports.deleteStudent = async (req, res) => {
 
 
 module.exports.getStudent = async (req, res) => {
-    
+
     if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
 
     const student = await Student.findOne({ RegNo: req.body.RegNo }).populate({ path: 'Project' })
-    
+
     if (!student) {
         return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
     }
-    console.log("IM HERE",student)
+    console.log("IM HERE", student)
     res.json(student);
 
 }
@@ -178,7 +182,7 @@ module.exports.updateTeacher = async (req, res) => {
     if (req.body?.isCommittee) teacher.isCommittee = req.body.isCommittee;
     if (req.body?.Designation) teacher.Designation = req.body.Designation;
 
-    
+
 
     if (req.body?.Password) {
         teacher.Password = await bcrypt.hash(req.body.Password, 10);
