@@ -8,6 +8,8 @@ var NotificationSchema = new mongoose.Schema({
     Content: {
         type: String,
     },
+  
+
     Sender:{
         type: mongoose.Schema.ObjectId,
         ref: 'Student'

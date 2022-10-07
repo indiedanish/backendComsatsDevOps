@@ -16,16 +16,11 @@ module.exports.addRequirement = async (req, res) => {
         if (!Project) {
             return res.status(209).json({ "message": `No such project exists` });
         }
-        //   const ProjectRequirementArray = Project.Requirements;
         const RequirementObj = await Requirement.findOne({ Title: Title, ProjectName: ProjectName });
 
         if (RequirementObj) {
             return res.status(209).json({ "message": `Record already exists` })
         };
-
-        // console.log(ProjectRequirementArray)
-        // console.log(DBRequirementArray)
-        // const duplicate = ProjectRequirementArray.some(item => DBRequirementArray.includes(item))
 
         const newRequirement = await Requirement.create({
             Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
@@ -114,11 +109,12 @@ module.exports.updateRequirementLead = async (req, res) => {
         if (req.body?.Deadline) RequirementObj.Deadline = req.body.Deadline;
         if (req.body?.Rename) {
             const check = await Requirement.findOne({ Title: Rename, ProjectName: req?.body?.ProjectName });
-            if(check){
+            if (check) {
                 return res.status(409).json({ "message": `Can't Rename: Already a Requirement with similar Name exists` });
             }
 
-            RequirementObj.Title = req.body.Rename;}
+            RequirementObj.Title = req.body.Rename;
+        }
 
         const result = await RequirementObj.save();
         res.json(result);
@@ -153,7 +149,7 @@ module.exports.updateRequirementMember = async (req, res) => {
         if (req.body?.Accepted) RequirementObj.Accepted = req.body.Accepted;
         if (req.body?.SubmittedFile) RequirementObj.SubmittedFile = req.body.SubmittedFile;
         if (req.body?.DateModified) RequirementObj.DateModified = req.body.DateModified;
-        
+
 
         const result = await RequirementObj.save();
         res.json(result);
@@ -221,7 +217,7 @@ module.exports.getRequirement = async (req, res) => {
 
 module.exports.addRequirementComments = async (req, res) => {
 
-    if (!req?.body?.Title || !req?.body?.Student || !req?.body?.Content || !req?.body?.ProjectName ) {
+    if (!req?.body?.Title || !req?.body?.Student || !req?.body?.Content || !req?.body?.ProjectName) {
         return res.status(400).json({ 'message': 'Project Name, Req Title, Student RegNo and Content required.' });
     }
 
@@ -257,7 +253,7 @@ module.exports.addRequirementComments = async (req, res) => {
 
 module.exports.deleteRequirementComments = async (req, res) => {
 
-    if (!req?.body?.Title || !req?.body?.Student || !req?.body?.ProjectName ) {
+    if (!req?.body?.Title || !req?.body?.Student || !req?.body?.ProjectName) {
         return res.status(400).json({ 'message': 'Project Name, Req Title, Student RegNo  required.' });
     }
 
@@ -310,7 +306,7 @@ module.exports.getRequirementComments = async (req, res) => {
     if (!RequirementObj) {
         return res.status(209).json({ "message": `No such Requirement exist in the Project` })
     };
-   
+
     DisplayComment = RequirementObj.Comments;
     res.json(DisplayComment);
 }

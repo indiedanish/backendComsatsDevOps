@@ -20,10 +20,16 @@ router.get('/allProject',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee
   
 // Evaluations
 router.get('/getSupervisorRubrics', SupervisorEvaluationController.getSupervisorRubrics)
-router.get('/getCommitteeRubrics', CommitteeEvaluationController.getCommitteeRubrics)
 
 router.post('/SupervisorEvaluation', SupervisorEvaluationController.AddSupervisorEvaluation)
+router.get('/getSupervisorEvaluation', SupervisorEvaluationController.getSupervisorEvaluation)
+router.get('/getAllSupervisorEvaluation', SupervisorEvaluationController.getAllSupervisorEvaluation)
+
+router.get('/getCommitteeRubrics', CommitteeEvaluationController.getCommitteeRubrics)
+
 router.post('/CommitteeEvaluation', CommitteeEvaluationController.AddCommitteeEvaluation)
+router.get('/getCommitteeEvaluation', CommitteeEvaluationController.getCommitteeEvaluation)
+router.get('/getAllCommitteeEvaluation', CommitteeEvaluationController.getAllCommitteeEvaluation)
 
 // View AssignedGroups
 
