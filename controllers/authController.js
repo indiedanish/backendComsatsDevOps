@@ -44,7 +44,9 @@ const StudentLogin = async (req, res) => {
         const result = await foundStudent.save();
 
         // Creates Secure Cookie with refresh token
+
         res.cookie('jwt', refreshToken, { secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
+
 
         // Send authorization roles and access token to user
         res.json({ role, refreshToken });
@@ -90,7 +92,9 @@ const TeacherLogin = async (req, res) => {
         const result = await foundTeacher.save();
 
         // Creates Secure Cookie with refresh token
+
         res.cookie('jwt', refreshToken, { secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
+
 
         // Send authorization roles and access token to user
         res.json({ role, refreshToken });
@@ -134,11 +138,13 @@ const AdminLogin = async (req, res) => {
 
     const result = await foundAdmin.save();
 
+
     // Creates Secure Cookie with refresh token
     res.cookie('jwt', refreshToken, { secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
     // Send authorization roles and access token to user
     res.json({ refreshToken, "Role": "Admin" });
+
 
 
 

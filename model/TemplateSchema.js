@@ -9,6 +9,10 @@ var TemplateSchema = new mongoose.Schema({
     unique: true,
   },
 
+  Description: {
+    type: String,
+  },
+
   DateModified: {
     type: Date,
     default: Date.now,
@@ -22,7 +26,6 @@ var TemplateSchema = new mongoose.Schema({
 
   File: {
     type: String,
-    required: true,
   }
 
 });

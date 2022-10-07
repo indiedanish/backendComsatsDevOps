@@ -9,10 +9,13 @@ const bcrypt = require('bcrypt');
 
 module.exports.addNewStudent = async (req, res) => {
 
+    console.log("IM HERE")
+    console.log(req.body.ProfilePicture)
+
     var { Name, RegNo, Email, Password, PhoneNumber, Gender, Position, FypStatus, 
-        CommitteeEvaluation, SupervisorEvaluation, Notifications, OnlineStatus } = req.body;
+        CommitteeEvaluation, SupervisorEvaluation, Notifications, OnlineStatus, Project, ProfilePicture } = req.body;
     if (!Name || !RegNo || !Password) return res.status(400).json({ 'message': 'Username, Reg No and password are required.' });
-    var Role= "TeamMember"
+    var Role = "TeamMember"
     // Check if user already exists
     const duplicate = await Student.findOne({ RegNo: RegNo }).exec();
     if (duplicate) return res.sendStatus(409); //Conflict 
@@ -21,8 +24,8 @@ module.exports.addNewStudent = async (req, res) => {
         Password = await bcrypt.hash(Password, 10);
 
         const newStudent = await Student.create({  Name, RegNo, Email, Password, PhoneNumber, Gender, 
-             Role, Position, FypStatus, CommitteeEvaluation, SupervisorEvaluation, 
-             Notifications, OnlineStatus });
+             Role, Position, FypStatus, CommitteeEvaluation, SupervisorEvaluation, ProfilePicture,
+             Notifications, OnlineStatus, Project });
 
         console.log(newStudent);
 
@@ -36,14 +39,21 @@ module.exports.addNewStudent = async (req, res) => {
 
 
 module.exports.updateStudent = async (req, res) => {
-    if (!req?.body?.RegNo) {
-        return res.status(400).json({ 'message': 'ID parameter is required.' });
-    }
-    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
+    console.log("IM BODY", req.body)
+    var {RegNo} = req.body;
+  
+ 
+    if (!RegNo) return res.status(400).json({ 'message': 'RegNo is required.' });
+
+ 
+
+    const student = await Student.findOne({ RegNo: req.body.RegNo });
     if (!student) {
         return res.status(204).json({ "message": `No Student matches RegNo ${req.body.RegNo}.` });
     }
     if (req.body?.Name) student.Name = req.body.Name;
+    if (req.body?.ProfilePicture) student.ProfilePicture = req.body.ProfilePicture;
+
     if (req.body?.RegNo) student.RegNo = req.body.RegNo;
     if (req.body?.Email) student.Email = req.body.Email;
     if (req.body?.PhoneNumber) student.PhoneNumber = req.body.PhoneNumber;
@@ -66,11 +76,12 @@ module.exports.updateStudent = async (req, res) => {
 
 
 module.exports.deleteStudent = async (req, res) => {
-    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
 
-    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
+    if (!req?.params?.regno) return res.status(400).json({ 'message': 'Student RegNo required.' });
+
+    const student = await Student.findOne({ RegNo: req.params.regno }).exec();
     if (!student) {
-        return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
+        return res.status(204).json({ "message": `No student matches RegNo ${req.params.regno}.` });
     }
     const result = await student.deleteOne(); //{ _id: req.body.id }
     res.json(result);
@@ -80,14 +91,15 @@ module.exports.deleteStudent = async (req, res) => {
 
 
 module.exports.getStudent = async (req, res) => {
-    
+
     if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
-    
-    const student = await Student.findOne({ RegNo: req.body.RegNo }).exec();
+
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).populate({ path: 'Project' })
+
     if (!student) {
         return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
     }
-    console.log("IM HERE",student)
+    console.log("IM HERE", student)
     res.json(student);
 
 }
@@ -117,7 +129,7 @@ module.exports.getAllStudent = async (req, res) => {
 
 module.exports.addNewTeacher = async (req, res) => {
 
-    var { Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation } = req.body;
+    var { Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation, ProfilePicture } = req.body;
     // Name = "Ali"
     // Email = "ali@yahoo.com"
     // Password = "1234",
@@ -135,7 +147,7 @@ module.exports.addNewTeacher = async (req, res) => {
         //encrypt the password
         Password = await bcrypt.hash(Password, 10);
 
-        const newTeacher = await Teacher.create({ Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation });
+        const newTeacher = await Teacher.create({ Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation , ProfilePicture});
         console.log(newTeacher);
 
         res.status(201).json({ 'success': `New user ${newTeacher} created!` });
@@ -147,16 +159,22 @@ module.exports.addNewTeacher = async (req, res) => {
 
 
 module.exports.updateTeacher = async (req, res) => {
+
+    console.log("Here " +req.body.Email)
+
+    console.log("")
     if (!req?.body?.Email) {
         return res.status(400).json({ 'message': 'Email parameter is required.' });
     }
+    console.log("Check")
 
-    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
+    const teacher = await Teacher.findOne({ Email: req.body.Email });
 
     if (!teacher) {
         return res.status(204).json({ "message": `No teacher matches  ${req.body.Email}.` });
     }
     if (req.body?.Name) teacher.Name = req.body.Name;
+    if (req.body?.ProfilePicture) teacher.ProfilePicture = req.body.ProfilePicture;
     if (req.body?.Email) teacher.Email = req.body.Email;
     if (req.body?.PhoneNumber) teacher.PhoneNumber = req.body.PhoneNumber;
     if (req.body?.Gender) teacher.Gender = req.body.Gender;
@@ -164,7 +182,7 @@ module.exports.updateTeacher = async (req, res) => {
     if (req.body?.isCommittee) teacher.isCommittee = req.body.isCommittee;
     if (req.body?.Designation) teacher.Designation = req.body.Designation;
 
-    
+
 
     if (req.body?.Password) {
         teacher.Password = await bcrypt.hash(req.body.Password, 10);
@@ -179,11 +197,14 @@ module.exports.updateTeacher = async (req, res) => {
 
 
 module.exports.deleteTeacher = async (req, res) => {
-    if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teachers Email required.' });
 
-    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
+    if (!req?.params?.email) return res.status(400).json({ 'message': 'Teachers Email required.' });
+
+    console.log("Hi")
+
+    const teacher = await Teacher.findOne({ Email: req?.params?.email });
     if (!teacher) {
-        return res.status(204).json({ "message": `No teacher matches email ${req.body.Email}.` });
+        return res.status(204).json({ "message": `No teacher matches email ${!req?.params?.email}.` });
     }
     const result = await teacher.deleteOne(); //{ _id: req.body.id }
     res.json(result);

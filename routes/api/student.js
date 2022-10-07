@@ -7,19 +7,28 @@ const TeamManagementController = require('../../controllers/StudentControllers/T
 const RequirementController = require('../../controllers/StudentControllers/requirementController');
 const SprintController = require('../../controllers/StudentControllers/SprintController');
 <<<<<<< HEAD
+<<<<<<< HEAD
 const TestPlanController = require('../../controllers/StudentControllers/TestPlanController');
 const BugReportController = require('../../controllers/StudentControllers/BugReportController');
 
 =======
+=======
+>>>>>>> 616bd504f88ee5a7ee466990dad230e0ba5efa82
 const DeliverablesController = require('../../controllers/StudentControllers/DeliverablesController');
 
 
 const StudentEvaluationController = require('../../controllers/StudentControllers/StudentEvaluationController');
 const CommitteeEvaluationController = require('../../controllers/TeacherControllers/CommitteeEvaluationController');
 const SupervisorEvaluationController = require('../../controllers/TeacherControllers/SupervisorEvaluationController');
+const TestPlanController = require('../../controllers/StudentControllers/TestPlanController');
+const BugReportController = require('../../controllers/StudentControllers/BugReportController');
+
 
 const stdTechCrudController = require('../../controllers/AdminControllers/stdTechCrudController');
+<<<<<<< HEAD
 >>>>>>> 30759392f316ac0bae49a327a05bf8e4bb0cd824
+=======
+>>>>>>> 616bd504f88ee5a7ee466990dad230e0ba5efa82
 
 const NotificationController = require('../../controllers/StudentControllers/NotificationController');
 
@@ -28,7 +37,7 @@ const verifyRoles = require('../../middleware/verifyRoles');
 
 
 router.post('/getStudent', stdTechCrudController.getStudent);
-router.get('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getProject)
+router.post('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getProject)
 router.get('/allProject', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getAllProject)
 router.put('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.updateProject)
 
@@ -36,6 +45,8 @@ router.put('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), 
 router.put('/teamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.addTeamMember)
 router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.updateRole)
 router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.deleteTeamMember)
+router.post('/getTeamMembers',  TeamManagementController.getTeamMembers)
+
 
 // Deliverables
 router.post('/deliverable', DeliverablesController.addDeliverable)
@@ -57,7 +68,9 @@ router.put('/requirementLead', RequirementController.updateRequirementLead)
 router.put('/requirementMember', RequirementController.updateRequirementMember)
 router.delete('/requirement', RequirementController.deleteRequirement)
 router.get('/getRequirement', RequirementController.getRequirement)
-router.get('/getAllRequirement', RequirementController.getAllRequirement)
+router.post('/getAllRequirement', RequirementController.getAllRequirement)
+router.post('/getStudentRequirement', RequirementController.getStudentRequirement)
+
 
 //Post, Delete and View Comments in Requirement
 router.put('/addRequirementComments', RequirementController.addRequirementComments)
@@ -101,9 +114,9 @@ router.post('/CommitteeEvaluation', CommitteeEvaluationController.AddCommitteeEv
 router.get('/getCommitteeEvaluation', CommitteeEvaluationController.getCommitteeEvaluation)
 router.get('/getAllCommitteeEvaluation', CommitteeEvaluationController.getAllCommitteeEvaluation)
 
-router.post('/getNotifications', NotificationController.getNotifications)
+//router.post('/getNotifications', NotificationController.getNotifications)
 //get all notifictions from students database, req.body will have student ki email.
-router.post('/sendNotification', NotificationController.sendNotification)
+//router.post('/sendNotification', NotificationController.sendNotification)
 //req.body will have 1. Aus student ki email ()Sender email jis ko Notification bejhni, Notification title vagira schema se dekh laina, phir jo bejh raah aus ki email 
 
 

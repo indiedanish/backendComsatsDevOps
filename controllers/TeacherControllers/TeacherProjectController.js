@@ -13,13 +13,15 @@ module.exports.addProject = async (req, res) => {
         GroupStatus, GroupSupervisor, GroupCoSupervisor, GroupCommittee, Average } = req.body;
     if (!Name) return res.status(400).json({ 'message': 'Name is required.' });
 
+    var RegNo = TeamLeader;
+
     const duplicate = await Project.findOne({ Name: Name }).exec();
     if (duplicate) return res.sendStatus(409); //Conflict 
     try {
 
         if (req.body.TeamLeader) {
 
-            TeamLeader = await Student.findOne({ RegNo: TeamLeader });
+            TeamLeader = await Student.findOne({ RegNo: RegNo });
 
             if (!TeamLeader) {
                 return res.status(204).json({ "message": `No such student exists` });
@@ -58,9 +60,34 @@ module.exports.addProject = async (req, res) => {
             Name, Description, Status, Deliverable, TeamLeader, GroupMembers,
             GroupStatus, GroupSupervisor, GroupCoSupervisor, GroupCommittee, Average
         });
-        console.log(newProject);
+
+
+
+        const project =  await Project.findOne({ Name: req.body.Name });
+        if (req.body.TeamLeader) {
+            const TeamLead = await Student.findOne({ RegNo: RegNo });
+
+
+            if (!TeamLead) {
+                console.log("Hii")
+                return res.status(204).json({ "message": `No such student exists` });
+            }
+
+            var UpdateStudent = await Student.updateOne(
+                { '_id': TeamLead._id },
+                {  'Project': project},
+            );  
+
+            var UpdateStudent2 = await Student.updateOne(
+                { '_id': TeamLead._id },
+                {  'Role': "TeamLead"},
+            );  
+
+
+        }
 
         res.status(201).json({ 'success': `New ${newProject} created!` });
+     
     }
     catch (err) {
         res.status(500).json({ 'message': err.message });
@@ -93,7 +120,7 @@ module.exports.updateProject = async (req, res) => {
 
     }
 
-    if (req.body?.GroupMembers) project.GroupMembers = req.body.GroupMembers;
+    if (req.body?.GroupMembers) project.GroupMembers = [...project.GroupMembers, req.body.GroupMembers ] ;
     if (req.body?.GroupStatus) project.GroupStatus = req.body.GroupStatus;
 
     if (req.body?.GroupSupervisor) {
@@ -152,7 +179,7 @@ module.exports.getAllProject = async (req, res) => {
 }
 
 module.exports.getProject = async (req, res) => {
-    if (!req?.body?.Name) return res.status(400).json({ 'message': 'Name required.' });
+    if (!req?.body?.Name) return res.status(400).json({ 'message': 'Name of Project required.' });
 
     const project = await Project.findOne({ Name: req.body.Name }).exec();
     if (!project) {

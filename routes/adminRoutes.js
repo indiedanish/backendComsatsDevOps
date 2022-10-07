@@ -14,8 +14,8 @@ router.post('/teacher', stdTechCrudController.addNewTeacher);
 router.put('/student', stdTechCrudController.updateStudent);
 router.put('/teacher', stdTechCrudController.updateTeacher);
 
-router.delete('/student', stdTechCrudController.deleteStudent);
-router.delete('/teacher', stdTechCrudController.deleteTeacher);
+router.delete('/student/:regno', stdTechCrudController.deleteStudent);
+router.delete('/teacher/:email', stdTechCrudController.deleteTeacher);
 
 router.get('/getStudent', stdTechCrudController.getStudent);
 router.get('/getTeacher', stdTechCrudController.getTeacher);
@@ -25,13 +25,13 @@ router.get('/getAllTeachers', stdTechCrudController.getAllTeacher);
 
 router.post('/template', tempplateController.addTemplate); 
 router.put('/template', tempplateController.updateTemplate); 
-router.delete('/template', tempplateController.deleteTemplate); 
+router.delete('/template/:title', tempplateController.deleteTemplate); 
 router.get('/getAllTemplate', tempplateController.getAllTemplate); 
 router.get('/getTemplate', tempplateController.getTemplate); 
 
 router.post('/announcement', announcementController.addAnnouncement); 
 router.put('/announcement', announcementController.updateAnnouncement); 
-router.delete('/announcement', announcementController.deleteAnnouncement); 
+router.delete('/announcement/:title', announcementController.deleteAnnouncement); 
 router.get('/getAllAnnouncement', announcementController.getAllAnnouncement); 
 router.get('/getAnnouncement', announcementController.getAnnouncement); 
 
@@ -40,6 +40,15 @@ router.post('/supervisorRubrics', rubricsController.addSupervisorRubrics);
 // router.put('/supervisorRubrics', rubricsController.updateAnnouncement); 
 router.delete('/supervisorRubrics', rubricsController.deleteSupervisorRubrics); 
 router.get('/getSupervisorRubrics', rubricsController.getSupervisorRubrics); 
+
+router.put('/supervisorAddQuestion', rubricsController.supervisorAddQuestion); 
+router.put('/supervisorDeleteQuestion', rubricsController.supervisorDeleteQuestion); 
+
+router.put('/committeeAddQuestion', rubricsController.committeeAddQuestion); 
+router.put('/committeeDeleteQuestion', rubricsController.committeeDeleteQuestion); 
+
+
+
 
 
  router.post('/committeeRubrics', rubricsController.addCommitteeRubrics); 
