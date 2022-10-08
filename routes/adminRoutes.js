@@ -59,8 +59,8 @@ router.put('/committeeDeleteQuestion', rubricsController.committeeDeleteQuestion
 
 
 router.post('/committee', committeeController.addCommittee); 
-router.put('/committee', committeeController.updateCommittee); 
-router.delete('/committee', committeeController.deleteCommittee); 
+// router.put('/committee', committeeController.updateCommittee); 
+router.put('/deleteCommittee', committeeController.deleteCommittee); 
 router.get('/getCommittee', committeeController.getCommittee); 
 router.get('/getAllCommittee', committeeController.getAllCommittee); 
 

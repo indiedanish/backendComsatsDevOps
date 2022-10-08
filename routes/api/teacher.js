@@ -8,9 +8,10 @@ const TeacherProjectController = require('../../controllers/TeacherControllers/T
 const CommitteeEvaluationController = require('../../controllers/TeacherControllers/CommitteeEvaluationController');
 const SupervisorEvaluationController = require('../../controllers/TeacherControllers/SupervisorEvaluationController');
 
+const stdTechCrudController = require('../../controllers/AdminControllers/stdTechCrudController');
 
 const CommitteeAssignedProjectsController = require('../../controllers/TeacherControllers/CommitteeAssignedProjectsController');
-
+router.post('/getTeacher', stdTechCrudController.getTeacher);
 // Project Management
 router.post('/project', verifyRoles(ROLES_LIST.Supervisor), TeacherProjectController.addProject)
 router.put('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee), TeacherProjectController.updateProject)

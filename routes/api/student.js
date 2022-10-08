@@ -39,7 +39,7 @@ router.post('/getTeamMembers',  TeamManagementController.getTeamMembers)
 // Deliverables
 router.post('/deliverable', DeliverablesController.addDeliverable)
 router.put('/deliverable', DeliverablesController.updateDeliverable)
-router.get('/getAllDeliverable', DeliverablesController.getAllDeliverable)
+router.put('/getAllDeliverable', DeliverablesController.getAllDeliverable)
 router.get('/getDeliverable', DeliverablesController.getDeliverable)
 router.delete('/deliverable', DeliverablesController.deleteDeliverable)
 

@@ -215,11 +215,14 @@ module.exports.deleteTeacher = async (req, res) => {
 module.exports.getTeacher = async (req, res) => {
     if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teacher email required.' });
 
-    const teacher = await Teacher.findOne({ Email: req.body.Email }).exec();
+    const teacher = await Teacher.findOne({ Email: req.body.Email })
     if (!teacher) {
         return res.status(204).json({ "message": `No teacher matches Email ${req.body.Email}.` });
     }
     res.json(teacher);
+
+
+    
 }
 
 
