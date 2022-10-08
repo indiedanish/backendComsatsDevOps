@@ -49,6 +49,7 @@ module.exports.addCommittee = async (req, res) => {
             if (!temp) {
                 return res.status(204).json({ "message": `No such Teacher exists` });
             }
+            temp.isCommittee = true;
             validTeachers = [...validTeachers, temp]
         }
 
