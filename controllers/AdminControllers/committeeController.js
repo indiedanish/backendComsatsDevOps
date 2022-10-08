@@ -18,7 +18,7 @@ module.exports.addGroup = async (req, res) => {
         return res.status(209).json({ "message": `No such Committee exists` });
     }
 
-    const Group = await Committee.findOne({ Name: CommitteeName , Projects: ProjectName });
+    const Group = await Committee.findOne({ Name: CommitteeName, Projects: ProjectName });
 
     if (Group) {
         return res.sendStatus(409); //Conflict 
@@ -29,7 +29,7 @@ module.exports.addGroup = async (req, res) => {
         { $push: { Projects: Project } },
 
     );
-   
+
 }
 
 
@@ -45,10 +45,15 @@ module.exports.addCommittee = async (req, res) => {
     try {
         validTeachers = new Array();
         for (var i = 0; i < Teacher.length; i++) {
-            temp = await TeacherDB.findOne({ Email: Teacher[i] });
+            temp = await TeacherDB.findOne({ _id: Teacher[i] });
             if (!temp) {
                 return res.status(204).json({ "message": `No such Teacher exists` });
             }
+            var updateTeacher = await TeacherDB.updateOne(
+                { '_id': temp._id },
+                { 'isCommittee': true  },
+        
+            );
             validTeachers = [...validTeachers, temp]
         }
 
@@ -65,16 +70,40 @@ module.exports.addCommittee = async (req, res) => {
     }
 }
 
-
 module.exports.deleteCommittee = async (req, res) => {
     if (!req?.body?.Name) return res.status(400).json({ 'message': 'Name required.' });
 
-    const committee = await Committee.findOne({ Name: req.body.Name }).exec();
+    const committee = await Committee.findOne({ Name: req.body.Name });
     if (!committee) {
         return res.status(204).json({ "message": `No such Committee exists` });
     }
-    const result = await committee.deleteOne();
-    res.json(result);
+
+    try {
+        validTeachers = new Array();
+        for (var i = 0; i < committee.Teacher.length; i++) {
+            temp = await TeacherDB.findOne({ _id: committee.Teacher[i] });
+            if (!temp) {
+                return res.status(204).json({ "message": `No such Teacher exists` });
+            }
+
+            var updateTeacher = await TeacherDB.updateOne(
+                { '_id': temp._id },
+                { 'isCommittee': false },
+
+            );
+        }
+
+        const result = await committee.deleteOne();
+        res.json(result);
+
+    }
+
+
+    catch (err) {
+        res.status(500).json({ 'message': err.message });
+    }
+
+    
 }
 
 
@@ -110,7 +139,10 @@ module.exports.updateCommittee = async (req, res) => {
 
 
 module.exports.getAllCommittee = async (req, res) => {
-    const committees = await Committee.find();
+
+
+    const committees = await Committee.find().populate('Projects').populate("Teacher")
+
     if (!committees) return res.status(204).json({ 'message': 'No Committees found.' });
     try {
         res.json(committees);

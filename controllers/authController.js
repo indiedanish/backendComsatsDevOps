@@ -73,7 +73,7 @@ const TeacherLogin = async (req, res) => {
     if (match) {
 
 
-        const role = foundTeacher.isCommittee ? "2004" : "2003";
+        const role = foundTeacher.isCommittee ? "Committee" : "Supervisor";
 
 
         console.log(foundTeacher.Email)
