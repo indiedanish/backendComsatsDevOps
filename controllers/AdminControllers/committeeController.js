@@ -36,7 +36,7 @@ module.exports.addGroup = async (req, res) => {
 
 module.exports.addCommittee = async (req, res) => {
 
-    var { Name, Teacher = new Array() } = req.body;     // Committe Name and array of teacher emails
+    var { Name, Teacher = new Array() } = req.body;     // Committe Name and array of teacher Object IDs
     if (!Name) return res.status(400).json({ 'message': 'Name is required.' });
 
     const duplicate = await Committee.findOne({ Name: Name }).exec();
@@ -59,9 +59,23 @@ module.exports.addCommittee = async (req, res) => {
 
         Teacher = validTeachers
 
+        console.log("Hi")
+
 
         const newCommittee = await Committee.create({ Name, Teacher });
         console.log(newCommittee);
+
+
+
+        for (var i = 0; i < Teacher.length; i++) {
+            var updateTeacher = await TeacherDB.updateOne(
+                { '_id': Teacher[i]._id },
+                { 'Committee': newCommittee  },
+        
+            );
+
+        }
+
 
         res.status(201).json({ 'success': `New ${newCommittee} created!` });
     }
