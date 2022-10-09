@@ -63,7 +63,7 @@ module.exports.addProject = async (req, res) => {
 
 
 
-        const project =  await Project.findOne({ Name: req.body.Name });
+        const project = await Project.findOne({ Name: req.body.Name });
         if (req.body.TeamLeader) {
             const TeamLead = await Student.findOne({ RegNo: RegNo });
 
@@ -75,19 +75,19 @@ module.exports.addProject = async (req, res) => {
 
             var UpdateStudent = await Student.updateOne(
                 { '_id': TeamLead._id },
-                {  'Project': project},
-            );  
+                { 'Project': project },
+            );
 
             var UpdateStudent2 = await Student.updateOne(
                 { '_id': TeamLead._id },
-                {  'Role': "TeamLead"},
-            );  
+                { 'Role': "TeamLead" },
+            );
 
 
         }
 
         res.status(201).json({ 'success': `New ${newProject} created!` });
-     
+
     }
     catch (err) {
         res.status(500).json({ 'message': err.message });
@@ -120,7 +120,7 @@ module.exports.updateProject = async (req, res) => {
 
     }
 
-    if (req.body?.GroupMembers) project.GroupMembers = [...project.GroupMembers, req.body.GroupMembers ] ;
+    if (req.body?.GroupMembers) project.GroupMembers = [...project.GroupMembers, req.body.GroupMembers];
     if (req.body?.GroupStatus) project.GroupStatus = req.body.GroupStatus;
 
     if (req.body?.GroupSupervisor) {
@@ -179,9 +179,14 @@ module.exports.getAllProject = async (req, res) => {
 }
 
 module.exports.getProject = async (req, res) => {
-    if (!req?.body?.Name) return res.status(400).json({ 'message': 'Name of Project required.' });
+    if (!req?.body?.Name) return res.status(400).json({ 'message': 'Name required.' });
 
-    const project = await Project.findOne({ Name: req.body.Name }).exec();
+    const project = await Project.findOne({ Name: req.body.Name }).populate('GroupMembers')
+        .populate({ path: 'Requirements', modal: 'Requirements', populate: { path: 'AssignedTo', modal: 'Student' } })
+        .populate('Sprints').populate('Deliverable').populate('TeamLeader')
+        .populate('GroupSupervisor').populate('GroupCoSupervisor').populate('GroupCommittee');
+
+
     if (!project) {
         return res.status(204).json({ "message": `No Project matches Title` });
     }
