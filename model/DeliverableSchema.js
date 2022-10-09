@@ -12,6 +12,11 @@ var DeliverableSchema = new mongoose.Schema({
     required: true,
   },
 
+  Status: {
+    type: Boolean,
+    default: false,
+  },
+
   DateModified: {
     type: Date,
     default: Date.now,
