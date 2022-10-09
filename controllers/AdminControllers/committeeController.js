@@ -3,7 +3,7 @@ const TeacherDB = require('../../model/TeacherSchema');
 const ProjectDB = require('../../model/ProjectSchema');
 
 module.exports.addGroup = async (req, res) => {
-    var { CommitteeName, ProjectName } = req.body;     // Committe Name and array of teacher emails
+    var { CommitteeName, ProjectName } = req.body;     // Committe Name and Project Name
     if (!CommitteeName || !ProjectName) return res.status(400).json({ 'message': 'CommitteeName, Teacher, ProjectName are required.' });
 
     const Project = await ProjectDB.findOne({ Name: ProjectName });
