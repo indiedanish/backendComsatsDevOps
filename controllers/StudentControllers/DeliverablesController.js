@@ -7,7 +7,7 @@ const ProjectDB = require('../../model/ProjectSchema');
 
 module.exports.addDeliverable = async (req, res) => {
 
-    var { Title, ProjectName, File, DateModified } = req.body;
+    var { Title, ProjectName, File, DateModified, Status } = req.body;
     if (!Title || !ProjectName || !File) return res.status(400).json({
         'message': 'Name of Deliverable, ProjectName and file required.'
     });
@@ -21,12 +21,20 @@ module.exports.addDeliverable = async (req, res) => {
         const DeliverableObj = await DeliverableDB.findOne({ Title: Title, ProjectName: ProjectName });
 
         if (DeliverableObj) {
-            return res.status(209).json({ "message": `Record already exists` })
+
+
+            if (req.body?.File) {
+                DeliverableObj.File = req.body.File
+                const result = await DeliverableObj.save();
+                return res.status(200).json({ "message": `Record Updated` })
+                
+               
+            }
         };
 
 
         const newDeliverable = await DeliverableDB.create({
-            Title, ProjectName, File, DateModified
+            Title, ProjectName, File, DateModified, Status
         });
 
         var updateProject = await ProjectDB.updateOne(
@@ -150,7 +158,7 @@ module.exports.getDeliverable = async (req, res) => {
 
         if (!Project) {
             return res.status(209).json({ "message": `No such project exists` });
-           // return res.status(209).json({ "message": `No such project exists` });
+            // return res.status(209).json({ "message": `No such project exists` });
         }
 
         const DeliverableObj = await DeliverableDB.findOne({ Title: req?.body?.Title, ProjectName: req?.body?.ProjectName });
