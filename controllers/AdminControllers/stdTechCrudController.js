@@ -12,7 +12,7 @@ module.exports.addNewStudent = async (req, res) => {
     console.log("IM HERE")
     console.log(req.body.ProfilePicture)
 
-    var { Name, RegNo, Email, Password, PhoneNumber, Gender, Position, FypStatus, 
+    var { Name, RegNo, Email, Password, PhoneNumber, Gender, Position, FypStatus,
         CommitteeEvaluation, SupervisorEvaluation, Notifications, OnlineStatus, Project, ProfilePicture } = req.body;
     if (!Name || !RegNo || !Password) return res.status(400).json({ 'message': 'Username, Reg No and password are required.' });
     var Role = "TeamMember"
@@ -23,9 +23,11 @@ module.exports.addNewStudent = async (req, res) => {
         //encrypt the password
         Password = await bcrypt.hash(Password, 10);
 
-        const newStudent = await Student.create({  Name, RegNo, Email, Password, PhoneNumber, Gender, 
-             Role, Position, FypStatus, CommitteeEvaluation, SupervisorEvaluation, ProfilePicture,
-             Notifications, OnlineStatus, Project });
+        const newStudent = await Student.create({
+            Name, RegNo, Email, Password, PhoneNumber, Gender,
+            Role, Position, FypStatus, CommitteeEvaluation, SupervisorEvaluation, ProfilePicture,
+            Notifications, OnlineStatus, Project
+        });
 
         console.log(newStudent);
 
@@ -40,12 +42,12 @@ module.exports.addNewStudent = async (req, res) => {
 
 module.exports.updateStudent = async (req, res) => {
     console.log("IM BODY", req.body)
-    var {RegNo} = req.body;
-  
- 
+    var { RegNo } = req.body;
+
+
     if (!RegNo) return res.status(400).json({ 'message': 'RegNo is required.' });
 
- 
+
 
     const student = await Student.findOne({ RegNo: req.body.RegNo });
     if (!student) {
@@ -94,12 +96,7 @@ module.exports.getStudent = async (req, res) => {
 
     if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
 
-    const student = await Student.findOne({ RegNo: req.body.RegNo }).populate({ path: 'Project' , modal: 'Project' , populate: { path: 'Requirements', modal: 'Requirements' , populate: { path: 'AssignedTo', modal: 'Student' }   }  , populate: { path: 'GroupMembers', modal: 'Student' }     })
-
-    // const project = await ProjectDB.findOne({ Name: req.body.Name }).populate('GroupMembers')
-    //     .populate({ path: 'Requirements', modal: 'Requirements', populate: { path: 'AssignedTo', modal: 'Student' } })
-    //     .populate('Sprints').populate('Deliverable').populate('TeamLeader')
-    //     .populate('GroupSupervisor').populate('GroupCoSupervisor').populate('GroupCommittee');
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).populate({ path: 'Project', modal: 'Project', populate: { path: 'Requirements', modal: 'Requirements', populate: { path: 'AssignedTo', modal: 'Student' } } })
 
 
 
@@ -154,7 +151,7 @@ module.exports.addNewTeacher = async (req, res) => {
         //encrypt the password
         Password = await bcrypt.hash(Password, 10);
 
-        const newTeacher = await Teacher.create({ Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation , ProfilePicture});
+        const newTeacher = await Teacher.create({ Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation, ProfilePicture });
         console.log(newTeacher);
 
         res.status(201).json({ 'success': `New user ${newTeacher} created!` });
@@ -167,7 +164,7 @@ module.exports.addNewTeacher = async (req, res) => {
 
 module.exports.updateTeacher = async (req, res) => {
 
-    console.log("Here " +req.body.Email)
+    console.log("Here " + req.body.Email)
 
     console.log("")
     if (!req?.body?.Email) {
@@ -223,16 +220,18 @@ module.exports.getTeacher = async (req, res) => {
     if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teacher email required.' });
 
     const teacher = await Teacher.findOne({ Email: req.body.Email })
-    .populate({path: 'Committee', modal: 'Committee', populate:{path: 'Teacher', modal: 'Teacher'},
-     populate:{path: 'Projects', modal: 'Project', populate:{path: 'GroupMembers', modal:'Student'} }})
-    
+        .populate({
+            path: 'Committee', modal: 'Committee', populate: { path: 'Teacher', modal: 'Teacher' },
+            populate: { path: 'Projects', modal: 'Project', populate: { path: 'GroupMembers', modal: 'Student' } }
+        })
+
     if (!teacher) {
         return res.status(204).json({ "message": `No teacher matches Email ${req.body.Email}.` });
     }
     res.json(teacher);
 
 
-    
+
 }
 
 

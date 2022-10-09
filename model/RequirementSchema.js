@@ -72,7 +72,12 @@ var requirementSchema = new mongoose.Schema({
         default: Date.now,
     },
 
-    Deadline: {
+    start: {
+        type: Date,
+        required: true,
+    },
+
+    end: {
         type: Date,
         required: true,
 
