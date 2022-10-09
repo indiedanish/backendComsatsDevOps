@@ -216,6 +216,9 @@ module.exports.getTeacher = async (req, res) => {
     if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teacher email required.' });
 
     const teacher = await Teacher.findOne({ Email: req.body.Email })
+    .populate({path: 'Committee', modal: 'Committee', populate:{path: 'Teacher', modal: 'Teacher'},
+     populate:{path: 'Projects', modal: 'Project', populate:{path: 'GroupMembers', modal:'Student'} }})
+    
     if (!teacher) {
         return res.status(204).json({ "message": `No teacher matches Email ${req.body.Email}.` });
     }

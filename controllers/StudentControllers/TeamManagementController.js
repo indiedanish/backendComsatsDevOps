@@ -4,34 +4,54 @@ const StudentDB = require('../../model/StudentSchema');
 
 module.exports.addTeamMember = async (req, res) => {
 
-    var { Name, Student = new Array() } = req.body;
-    if (!Name || !Student) return res.status(400).json({ //Teacher = new Array()
-        'message': 'Name of Project and Student Array required.'
+    console.log(req.body)
+
+    var { Name, Student = new Array()} = req.body;
+    if (!Name || !Student) return res.status(400).json({ 
+        'message': 'Name of Project and Student RegNo required.'
     });
 
-
-    const student = await StudentDB.findOne({ RegNo: Student });
-
-
-    const project = await ProjectDB.findOne({ Name: req.body.Name });
-    if (!project) {
-        return res.status(204).json({ "message": `No Project matches Name` });
-    }
     try {
 
-        var astudent = await ProjectDB.updateOne(
-            { '_id': project._id },
-            { $push :{ GroupMembers: student } },
-           
-        );
-    const result = await project.save();
-    res.json(result);
+        const project = await ProjectDB.findOne({ Name: req.body.Name });
+        if (!project) {
+            return res.status(204).json({ "message": `No Project matches Name` });
+        }
+        validStudents = new Array();
+        for (var i = 0; i < Student.length; i++) {
+            student = await StudentDB.findOne({ _id: Student[i] });
+            if (!student) {
+                return res.status(204).json({ "message": `No such Student exists` });
+            }
+
+            const updateProject = await ProjectDB.updateOne(
+                { '_id': project._id },
+                { $push :{ GroupMembers: student } },
+               
+            );
+            const result = await updateProject.save();
+            res.json(result);
+
+
+        }
+
+
 
     }
+
+
     catch (err) {
-    res.status(500).json({ 'message': err.message });
+        res.status(500).json({ 'message': err.message });
+    }
+
 }
-}
+
+
+
+
+    
+ 
+
 
 
 module.exports.updateRole = async (req, res) => {

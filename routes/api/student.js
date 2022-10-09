@@ -30,6 +30,8 @@ router.get('/allProject', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead
 router.put('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.updateProject)
 
 // Team Management
+router.get('/getAllStudents', stdTechCrudController.getAllStudent);
+
 router.put('/teamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.addTeamMember)
 router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.updateRole)
 router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.deleteTeamMember)

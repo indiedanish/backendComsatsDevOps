@@ -34,6 +34,12 @@ var TeacherSchema = new mongoose.Schema({
     required: true,
   },
 
+  Committee: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Committee'
+
+  },
+
   Designation: {
     type: String,
   },
