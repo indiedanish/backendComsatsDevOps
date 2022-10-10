@@ -23,7 +23,7 @@ module.exports.addRequirement = async (req, res) => {
             return res.status(209).json({ "message": `Record already exists` })
         };
 
-        const AssignedTo = await StudentDB.findOne({ RegNo: req?.body?.AssignedTo });
+        const AssignedTo = await ProjectDB.findOne({ ProjectName: req?.body?.ProjectName , GroupMembers: req?.body?.AssignedTo });
 
         if (!AssignedTo) {
             return res.status(209).json({ "message": `No such student exists` });
