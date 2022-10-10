@@ -9,6 +9,8 @@ const Committee = require('../../model/CommitteeSchema');
 module.exports.addProject = async (req, res) => {
 
 
+    console.log(req.body)
+
     var { Name, Description, Status, Deliverable, TeamLeader, GroupMembers,
         GroupStatus, GroupSupervisor, GroupCoSupervisor, GroupCommittee, Average } = req.body;
     if (!Name) return res.status(400).json({ 'message': 'Name is required.' });
@@ -83,6 +85,12 @@ module.exports.addProject = async (req, res) => {
                 { 'Role': "TeamLead" },
             );
 
+            var UpdateTeacher = await Teacher.updateOne(
+                { '_id': GroupSupervisor._id },
+                { $push: { MyProjects: newProject } },
+            );
+
+        
 
         }
 
@@ -167,10 +175,10 @@ module.exports.deleteProject = async (req, res) => {
 
 
 module.exports.getAllProject = async (req, res) => {
-    const projects = await Project.find();
+    const projects = await Project.find().populate('GroupSupervisor');
     if (!projects) return res.status(204).json({ 'message': 'No Projects found.' });
     try {
-        res.json(projects);
+        res.json(projects)
     }
     catch (err) {
         res.status(500).json({ 'message': err.message });
@@ -193,6 +201,24 @@ module.exports.getProject = async (req, res) => {
     res.json(project);
 }
 
+
+
+module.exports.getTeacherForMyProjects = async (req, res) => {
+    if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teacher email required.' });
+
+    const teacher = await Teacher.findOne({ Email: req.body.Email })
+        .populate({
+            path: 'MyProjects', modal: 'Project', populate: { path: 'GroupMembers', modal: 'Student' }})
+        
+
+    if (!teacher) {
+        return res.status(204).json({ "message": `No teacher matches Email ${req.body.Email}.` });
+    }
+    res.json(teacher);
+
+
+
+}
 
 
 

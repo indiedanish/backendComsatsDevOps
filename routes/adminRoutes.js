@@ -71,6 +71,9 @@ router.put('/deleteProjectCommittee', assignCommitteeController.deleteGroup);
 router.get('/getProjectCommittee', assignCommitteeController.getOneGroup); 
 router.get('/getAllProjectCommittee', assignCommitteeController.getAllGroup); 
 
+router.get('/getAssignedProject', assignCommitteeController.getAssignedProject); 
+
+
 
 
 

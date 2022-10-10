@@ -6,7 +6,11 @@ const TeamManagementController = require('../../controllers/StudentControllers/T
 
 const RequirementController = require('../../controllers/StudentControllers/requirementController');
 const SprintController = require('../../controllers/StudentControllers/SprintController');
+
+
+
 const DeliverablesController = require('../../controllers/StudentControllers/DeliverablesController');
+const TeacherProjectController = require('../../controllers/TeacherControllers/TeacherProjectController');
 
 
 const StudentEvaluationController = require('../../controllers/StudentControllers/StudentEvaluationController');
@@ -18,11 +22,16 @@ const BugReportController = require('../../controllers/StudentControllers/BugRep
 
 const stdTechCrudController = require('../../controllers/AdminControllers/stdTechCrudController');
 
+
 const NotificationController = require('../../controllers/StudentControllers/NotificationController');
 
 const ROLES_LIST = require('../../config/roles_list');
 const verifyRoles = require('../../middleware/verifyRoles');
 
+
+
+
+router.post('/getStudentForSupervisorEvaluation', stdTechCrudController.getStudentForSupervisorEvaluation);
 
 router.post('/getStudent', stdTechCrudController.getStudent);
 router.post('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getProject)
@@ -105,6 +114,11 @@ router.get('/getAllSupervisorEvaluation', SupervisorEvaluationController.getAllS
 router.post('/CommitteeEvaluation', CommitteeEvaluationController.AddCommitteeEvaluation)
 router.get('/getCommitteeEvaluation', CommitteeEvaluationController.getCommitteeEvaluation)
 router.get('/getAllCommitteeEvaluation', CommitteeEvaluationController.getAllCommitteeEvaluation)
+
+
+
+router.get('/allProject', TeacherProjectController.getAllProject)
+
 
 //router.post('/getNotifications', NotificationController.getNotifications)
 //get all notifictions from students database, req.body will have student ki email.

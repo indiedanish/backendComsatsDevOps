@@ -28,7 +28,7 @@ module.exports.addRequirement = async (req, res) => {
             return res.status(209).json({ "message": `Record already exists` })
         };
 
-     
+
 
         const newRequirement = await Requirement.create({
             Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
