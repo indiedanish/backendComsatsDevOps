@@ -74,7 +74,7 @@ module.exports.getAllCommitteeEvaluation = async (req, res) => {
     var { Name, Student } = req.body;
     //Name of Evaluation i.e SRS, SDS,  Student RegNo,
 
-    if (!Name || !Student ) return res.status(400).json({
+    if (!Name || !Student) return res.status(400).json({
         'message': 'Name of Evaluation Teacher Email Student RegNo required.'
     });
 
@@ -84,7 +84,7 @@ module.exports.getAllCommitteeEvaluation = async (req, res) => {
         if (!Student) {
             return res.status(204).json({ "message": `No Student matches RegNo` });
         }
-      
+
         var std = Student._id;
 
         const EvalFound = await EvaluationCommittee.find({ Name: req.body.Name, Student: std });
@@ -93,7 +93,7 @@ module.exports.getAllCommitteeEvaluation = async (req, res) => {
             return res.status(209).json({ "message": `Record doesn't exist` });
         }
 
-        res.json(EvalFound);     
+        res.json(EvalFound);
 
     }
     catch (err) {
@@ -133,7 +133,7 @@ module.exports.getCommitteeEvaluation = async (req, res) => {
             return res.status(209).json({ "message": `Record doesn't exists` });
         }
 
-        res.json(EvalFound);     
+        res.json(EvalFound);
 
     }
     catch (err) {

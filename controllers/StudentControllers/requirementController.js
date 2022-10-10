@@ -7,7 +7,7 @@ const ProjectDB = require('../../model/ProjectSchema');
 module.exports.addRequirement = async (req, res) => {
 
     var { Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
-        File = new Array(), SubmittedFile = new Array(), DateModified, Deadline } = req.body;
+        File = new Array(), SubmittedFile = new Array(), DateModified, start, end  } = req.body;
     if (!Title|| !AssignedTo || !ProjectName) return res.status(400).json({ 'message': 
     'Title of Requirement, Assigned To, Priority and Project Name required.' });
 
@@ -23,7 +23,7 @@ module.exports.addRequirement = async (req, res) => {
             return res.status(209).json({ "message": `Record already exists` })
         };
 
-        const AssignedTo = await StudentDB.findOne({ RegNo: req?.body?.AssignedTo });
+        const AssignedTo = await ProjectDB.findOne({ ProjectName: req?.body?.ProjectName , GroupMembers: req?.body?.AssignedTo });
 
         if (!AssignedTo) {
             return res.status(209).json({ "message": `No such student exists` });
@@ -31,7 +31,7 @@ module.exports.addRequirement = async (req, res) => {
 
         const newRequirement = await Requirement.create({
             Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
-            File, SubmittedFile, DateModified, Deadline
+            File, SubmittedFile, DateModified,start, end
         });
 
         var updateProject = await ProjectDB.updateOne(
@@ -113,7 +113,8 @@ module.exports.updateRequirementLead = async (req, res) => {
         if (req.body?.File) RequirementObj.File = req.body.File;
         if (req.body?.SubmittedFile) RequirementObj.SubmittedFile = req.body.SubmittedFile;
         if (req.body?.DateModified) RequirementObj.DateModified = req.body.DateModified;
-        if (req.body?.Deadline) RequirementObj.Deadline = req.body.Deadline;
+        if (req.body?.start) RequirementObj.start = req.body.start;
+        if (req.body?.end) RequirementObj.end = req.body.end;
         if (req.body?.Rename) {
             const check = await Requirement.findOne({ Title: Rename, ProjectName: req?.body?.ProjectName });
             if (check) {
@@ -156,6 +157,7 @@ module.exports.updateRequirementMember = async (req, res) => {
         if (req.body?.Accepted) RequirementObj.Accepted = req.body.Accepted;
         if (req.body?.SubmittedFile) RequirementObj.SubmittedFile = req.body.SubmittedFile;
         if (req.body?.DateModified) RequirementObj.DateModified = req.body.DateModified;
+        if (req.body?.start) RequirementObj.start = req.body.start;
 
 
         const result = await RequirementObj.save();
