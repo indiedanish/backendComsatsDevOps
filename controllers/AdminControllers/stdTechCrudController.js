@@ -94,7 +94,10 @@ module.exports.getStudent = async (req, res) => {
 
     if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
 
-    const student = await Student.findOne({ RegNo: req.body.RegNo }).populate({ path: 'Project' })
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).populate({ path: 'Project', modal:'Project', 
+    populate:{path: 'GroupMembers', modal: 'Student'}, populate:{   path: 'Requirements', modal: 'Requirements'}})
+
+
 
     if (!student) {
         return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });

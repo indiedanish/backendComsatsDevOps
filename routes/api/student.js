@@ -7,6 +7,7 @@ const TeamManagementController = require('../../controllers/StudentControllers/T
 const RequirementController = require('../../controllers/StudentControllers/requirementController');
 const SprintController = require('../../controllers/StudentControllers/SprintController');
 const DeliverablesController = require('../../controllers/StudentControllers/DeliverablesController');
+const TeacherProjectController = require('../../controllers/TeacherControllers/TeacherProjectController');
 
 
 const StudentEvaluationController = require('../../controllers/StudentControllers/StudentEvaluationController');
@@ -103,6 +104,11 @@ router.get('/getAllSupervisorEvaluation', SupervisorEvaluationController.getAllS
 router.post('/CommitteeEvaluation', CommitteeEvaluationController.AddCommitteeEvaluation)
 router.get('/getCommitteeEvaluation', CommitteeEvaluationController.getCommitteeEvaluation)
 router.get('/getAllCommitteeEvaluation', CommitteeEvaluationController.getAllCommitteeEvaluation)
+
+
+
+router.get('/allProject', TeacherProjectController.getAllProject)
+
 
 //router.post('/getNotifications', NotificationController.getNotifications)
 //get all notifictions from students database, req.body will have student ki email.

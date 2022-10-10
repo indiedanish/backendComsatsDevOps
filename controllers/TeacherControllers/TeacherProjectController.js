@@ -9,6 +9,8 @@ const Committee = require('../../model/CommitteeSchema');
 module.exports.addProject = async (req, res) => {
 
 
+    console.log(req.body)
+
     var { Name, Description, Status, Deliverable, TeamLeader, GroupMembers,
         GroupStatus, GroupSupervisor, GroupCoSupervisor, GroupCommittee, Average } = req.body;
     if (!Name) return res.status(400).json({ 'message': 'Name is required.' });
@@ -167,10 +169,10 @@ module.exports.deleteProject = async (req, res) => {
 
 
 module.exports.getAllProject = async (req, res) => {
-    const projects = await Project.find();
+    const projects = await Project.find().populate('GroupSupervisor');
     if (!projects) return res.status(204).json({ 'message': 'No Projects found.' });
     try {
-        res.json(projects);
+        res.json(projects)
     }
     catch (err) {
         res.status(500).json({ 'message': err.message });
