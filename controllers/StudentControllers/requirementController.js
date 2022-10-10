@@ -6,10 +6,15 @@ const ProjectDB = require('../../model/ProjectSchema');
 
 module.exports.addRequirement = async (req, res) => {
 
+    console.log("AssignedTo SFSFSFSFSFFS", req.body.AssignedTo)
+
+
     var { Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
-        File = new Array(), SubmittedFile = new Array(), DateModified, start, end  } = req.body;
-    if (!Title|| !AssignedTo || !ProjectName) return res.status(400).json({ 'message': 
-    'Title of Requirement, Assigned To, Priority and Project Name required.' });
+        File = new Array(), SubmittedFile = new Array(), DateModified, start, end } = req.body;
+    if (!Title || !AssignedTo || !ProjectName) return res.status(400).json({
+        'message':
+            'Title of Requirement, Assigned To, Priority and Project Name required.'
+    });
 
     try {
 
@@ -23,7 +28,7 @@ module.exports.addRequirement = async (req, res) => {
             return res.status(209).json({ "message": `Record already exists` })
         };
 
-        const AssignedTo = await ProjectDB.findOne({ ProjectName: req?.body?.ProjectName , GroupMembers: req?.body?.AssignedTo });
+        AssignedTo = await StudentDB.findOne({ RegNo: req.body.AssignedTo });
 
         if (!AssignedTo) {
             return res.status(209).json({ "message": `No such student exists` });
@@ -31,7 +36,7 @@ module.exports.addRequirement = async (req, res) => {
 
         const newRequirement = await Requirement.create({
             Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
-            File, SubmittedFile, DateModified,start, end
+            File, SubmittedFile, DateModified, start, end
         });
 
         var updateProject = await ProjectDB.updateOne(
@@ -216,12 +221,12 @@ module.exports.getStudentRequirement = async (req, res) => {
         if (!student) {
             return res.status(209).json({ "message": `No such student exists` });
         }
-       
+
         const StudentRequirements = await Requirement.find({ ProjectName: req?.body?.ProjectName, AssignedTo: student }).populate('AssignedTo')
         console.log(StudentRequirements)
         res.json(StudentRequirements);
-        
-;
+
+        ;
 
 
     }
