@@ -8,6 +8,8 @@ var NotificationSchema = new mongoose.Schema({
     Content: {
         type: String,
     },
+  
+
     Sender:{
         type: mongoose.Schema.ObjectId,
         ref: 'Student'
@@ -17,9 +19,6 @@ var NotificationSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-
-
-
 
 });
 

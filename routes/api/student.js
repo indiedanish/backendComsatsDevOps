@@ -6,6 +6,14 @@ const TeamManagementController = require('../../controllers/StudentControllers/T
 
 const RequirementController = require('../../controllers/StudentControllers/requirementController');
 const SprintController = require('../../controllers/StudentControllers/SprintController');
+<<<<<<< HEAD
+<<<<<<< HEAD
+const TestPlanController = require('../../controllers/StudentControllers/TestPlanController');
+const BugReportController = require('../../controllers/StudentControllers/BugReportController');
+
+=======
+=======
+>>>>>>> 616bd504f88ee5a7ee466990dad230e0ba5efa82
 const DeliverablesController = require('../../controllers/StudentControllers/DeliverablesController');
 const TeacherProjectController = require('../../controllers/TeacherControllers/TeacherProjectController');
 
@@ -18,6 +26,10 @@ const BugReportController = require('../../controllers/StudentControllers/BugRep
 
 
 const stdTechCrudController = require('../../controllers/AdminControllers/stdTechCrudController');
+<<<<<<< HEAD
+>>>>>>> 30759392f316ac0bae49a327a05bf8e4bb0cd824
+=======
+>>>>>>> 616bd504f88ee5a7ee466990dad230e0ba5efa82
 
 const NotificationController = require('../../controllers/StudentControllers/NotificationController');
 
