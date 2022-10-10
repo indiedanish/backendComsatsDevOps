@@ -50,6 +50,8 @@ module.exports.addRequirement = async (req, res) => {
 
 
 module.exports.deleteRequirement = async (req, res) => {
+    console.log("REQUEST: ", req.body)
+    
     if (!req?.body?.Title || !req?.body?.ProjectName) return res.status(400).json({ 'message': 'Title required.' });
     try {
 
