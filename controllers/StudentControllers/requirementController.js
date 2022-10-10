@@ -28,11 +28,7 @@ module.exports.addRequirement = async (req, res) => {
             return res.status(209).json({ "message": `Record already exists` })
         };
 
-        AssignedTo = await StudentDB.findOne({ RegNo: req.body.AssignedTo });
-
-        if (!AssignedTo) {
-            return res.status(209).json({ "message": `No such student exists` });
-        }
+     
 
         const newRequirement = await Requirement.create({
             Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
@@ -85,6 +81,9 @@ module.exports.deleteRequirement = async (req, res) => {
 
 
 module.exports.updateRequirementLead = async (req, res) => {
+
+    console.log("REQUEST: ", req.body)
+
     if (!req?.body?.Title || !req?.body?.ProjectName) { //Name of Requirement
         return res.status(400).json({ 'message': 'Name required.' });
     }
