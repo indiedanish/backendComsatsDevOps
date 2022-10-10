@@ -108,6 +108,27 @@ module.exports.getStudent = async (req, res) => {
 
 }
 
+
+
+module.exports.getStudentForSupervisorEvaluation = async (req, res) => {
+
+    if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
+
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).populate({ path: 'Project', modal: 'Project', populate: { path: 'Requirements', modal: 'Requirements', populate: { path: 'AssignedTo', modal: 'Student' } } }).populate({ path: 'SupervisorEvaluation', modal: 'SupervisorEvaluation' ,  populate: { path: 'Teacher', modal: 'Teacher'}})
+
+
+
+    if (!student) {
+        return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
+    }
+    console.log("IM HERE", student)
+    res.json(student);
+
+}
+
+
+
+
 module.exports.getAllStudent = async (req, res) => {
     const students = await Student.find();
     if (!students) return res.status(204).json({ 'message': 'No Students found.' });
@@ -233,6 +254,9 @@ module.exports.getTeacher = async (req, res) => {
 
 
 }
+
+
+
 
 
 

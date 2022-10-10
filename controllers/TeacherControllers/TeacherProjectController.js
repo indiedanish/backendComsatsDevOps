@@ -85,6 +85,12 @@ module.exports.addProject = async (req, res) => {
                 { 'Role': "TeamLead" },
             );
 
+            var UpdateTeacher = await Teacher.updateOne(
+                { '_id': GroupSupervisor._id },
+                { $push: { MyProjects: newProject } },
+            );
+
+        
 
         }
 
@@ -195,6 +201,24 @@ module.exports.getProject = async (req, res) => {
     res.json(project);
 }
 
+
+
+module.exports.getTeacherForMyProjects = async (req, res) => {
+    if (!req?.body?.Email) return res.status(400).json({ 'message': 'Teacher email required.' });
+
+    const teacher = await Teacher.findOne({ Email: req.body.Email })
+        .populate({
+            path: 'MyProjects', modal: 'Project', populate: { path: 'GroupMembers', modal: 'Student' }})
+        
+
+    if (!teacher) {
+        return res.status(204).json({ "message": `No teacher matches Email ${req.body.Email}.` });
+    }
+    res.json(teacher);
+
+
+
+}
 
 
 

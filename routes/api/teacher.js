@@ -18,6 +18,9 @@ router.put('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee), 
 router.delete('/project',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee), TeacherProjectController.deleteProject)
 router.post('/getProject',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee ), TeacherProjectController.getProject)
 router.get('/allProject',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee ), TeacherProjectController.getAllProject)
+router.post('/getTeacherForMyProjects',verifyRoles(ROLES_LIST.Supervisor, ROLES_LIST.Committee ), TeacherProjectController.getTeacherForMyProjects)
+
+
   
 // Evaluations
 router.get('/getSupervisorRubrics', SupervisorEvaluationController.getSupervisorRubrics)

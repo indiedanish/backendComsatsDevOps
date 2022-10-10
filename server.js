@@ -17,6 +17,9 @@ const verifyAdmin = require('./middleware/verifyAdmin');
 // Connect to MongoDB
 connectDB();
 
+app.use(express.json({limit: '100mb'}));
+app.use(express.urlencoded({limit: '100mb', extended: false }));
+
 // custom middleware logger
 app.use(logger);
 
@@ -49,6 +52,9 @@ app.use('/auth', require('./routes/auth'));
 
 app.use('/refresh', require('./routes/refresh'));
 app.use('/logout', require('./routes/logout'));
+
+
+
 
 app.use('/admin',
 verifyAdmin, 
