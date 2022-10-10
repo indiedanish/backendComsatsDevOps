@@ -22,7 +22,6 @@ var TestPlanSchema = new mongoose.Schema({
     default: Date.now,
   },
 
-  //Save test Id from requirements over here
 
   TestingRequirement: {
    type: mongoose.Schema.ObjectId,

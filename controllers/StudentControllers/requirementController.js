@@ -29,6 +29,7 @@ module.exports.addRequirement = async (req, res) => {
         };
 
 
+
         const newRequirement = await Requirement.create({
             Title, Description, ProjectName, AssignedTo, Type, Priority, Accepted, Comments,
             File, SubmittedFile, DateModified, start, end
@@ -49,6 +50,8 @@ module.exports.addRequirement = async (req, res) => {
 
 
 module.exports.deleteRequirement = async (req, res) => {
+    console.log("REQUEST: ", req.body)
+    
     if (!req?.body?.Title || !req?.body?.ProjectName) return res.status(400).json({ 'message': 'Title required.' });
     try {
 
@@ -80,6 +83,9 @@ module.exports.deleteRequirement = async (req, res) => {
 
 
 module.exports.updateRequirementLead = async (req, res) => {
+
+    console.log("REQUEST: ", req.body)
+
     if (!req?.body?.Title || !req?.body?.ProjectName) { //Name of Requirement
         return res.status(400).json({ 'message': 'Name required.' });
     }
