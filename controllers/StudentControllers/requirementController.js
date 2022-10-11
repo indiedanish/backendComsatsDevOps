@@ -97,8 +97,8 @@ module.exports.updateRequirementLead = async (req, res) => {
             return res.status(209).json({ "message": `No such project exists` });
         }
 
-        const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req?.body?.ProjectName });
-
+        const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req.body.ProjectName });
+        console.log("RequirementObj: ",RequirementObj)
         if (!RequirementObj) {
             return res.status(209).json({ "message": `No such Requirement in the Project` })
         };
@@ -126,6 +126,7 @@ module.exports.updateRequirementLead = async (req, res) => {
             if (check) {
                 return res.status(409).json({ "message": `Can't Rename: Already a Requirement with similar Name exists` });
             }
+            //ss
 
             RequirementObj.Title = req.body.Rename;
         }
