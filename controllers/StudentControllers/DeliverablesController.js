@@ -7,11 +7,16 @@ const ProjectDB = require('../../model/ProjectSchema');
 
 module.exports.addDeliverable = async (req, res) => {
 
+
+    console.log(req.body)
+ 
     var { Title, ProjectName, File, DateModified, Status } = req.body;
     if (!Title || !ProjectName || !File) return res.status(400).json({
         'message': 'Name of Deliverable, ProjectName and file required.'
     });
     try {
+
+        console.log("hiii")
 
         const project = await ProjectDB.findOne({ Name: ProjectName });
         if (!project) {
@@ -21,6 +26,9 @@ module.exports.addDeliverable = async (req, res) => {
         const DeliverableObj = await DeliverableDB.findOne({ Title: Title, ProjectName: ProjectName });
 
         if (DeliverableObj) {
+
+            console.log("hiii2222")
+
 
 
             if (req.body?.File) {
@@ -38,10 +46,17 @@ module.exports.addDeliverable = async (req, res) => {
             Title, ProjectName, File, DateModified, Status
         });
 
+
+        console.log("hiii22333322")
+
+
         var updateProject = await ProjectDB.updateOne(
             { '_id': project._id },
             { $push: { Deliverable: newDeliverable } },
         )
+
+        console.log("212")
+
 
         res.status(201).json({ 'success': `New ${newDeliverable} created!` });
 
