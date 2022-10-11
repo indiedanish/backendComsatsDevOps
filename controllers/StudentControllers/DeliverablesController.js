@@ -23,6 +23,8 @@ module.exports.addDeliverable = async (req, res) => {
             return res.status(204).json({ "message": `No Project matches Name` });
         }
 
+        console.log("Hiii")
+
         const DeliverableObj = await DeliverableDB.findOne({ Title: Title, ProjectName: ProjectName });
 
         if (DeliverableObj) {
@@ -31,7 +33,8 @@ module.exports.addDeliverable = async (req, res) => {
 
 
 
-            if (req.body?.File) {
+            if (req.body.File) {
+                console.log("Thissssss")
                 DeliverableObj.File = req.body.File
                 const result = await DeliverableObj.save();
                 res.status(200).json({ "message": `Record Updated` })
@@ -40,6 +43,8 @@ module.exports.addDeliverable = async (req, res) => {
                
             }
         };
+
+        console.log("This is it")
 
 
         const newDeliverable = await DeliverableDB.create({
@@ -87,7 +92,7 @@ module.exports.updateDeliverable = async (req, res) => {
             return res.status(209).json({ "message": `Record doesn't exist` })
         };
 
-        if (req.body?.Type) DeliverableObj.File = req.body.File;
+        if (req.body.Type) DeliverableObj.File = req.body.File;
 
 
         const result = await DeliverableObj.save();

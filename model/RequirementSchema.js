@@ -79,7 +79,7 @@ var requirementSchema = new mongoose.Schema({
 
     end: {
         type: Date,
-        required: true,
+        
 
     }
 });

@@ -76,7 +76,4 @@ router.get('/getAssignedProject', assignCommitteeController.getAssignedProject);
 
 
 
-
-
-
 module.exports = router;

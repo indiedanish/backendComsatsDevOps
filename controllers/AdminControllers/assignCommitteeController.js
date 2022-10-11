@@ -140,7 +140,8 @@ module.exports.deleteGroup = async (req, res) => {
 
         const AssignedGroups = await AssignedProjectDB.findOne({ Name: req.body.CommitteeName , Project: req.body.ProjectName });
         const DeleteAssign = await  AssignedGroups.delete();
-        console.log(DeleteAssign)
+        console.log(DeleteAssign
+            )
 
 
         res.json(result);
