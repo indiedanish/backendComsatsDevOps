@@ -51,7 +51,7 @@ module.exports.addRequirement = async (req, res) => {
 
 module.exports.deleteRequirement = async (req, res) => {
     console.log("REQUEST: ", req.body)
-    
+
     if (!req?.body?.Title || !req?.body?.ProjectName) return res.status(400).json({ 'message': 'Title required.' });
     try {
 
@@ -84,7 +84,7 @@ module.exports.deleteRequirement = async (req, res) => {
 
 module.exports.updateRequirementLead = async (req, res) => {
 
-    console.log("REQUEST: ", req.body)
+    console.log("REQUEST: ", req.body.Title , req.body.ProjectName)
 
     if (!req?.body?.Title || !req?.body?.ProjectName) { //Name of Requirement
         return res.status(400).json({ 'message': 'Name required.' });
@@ -98,35 +98,51 @@ module.exports.updateRequirementLead = async (req, res) => {
         }
 
         const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req.body.ProjectName });
-        console.log("RequirementObj: ",RequirementObj)
+        console.log("RequirementObj: ", RequirementObj)
         if (!RequirementObj) {
             return res.status(209).json({ "message": `No such Requirement in the Project` })
         };
 
-        if (req.body?.Description) RequirementObj.Description = req.body.Description;
 
-        if (req.body?.AssignedTo) { // AssignedTo = Student RegNo
+        if (req.body.Description) RequirementObj.Description = req.body.Description;
+
+
+        if (req.body.AssignedTo) { // AssignedTo = Student RegNo
             var StudentObj = await StudentDB.findOne({ RegNo: req.body.AssignedTo })
             if (!StudentObj) {
                 return res.status(209).json({ "message": `No such Student in the Project` })
             }
             RequirementObj.AssignedTo = StudentObj;
         }
-        if (req.body?.Type) RequirementObj.Type = req.body.Type;
-        if (req.body?.Priority) RequirementObj.Priority = req.body.Priority;
-        if (req.body?.Accepted) RequirementObj.Accepted = req.body.Accepted;
 
-        if (req.body?.File) RequirementObj.File = req.body.File;
-        if (req.body?.SubmittedFile) RequirementObj.SubmittedFile = req.body.SubmittedFile;
-        if (req.body?.DateModified) RequirementObj.DateModified = req.body.DateModified;
-        if (req.body?.start) RequirementObj.start = req.body.start;
-        if (req.body?.end) RequirementObj.end = req.body.end;
-        if (req.body?.Rename) {
-            const check = await Requirement.findOne({ Title: Rename, ProjectName: req?.body?.ProjectName });
+
+
+        if (req.body.Type) RequirementObj.Type = req.body.Type;
+        if (req.body.Priority) RequirementObj.Priority = req.body.Priority;
+        if (req.body.Accepted) RequirementObj.Accepted = req.body.Accepted;
+
+
+
+        if (req.body.File) RequirementObj.File = req.body.File;
+        if (req.body.SubmittedFile) RequirementObj.SubmittedFile = req.body.SubmittedFile;
+        if (req.body.DateModified) RequirementObj.DateModified = req.body.DateModified;
+
+
+
+        if (req.body.start) RequirementObj.start = req.body.start;
+        if (req.body.end) RequirementObj.end = req.body.end;
+        if (req.body.Rename) {
+
+            const check = await Requirement.findOne({ Title: req.body.Rename, ProjectName: req.body.ProjectName });
+
+
             if (check) {
+
                 return res.status(409).json({ "message": `Can't Rename: Already a Requirement with similar Name exists` });
             }
             //ss
+
+
 
             RequirementObj.Title = req.body.Rename;
         }
@@ -368,4 +384,3 @@ module.exports.getRequirementComments = async (req, res) => {
     DisplayComment = RequirementObj.Comments;
     res.json(DisplayComment);
 }
-
