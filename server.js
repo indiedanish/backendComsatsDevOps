@@ -17,8 +17,8 @@ const verifyAdmin = require('./middleware/verifyAdmin');
 // Connect to MongoDB
 connectDB();
 
-app.use(express.json({limit: '100mb'}));
-app.use(express.urlencoded({limit: '100mb', extended: false }));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb', extended: false }));
 
 // custom middleware logger
 app.use(logger);
@@ -30,7 +30,7 @@ app.use(credentials);
 // Cross Origin Resource Sharing
 app.use(cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://comsats-devops.vercel.app"],
 }));
 
 // built-in middleware to handle urlencoded form data
@@ -57,8 +57,8 @@ app.use('/logout', require('./routes/logout'));
 
 
 app.use('/admin',
-verifyAdmin, 
-require('./routes/adminRoutes'));
+    verifyAdmin,
+    require('./routes/adminRoutes'));
 //{"Email": "dan@dan.com" , "Password": "12345"}
 
 app.use(verifyJWT);
