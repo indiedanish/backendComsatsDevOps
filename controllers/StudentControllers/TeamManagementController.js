@@ -19,7 +19,7 @@ module.exports.addTeamMember = async (req, res) => {
         }
         validStudents = new Array();
         for (var i = 0; i < Student.length; i++) {
-            student = await StudentDB.findOne({ _id: Student[i] });
+           var student = await StudentDB.findOne({ _id: Student[i] });
             if (!student) {
                 return res.status(204).json({ "message": `No such Student exists` });
             }
@@ -29,7 +29,16 @@ module.exports.addTeamMember = async (req, res) => {
                 { $push :{ GroupMembers: student } },
                
             );
+            const updateStudent = await StudentDB.updateOne(
+                { '_id': student._id },
+                { Project : project },
+               
+            );
+
+
             const result = await updateProject.save();
+            const result2 = await updateStudent.save();
+
             res.json(result);
 
 
