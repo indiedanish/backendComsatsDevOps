@@ -51,7 +51,7 @@ module.exports.addRequirement = async (req, res) => {
 
 module.exports.deleteRequirement = async (req, res) => {
     console.log("REQUEST: ", req.body)
-    
+
     if (!req?.body?.Title || !req?.body?.ProjectName) return res.status(400).json({ 'message': 'Title required.' });
     try {
 
@@ -84,7 +84,7 @@ module.exports.deleteRequirement = async (req, res) => {
 
 module.exports.updateRequirementLead = async (req, res) => {
 
-    console.log("REQUEST: ", req.body)
+    console.log("REQUEST: ", req.body.Title , req.body.ProjectName)
 
     if (!req?.body?.Title || !req?.body?.ProjectName) { //Name of Requirement
         return res.status(400).json({ 'message': 'Name required.' });
@@ -98,7 +98,7 @@ module.exports.updateRequirementLead = async (req, res) => {
         }
 
         const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req.body.ProjectName });
-        console.log("RequirementObj: ",RequirementObj)
+        console.log("RequirementObj: ", RequirementObj)
         if (!RequirementObj) {
             return res.status(209).json({ "message": `No such Requirement in the Project` })
         };
@@ -134,7 +134,7 @@ module.exports.updateRequirementLead = async (req, res) => {
         if (req.body.Rename) {
 
             const check = await Requirement.findOne({ Title: req.body.Rename, ProjectName: req.body.ProjectName });
-         
+
 
             if (check) {
 
@@ -384,4 +384,3 @@ module.exports.getRequirementComments = async (req, res) => {
     DisplayComment = RequirementObj.Comments;
     res.json(DisplayComment);
 }
-

@@ -171,6 +171,8 @@ module.exports.committeeAddQuestion= async (req, res) => {
 
 module.exports.committeeDeleteQuestion= async (req, res) => {
 
+  console.log(req.body)
+
   var { Name,  Question_id } = req.body;
 
   console.log("Here", req.body)
