@@ -76,7 +76,7 @@ router.post('/getStudentRequirement', RequirementController.getStudentRequiremen
 
 
 //Post, Delete and View Comments in Requirement
-router.put('/addRequirementComments', RequirementController.addRequirementComments)
+router.post('/addRequirementComments', RequirementController.addRequirementComments)
 router.put('/deleteRequirementComments', RequirementController.deleteRequirementComments)
 router.get('/getRequirementComments', RequirementController.getRequirementComments)
 

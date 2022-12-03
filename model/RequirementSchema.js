@@ -40,14 +40,17 @@ var requirementSchema = new mongoose.Schema({
     Comments: [{
 
 
-        Student: {
+        Sender: {
             type: mongoose.Schema.ObjectId,
-            ref: 'Student'
+            ref: 'Student',
+
+            
         },
 
-        Content: {
+
+        Content: [{
             type: String,
-        },
+          }],
 
         DateModified: {
             type: Date,
