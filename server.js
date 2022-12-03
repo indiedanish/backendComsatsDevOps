@@ -16,6 +16,8 @@ const verifyAdmin = require('./middleware/verifyAdmin');
 
 const conversationRoute = require("./routes/conversations");
 const messageRoute = require("./routes/messages");
+const notificationRoute = require("./routes/notifications");
+
 
 // Connect to MongoDB
 connectDB();
@@ -59,6 +61,10 @@ app.use('/refresh', require('./routes/refresh'));
 //chat
 app.use("/chat/conversations", conversationRoute);
 app.use("/chat/messages", messageRoute);
+
+//Notification
+app.use("/notification", notificationRoute);
+
 
 //logout
 app.use('/logout', require('./routes/logout'));
@@ -120,7 +126,7 @@ const io = require("socket.io")(8900, {
   
   const getUser = (userId) => {
 
-    console.log(users)
+    
     return users.find((user) => user.userId === userId);
   };
   
@@ -142,6 +148,15 @@ const io = require("socket.io")(8900, {
       io.to(user?.socketId).emit("getMessage", {
         senderId,
         text,
+      });
+    });
+
+    socket.on("sendNotification", ({ senderId, receiverId, content, title }) => {
+      const user = getUser(receiverId._id);
+      io.to(user?.socketId).emit("getNotification", {
+        senderId,
+        title,
+        content,
       });
     });
   
