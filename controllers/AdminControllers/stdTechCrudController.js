@@ -9,8 +9,6 @@ const bcrypt = require('bcrypt');
 
 module.exports.addNewStudent = async (req, res) => {
 
-    console.log("IM HERE")
-    console.log(req.body.ProfilePicture)
 
     var { Name, RegNo, Email, Password, PhoneNumber, Gender, Position, FypStatus,
         CommitteeEvaluation, SupervisorEvaluation, Notifications, OnlineStatus, Project, ProfilePicture } = req.body;
@@ -29,7 +27,6 @@ module.exports.addNewStudent = async (req, res) => {
             Notifications, OnlineStatus, Project
         });
 
-        console.log(newStudent);
 
         res.status(201).json({ 'success': `New user ${newStudent} created!` });
     }
@@ -41,7 +38,6 @@ module.exports.addNewStudent = async (req, res) => {
 
 
 module.exports.updateStudent = async (req, res) => {
-    console.log("IM BODY", req.body)
     var { RegNo } = req.body;
 
 
@@ -103,7 +99,21 @@ module.exports.getStudent = async (req, res) => {
     if (!student) {
         return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
     }
-    console.log("IM HERE", student)
+    res.json(student);
+
+}
+
+module.exports.getStudentWithID = async (req, res) => {
+
+    if (!req?.body?._id) return res.status(400).json({ 'message': 'Student ID required.' });
+
+    const student = await Student.findOne({ _id: req.body._id }).populate({ path: 'Project', modal: 'Project', populate: { path: 'Requirements', modal: 'Requirements', populate: { path: 'AssignedTo', modal: 'Student' } } }).populate({ path: 'CommitteeEvaluation', modal: 'CommitteeEvaluation' ,  populate: { path: 'Teacher', modal: 'Teacher'}})
+
+
+
+    if (!student) {
+        return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
+    }
     res.json(student);
 
 }
@@ -121,7 +131,6 @@ module.exports.getStudentForSupervisorEvaluation = async (req, res) => {
     if (!student) {
         return res.status(204).json({ "message": `No student matches RegNo ${req.body.RegNo}.` });
     }
-    console.log("IM HERE", student)
     res.json(student);
 
 }
@@ -173,7 +182,6 @@ module.exports.addNewTeacher = async (req, res) => {
         Password = await bcrypt.hash(Password, 10);
 
         const newTeacher = await Teacher.create({ Name, Email, Password, PhoneNumber, Gender, isSupervisor, isCommittee, Designation, ProfilePicture });
-        console.log(newTeacher);
 
         res.status(201).json({ 'success': `New user ${newTeacher} created!` });
     }
@@ -185,13 +193,10 @@ module.exports.addNewTeacher = async (req, res) => {
 
 module.exports.updateTeacher = async (req, res) => {
 
-    console.log("Here " + req.body.Email)
 
-    console.log("")
     if (!req?.body?.Email) {
         return res.status(400).json({ 'message': 'Email parameter is required.' });
     }
-    console.log("Check")
 
     const teacher = await Teacher.findOne({ Email: req.body.Email });
 
@@ -225,7 +230,6 @@ module.exports.deleteTeacher = async (req, res) => {
 
     if (!req?.params?.email) return res.status(400).json({ 'message': 'Teachers Email required.' });
 
-    console.log("Hi")
 
     const teacher = await Teacher.findOne({ Email: req?.params?.email });
     if (!teacher) {

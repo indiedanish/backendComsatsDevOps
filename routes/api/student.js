@@ -34,6 +34,8 @@ const verifyRoles = require('../../middleware/verifyRoles');
 router.post('/getStudentForSupervisorEvaluation', stdTechCrudController.getStudentForSupervisorEvaluation);
 
 router.post('/getStudent', stdTechCrudController.getStudent);
+router.post('/getStudentWithID', stdTechCrudController.getStudentWithID);
+
 router.post('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getProject)
 router.get('/allProject', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getAllProject)
 router.put('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.updateProject)
