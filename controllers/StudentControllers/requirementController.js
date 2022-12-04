@@ -2,6 +2,7 @@ const Requirement = require('../../model/RequirementSchema');
 const TeacherDB = require('../../model/TeacherSchema');
 const StudentDB = require('../../model/StudentSchema');
 const ProjectDB = require('../../model/ProjectSchema');
+const Comment  = require('../../model/CommentSchema');
 
 
 module.exports.addRequirement = async (req, res) => {
@@ -291,14 +292,7 @@ module.exports.getRequirement = async (req, res) => {
 
 module.exports.addRequirementComments = async (req, res) => {
 
-    console.log(req.body.Title)
-
-    console.log(req.body.Content)
-
-
-
-
-
+  
     if (!req.body.Title || !req.body.Sender || !req.body.Content ) {
         return res.status(400).json({ 'message': 'Project Name, Req Title, Student RegNo and Content required.' });
     }
@@ -312,7 +306,6 @@ module.exports.addRequirementComments = async (req, res) => {
     console.log("PROJECT DONE")
 
     const RequirementObj = await Requirement.findOne({ Title: req.body.Title, ProjectName: req?.body?.Sender.data.Project.Name });
-    console.log(RequirementObj)
 
     if (!RequirementObj) {
         return res.status(209).json({ "message": `No such Requirement exist in the Project` })
@@ -322,12 +315,27 @@ module.exports.addRequirementComments = async (req, res) => {
     if (!StudentObj) {
         return res.status(204).json({ "message": `No such Student exists` });
     }
+
+
+    
+    const Sender = StudentObj
+    const Content = req?.body?.Content 
+
+    const newRequirementComment = await Comment.create({
+        Sender, Content
+    });
+
+    console.log("Still")
+
+
     try {
         var AddComment = await Requirement.updateOne(
             { '_id': RequirementObj._id },
-            { $push: { Comments: { 'Sender': StudentObj, 'Content': req?.body?.Content } } },
+            { $push: { Comments: newRequirementComment } },
         );
-        res.json(AddComment);
+
+        console.log(newRequirementComment)
+        res.status(201).json({ 'success': `New ${newRequirementComment} created!` });
     }
     catch (err) {
         res.status(500).json({ 'message': err.message });
