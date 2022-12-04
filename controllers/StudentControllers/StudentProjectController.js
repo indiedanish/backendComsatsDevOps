@@ -138,10 +138,13 @@ module.exports.getProject = async (req, res) => {
 
     const project = await ProjectDB.findOne({ Name: req.body.Name }).populate('GroupMembers')
         .populate({ path: 'Requirements', modal: 'Requirements' ,
-         populate:{ populate: { path: 'AssignedTo', modal: 'Student'}, path: 'Comments', modal: 'Comment', populate: { path: 'Sender', modal: 'Student' } } , 
-          })
+        populate:{  path: 'Comments', modal: 'Comment', populate: { path: 'Sender', modal: 'Student'  }}  
+          }).populate({ path: 'Requirements', modal: 'Requirements' , populate:{  path: 'AssignedTo', modal: 'Student'}})
         .populate('Sprints').populate('Deliverable').populate('TeamLeader')
         .populate('GroupSupervisor').populate('GroupCoSupervisor').populate('GroupCommittee');
+
+
+       
 
 
     if (!project) {
