@@ -20,9 +20,10 @@ module.exports.addNewStudent = async (req, res) => {
     try {
         //encrypt the password
         Password = await bcrypt.hash(Password, 10);
+        const Widgets = [true, true, true, true]
 
         const newStudent = await Student.create({
-            Name, RegNo, Email, Password, PhoneNumber, Gender,
+            Name, RegNo, Email, Password, PhoneNumber, Gender, Widgets,
             Role, Position, FypStatus, CommitteeEvaluation, SupervisorEvaluation, ProfilePicture,
             Notifications, OnlineStatus, Project
         });
@@ -92,10 +93,14 @@ module.exports.getStudent = async (req, res) => {
 
     if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
 
-    const student = await Student.findOne({ RegNo: req.body.RegNo }).populate({ path: 'Project', modal: 'Project',
-     populate: { path: 'Requirements', modal: 'Requirements', populate: { path: 'AssignedTo', modal: 'Student' } } }
-     ).populate({ path: 'CommitteeEvaluation', modal: 'CommitteeEvaluation' , 
-     populate: { path: 'Teacher', modal: 'Teacher'}}).populate({path: 'Notifications', modal: 'Notification'})
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).populate({
+        path: 'Project', modal: 'Project',
+        populate: { path: 'Requirements', modal: 'Requirements', populate: { path: 'AssignedTo', modal: 'Student' } }
+    }
+    ).populate({
+        path: 'CommitteeEvaluation', modal: 'CommitteeEvaluation',
+        populate: { path: 'Teacher', modal: 'Teacher' }
+    }).populate({ path: 'Notifications', modal: 'Notification' })
 
 
 
@@ -110,7 +115,7 @@ module.exports.getStudentWithID = async (req, res) => {
 
     if (!req?.body?._id) return res.status(400).json({ 'message': 'Student ID required.' });
 
-    const student = await Student.findOne({ _id: req.body._id }).populate({ path: 'Project', modal: 'Project', populate: { path: 'Requirements', modal: 'Requirements', populate: { path: 'AssignedTo', modal: 'Student' } } }).populate({ path: 'CommitteeEvaluation', modal: 'CommitteeEvaluation' ,  populate: { path: 'Teacher', modal: 'Teacher'}})
+    const student = await Student.findOne({ _id: req.body._id }).populate({ path: 'Project', modal: 'Project', populate: { path: 'Requirements', modal: 'Requirements', populate: { path: 'AssignedTo', modal: 'Student' } } }).populate({ path: 'CommitteeEvaluation', modal: 'CommitteeEvaluation', populate: { path: 'Teacher', modal: 'Teacher' } })
 
 
 
@@ -127,7 +132,7 @@ module.exports.getStudentForSupervisorEvaluation = async (req, res) => {
 
     if (!req?.body?.RegNo) return res.status(400).json({ 'message': 'Student RegNo required.' });
 
-    const student = await Student.findOne({ RegNo: req.body.RegNo }).populate({ path: 'Project', modal: 'Project', populate: { path: 'Requirements', modal: 'Requirements', populate: { path: 'AssignedTo', modal: 'Student' } } }).populate({ path: 'SupervisorEvaluation', modal: 'SupervisorEvaluation' ,  populate: { path: 'Teacher', modal: 'Teacher'}})
+    const student = await Student.findOne({ RegNo: req.body.RegNo }).populate({ path: 'Project', modal: 'Project', populate: { path: 'Requirements', modal: 'Requirements', populate: { path: 'AssignedTo', modal: 'Student' } } }).populate({ path: 'SupervisorEvaluation', modal: 'SupervisorEvaluation', populate: { path: 'Teacher', modal: 'Teacher' } })
 
 
 

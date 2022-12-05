@@ -334,7 +334,6 @@ module.exports.addRequirementComments = async (req, res) => {
             { $push: { Comments: newRequirementComment } },
         );
 
-        console.log(newRequirementComment)
         res.status(201).json({ 'success': `New ${newRequirementComment} created!` });
     }
     catch (err) {

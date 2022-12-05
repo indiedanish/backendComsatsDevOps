@@ -85,7 +85,14 @@ var StudentSchema = new mongoose.Schema({
 
   RefreshToken: {
     type: String,
-  }
+  },
+
+  Widgets: [{
+    type: Boolean,
+    default: true
+    
+
+  }]
 });
 
 module.exports = mongoose.model("Student", StudentSchema);
