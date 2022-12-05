@@ -45,7 +45,7 @@ const StudentLogin = async (req, res) => {
 
         // Creates Secure Cookie with refresh token
 
-        res.cookie('jwt', refreshToken, { secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
+        res.cookie('jwt', refreshToken, {secure: true,  sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
 
         // Send authorization roles and access token to user

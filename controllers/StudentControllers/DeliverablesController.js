@@ -33,8 +33,7 @@ module.exports.addDeliverable = async (req, res) => {
 
 
 
-            if (req.body.File) {
-                console.log("Thissssss")
+            if (req.body?.File) {
                 DeliverableObj.File = req.body.File
                 const result = await DeliverableObj.save();
                 res.status(200).json({ "message": `Record Updated` })
@@ -43,8 +42,6 @@ module.exports.addDeliverable = async (req, res) => {
                
             }
         };
-
-        console.log("This is it")
 
 
         const newDeliverable = await DeliverableDB.create({
@@ -96,11 +93,7 @@ module.exports.updateDeliverable = async (req, res) => {
         console.log("3")
 
 
-
-        if (req.body.File) {DeliverableObj.File = req.body.File;}
-
-        console.log("4")
-
+        if (req.body?.Type) DeliverableObj.File = req.body.File;
 
 
         const result = await DeliverableObj.save();

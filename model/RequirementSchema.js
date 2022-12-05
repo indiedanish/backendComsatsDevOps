@@ -38,22 +38,8 @@ var requirementSchema = new mongoose.Schema({
     },
 
     Comments: [{
-
-
-        Student: {
-            type: mongoose.Schema.ObjectId,
-            ref: 'Student'
-        },
-
-        Content: {
-            type: String,
-        },
-
-        DateModified: {
-            type: Date,
-            default: Date.now,
-        },
-
+        type: mongoose.Schema.ObjectId,
+        ref: 'Comment',
     }],
 
     File: [{
@@ -79,7 +65,7 @@ var requirementSchema = new mongoose.Schema({
 
     end: {
         type: Date,
-        required: true,
+
 
     }
 });

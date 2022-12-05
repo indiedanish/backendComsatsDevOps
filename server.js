@@ -14,6 +14,11 @@ const connectDB = require('./config/dbConn');
 const PORT = process.env.PORT || 3500;
 const verifyAdmin = require('./middleware/verifyAdmin');
 
+const conversationRoute = require("./routes/conversations");
+const messageRoute = require("./routes/messages");
+const notificationRoute = require("./routes/notifications");
+
+
 // Connect to MongoDB
 connectDB();
 
@@ -51,6 +56,17 @@ app.use('/', require('./routes/root'));
 app.use('/auth', require('./routes/auth'));
 
 app.use('/refresh', require('./routes/refresh'));
+
+
+//chat
+app.use("/chat/conversations", conversationRoute);
+app.use("/chat/messages", messageRoute);
+
+//Notification
+app.use("/notification", notificationRoute);
+
+
+//logout
 app.use('/logout', require('./routes/logout'));
 
 
@@ -77,6 +93,86 @@ app.all('*', (req, res) => {
         res.type('txt').send("404 Not Found");
     }
 });
+
+//=========================================
+
+//Socket Io Chat
+
+const io = require("socket.io")(8900, {
+    cors: {
+      origin: "http://localhost:3000",
+    },
+  });
+  
+  let users = [];
+  
+  const addUser = (userId, socketId) => {
+
+
+
+    if(userId != null && socketId != null){
+
+        !users.some((user) => user.userId === userId) &&
+        users.push({ userId, socketId });
+    }
+
+
+    };
+      
+  
+  const removeUser = (socketId) => {
+    users = users.filter((user) => user.socketId !== socketId);
+  };
+  
+  const getUser = (userId) => {
+
+    
+    return users.find((user) => user.userId === userId);
+  };
+  
+  io.on("connection", (socket) => {
+    //when ceonnect
+    console.log("a user connected.");
+  
+    //take userId and socketId from user
+    socket.on("addUser", (userId) => {
+       
+
+      addUser(userId, socket.id);
+      io.emit("getUsers", users);
+    });
+  
+    //send and get message
+    socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+      const user = getUser(receiverId._id);
+      io.to(user?.socketId).emit("getMessage", {
+        senderId,
+        text,
+      });
+    });
+
+    socket.on("sendNotification", ({ senderId, receiverId, content, title }) => {
+      const user = getUser(receiverId._id);
+      io.to(user?.socketId).emit("getNotification", {
+        senderId,
+        title,
+        content,
+      });
+    });
+  
+    //when disconnected
+    socket.on("disconnect", () => {
+      console.log("a user disconnected!");
+      removeUser(socket.id);
+      io.emit("getUsers", users);
+    });
+  });
+  
+
+
+//=========================================
+
+
 
 
 

@@ -1,24 +1,33 @@
 var mongoose = require("mongoose");
 var NotificationSchema = new mongoose.Schema({
     
-    Title: {
+    title: {
         type: String,
     },
 
-    Content: {
+    content: {
         type: String,
     },
   
 
-    Sender:{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Student'
+    sender:{
+        type: String,
     },
 
-    Date: {
+    senderImg:{
+        type: String,
+    },
+
+    date: {
         type: Date,
         default: Date.now,
     },
+
+    receiverId:{
+        type: String,
+
+        
+    }
 
 });
 
