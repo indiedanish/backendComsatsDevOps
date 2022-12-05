@@ -144,9 +144,6 @@ module.exports.getProject = async (req, res) => {
         .populate('GroupSupervisor').populate('GroupCoSupervisor').populate('GroupCommittee');
 
 
-       
-
-
     if (!project) {
         return res.status(204).json({ "message": `No Project matches Title` });
     }
