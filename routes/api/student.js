@@ -35,6 +35,8 @@ router.post('/getStudentForSupervisorEvaluation', stdTechCrudController.getStude
 
 router.post('/getStudent', stdTechCrudController.getStudent);
 router.post('/getStudentWithID', stdTechCrudController.getStudentWithID);
+router.put('/student', stdTechCrudController.updateStudent);
+
 
 router.post('/project', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getProject)
 router.get('/allProject', verifyRoles(ROLES_LIST.TeamMember, ROLES_LIST.TeamLead), StudentProjectController.getAllProject)
