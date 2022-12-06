@@ -48,6 +48,7 @@ router.put('/updateRole', verifyRoles(ROLES_LIST.TeamLead), TeamManagementContro
 router.put('/deleteTeamMember', verifyRoles(ROLES_LIST.TeamLead), TeamManagementController.deleteTeamMember)
 router.post('/getTeamMembers',  TeamManagementController.getTeamMembers)
 
+router.get('/getAllStudents', stdTechCrudController.getAllStudent);
 
 // Deliverables
 router.post('/deliverable', DeliverablesController.addDeliverable)
