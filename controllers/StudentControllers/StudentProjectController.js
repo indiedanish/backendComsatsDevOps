@@ -122,7 +122,7 @@ module.exports.updateProject = async (req, res) => {
 
 
 module.exports.getAllProject = async (req, res) => {
-    const projects = await ProjectDB.find();
+    const projects = await ProjectDB.find().populate('GroupSupervisor');
     if (!projects) return res.status(204).json({ 'message': 'No Projects found.' });
     try {
         res.json(projects);
